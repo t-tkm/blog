@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>AWS on Takumi Tomita&#39;s Blog</title>
+    <link>https://t-tkm.github.io/blog/tags/aws/</link>
+    <description>Recent content in AWS on Takumi Tomita&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <copyright>&amp;copy; 2021 Takumi Tomita Powered by Hugo &amp; Pickles.</copyright>
+    <lastBuildDate>Fri, 26 Mar 2021 00:00:00 +0900</lastBuildDate><atom:link href="https://t-tkm.github.io/blog/tags/aws/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Alexaでかけ算ゲーム</title>
+      <link>https://t-tkm.github.io/blog/posts/2021/03/aws_alexa_practice/</link>
+      <pubDate>Fri, 26 Mar 2021 00:00:00 +0900</pubDate>
+      
+      <guid>https://t-tkm.github.io/blog/posts/2021/03/aws_alexa_practice/</guid>
+      <description>Alexaでかけ算ゲーム はじめに 今年の正月は、コロナ禍ということで帰省ができなかったため、以前より気になっていたAlexaに手を出してみました。あわよくば、今回の勉強を通して「Alexa認定」も取得できるかも？と思ったのですが、そこまで甘い世界ではありませんでした1。。。
+Alexa全体像の理解 さて、実際始めようとすると、今まで公私共に全く触った事の無いサービスという事もあり、どこから手をつけてよいものかわかりません。。。そこでとっかかりとして、Alexa公式 動画シリーズ「Alexa道場」から始めることにしました。こちらの教材がとても丁寧で、ストーリを追って段階的に学習できお勧めです！一通り動画を視聴し終わると、なんとなく(開発含めた)全体像が把握できると思います(とりあえずスキルを作ってみたいというのであれば、Season1〜3で十分)。
+#スキル開発 では早速開発、と言ってもゼロベースでコードを作成するのは流石に大変ですで、お手本になるサンプル探しを開始。そこで気がついた事は、Alexaのスキル自体はたくさん公開されているのですが、コードはさほどネットには落ちてない感じでした(私の探し方が十分で無い可能性もございます)。そこで見つけたのが、クジラ飛行机さんのやさしくはじめる スマートスピーカープログラミング。このサンプルをベースに、スキル作成にチャレンジさせて頂きました。
+ユースケース ちょうど、小学２年の息子が「冬休みの宿題」として九九の練習を持ち帰ってきており、親が問題を出すという箇所を、Alexaにお手伝いしてもらうことにしました。   実際のアクター(息子)とシステム(Alexa)のやりとりは↓   システム概要 今回はじめて知ったのですが、AlexaサービスはAWSでなくAmazonなのですね。また、Alexaを開発するコンソールも、日々進化しているようで、書籍・記事によっては追い付けていないものも多いと思われますので、最新がどうなっているのか確認が必要になります(Alexaに限らず、クラウドサービス全般に言えることではございます)。
+  サンプル(lambda) 今回作成したコードは、こちらに置いております。 https://gitlab.com/t-tkm/alexa-kakezan-game
+const Alexa = require(&amp;#39;ask-sdk&amp;#39;); const TABLE_NAME = &amp;#39;myScore&amp;#39;; let skill; exports.handler = async function (event, context) { if (skill) return skill.invoke(event); skill = Alexa.SkillBuilders.standard() .addRequestHandlers( LaunchRequestHandler, NumberIntentHandler, CancelIntentHandler) .withTableName(TABLE_NAME) .withAutoCreateTable(true) .create(); return skill.invoke(event); }; const TITLE = &amp;#39;かけ算ゲーム&amp;#39;; function getResponse(h, msg) { return h.responseBuilder .speak(msg).reprompt(msg).withSimpleCard(TITLE, msg) .getResponse(); } async function getHighScore(h) { const pa = await h.</description>
+    </item>
+    
+    <item>
+      <title>我が家のマイクラサーバー(AWS編)</title>
+      <link>https://t-tkm.github.io/blog/posts/2021/03/minecraft_server_aws_ecs/</link>
+      <pubDate>Sun, 21 Mar 2021 00:00:00 +0900</pubDate>
+      
+      <guid>https://t-tkm.github.io/blog/posts/2021/03/minecraft_server_aws_ecs/</guid>
+      <description>はじめに マイクラサーバ(javaアプリ)をECS+Fargate+EFSで動かしてみた備忘録になります。趣味であるこのシステムの運用を通じて、今後周辺ノウハウを強化していきたいというのが(私、インフラエンジニア)目的ですw
+我が家はマイクラのヘビーユーザで、息子3人(小学生)と母親が、同じ世界(マイクラではワールドと呼ぶ)にログインして、各々の建築を見せあったり、道具を揃えて洞窟を冒険したり楽しんでいます。私はそのマルチサーバをお守りしており、以前はVM上にサーバを構築して運用していました。しかし、1つのサーバで展開できるワールドは1つであり、色々複数のワールドを家族に提供するには、複数サーバを立てる必要があります。そこで、最近ではアプリをitzg氏が作成・メンテしているコンテナ1を使い、複数ワールドをフットプリント軽く運用していました。
+ECS+Fargateに目をつけた理由 VMにDockerをインストールして、複数コンテナを運用していたのですが「Fargateを使えばVMのメンテが不要になるのでは？」と漠然と考えていました。しかし、マイクラサーバは、ワールドデータを自身のディスク(ファイルシステム)に永続化する必要があるため、Fargateでは諦めていたところ、2020.4月にFargateがEFSをサポート！というアナウンスを受け、これは試すしかないと思ったのがきっかけになります。 ※試してみたのは昨年4月なのですが、今頃記事を書いているのは単に私の怠慢ですw
+注意  サーバー運営で発生するリスクは全て自己責任でお願いします。Mineraftに限る話ではないですが、サーバ構築・動作には様々なリスクがあります。自身が何をしているのか十分理解する必要があります。 また、Minecraftの利用規約やガイドラインについても確認するようにして下さい(例えばこちら)。規約にある通り、全般的に個人で楽しむ使い方には好意的に見受けられますが、一方でビジネス(お金儲け)についての利用は厳しく線引き(制限)されています。  システム概要 マイクラは今や世界的に展開されいるゲームであり、対応プラットフォームもPCだけでなく様々です。ここで記載するのはPCのJava版と呼ばれるエディションによる、クライアント・サーバ形式のものを使い、そのサーバ部分をECS(Fargate)化してみよう、というのがゴールになります。クライアント(プレイヤー)の方は、我が家ではこちらのサイトから、5名分のアカウント(3,000円/人、買切り〜2020.4月地点〜)を購入して楽しんでいます2。
+  今回デプロイしてみた構成図は下記になります。   #各種設定概略 以下、概略程度になりますが、各種サービス設定と、その時のポイントを共有したいと思います。
+ELBの設定  マイクラサーバはHTTP(S)などL7プロトコルでなく、ポート番号25565を使った独自プロトコル(Java RMI?)になるため、ELBもNLB(L4)を使います 外部からデフォルトポート番号でアクセスさせるのは少し気になったので、外からは50000で受付け、それをアプリ(25565)に転送させています     EFSの設定  特段な事は行わず、素直な設定でいきました     ECSタスクの設定  コンテナイメージは、itgz氏の下記を利用しました  https://hub.docker.com/r/itzg/minecraft-server   タスクサイズは、CPUとして2vCPU(1024x2)と、メモリ4GiBを確保。  今回は、タスクの中に定義するコンテナは1つなのでこれで十分ですが、ロギング用などサイドカーコンテナも一緒に入れておくなど1タスクにに複数コンテナを定義する場合は、個別コンテナに対してリソース制限を設定する事も可能です。ただし、AWSドキュメントにも記載されている通り、あまり神経質になる必要はないようです3。   コンテナの使い方にもある通り、コンテナ起動時に環境変数「EULA=TRUE」が必要です。 アプリデータの永続化に、先に作成したEFSのファイルシステムを指定したボリュームを指定します。アプリ(コンテナ)内のマウントポイントは「/data」です。      ECSサービス設定  2020.4月の段階では、プラットフォームバージョンを「latest」にするとFargateは「1.3.0」で起動し、EFSマウント機能(1.4.0)が使えなかったので明示的に指定していました。最近latestが1.4.0になったようですので↓、今後はlatestで良いのかもしれません。  https://aws.amazon.com/jp/about-aws/whats-new/2021/03/aws-fargate-updates-platform-version-1-4-0-to-be-the-latest-version/   マイクラサーバ(アプリ)はシングルサーバ構成であるため、タスク数は1になります。タスク数を2以上にして複数コンテナを立ち上げようとすると、アプリ側で起動失敗するようになっているようです。**コンテナ化によるオートスケールの恩恵を受けたい場合、アプリもステートレスなどでスケールできる作りにしておく必要がある。**という、分かりやすい例かと思いました。            自動起動・停止ジョブ(lambda)  コンテナの起動、停止もサービス経由で宣言的に操作できるのが嬉しいですね♪  宣言的？ Declarative?</description>
+    </item>
+    
+  </channel>
+</rss>

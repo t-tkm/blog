@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Alexa on Takumi Tomita&#39;s Blog</title>
+    <link>https://t-tkm.github.io/blog/tags/alexa/</link>
+    <description>Recent content in Alexa on Takumi Tomita&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <copyright>&amp;copy; 2021 Takumi Tomita Powered by Hugo &amp; Pickles.</copyright>
+    <lastBuildDate>Fri, 26 Mar 2021 00:00:00 +0900</lastBuildDate><atom:link href="https://t-tkm.github.io/blog/tags/alexa/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Alexaでかけ算ゲーム</title>
+      <link>https://t-tkm.github.io/blog/posts/2021/03/aws_alexa_practice/</link>
+      <pubDate>Fri, 26 Mar 2021 00:00:00 +0900</pubDate>
+      
+      <guid>https://t-tkm.github.io/blog/posts/2021/03/aws_alexa_practice/</guid>
+      <description>Alexaでかけ算ゲーム はじめに 今年の正月は、コロナ禍ということで帰省ができなかったため、以前より気になっていたAlexaに手を出してみました。あわよくば、今回の勉強を通して「Alexa認定」も取得できるかも？と思ったのですが、そこまで甘い世界ではありませんでした1。。。
+Alexa全体像の理解 さて、実際始めようとすると、今まで公私共に全く触った事の無いサービスという事もあり、どこから手をつけてよいものかわかりません。。。そこでとっかかりとして、Alexa公式 動画シリーズ「Alexa道場」から始めることにしました。こちらの教材がとても丁寧で、ストーリを追って段階的に学習できお勧めです！一通り動画を視聴し終わると、なんとなく(開発含めた)全体像が把握できると思います(とりあえずスキルを作ってみたいというのであれば、Season1〜3で十分)。
+#スキル開発 では早速開発、と言ってもゼロベースでコードを作成するのは流石に大変ですで、お手本になるサンプル探しを開始。そこで気がついた事は、Alexaのスキル自体はたくさん公開されているのですが、コードはさほどネットには落ちてない感じでした(私の探し方が十分で無い可能性もございます)。そこで見つけたのが、クジラ飛行机さんのやさしくはじめる スマートスピーカープログラミング。このサンプルをベースに、スキル作成にチャレンジさせて頂きました。
+ユースケース ちょうど、小学２年の息子が「冬休みの宿題」として九九の練習を持ち帰ってきており、親が問題を出すという箇所を、Alexaにお手伝いしてもらうことにしました。   実際のアクター(息子)とシステム(Alexa)のやりとりは↓   システム概要 今回はじめて知ったのですが、AlexaサービスはAWSでなくAmazonなのですね。また、Alexaを開発するコンソールも、日々進化しているようで、書籍・記事によっては追い付けていないものも多いと思われますので、最新がどうなっているのか確認が必要になります(Alexaに限らず、クラウドサービス全般に言えることではございます)。
+  サンプル(lambda) 今回作成したコードは、こちらに置いております。 https://gitlab.com/t-tkm/alexa-kakezan-game
+const Alexa = require(&amp;#39;ask-sdk&amp;#39;); const TABLE_NAME = &amp;#39;myScore&amp;#39;; let skill; exports.handler = async function (event, context) { if (skill) return skill.invoke(event); skill = Alexa.SkillBuilders.standard() .addRequestHandlers( LaunchRequestHandler, NumberIntentHandler, CancelIntentHandler) .withTableName(TABLE_NAME) .withAutoCreateTable(true) .create(); return skill.invoke(event); }; const TITLE = &amp;#39;かけ算ゲーム&amp;#39;; function getResponse(h, msg) { return h.responseBuilder .speak(msg).reprompt(msg).withSimpleCard(TITLE, msg) .getResponse(); } async function getHighScore(h) { const pa = await h.</description>
+    </item>
+    
+  </channel>
+</rss>
