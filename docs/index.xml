@@ -37,6 +37,21 @@ ELBの設定  マイクラサーバはHTTP(S)などL7プロトコルでなく、
     </item>
     
     <item>
+      <title>FireLensを使ってFargateコンテナのファイルログを転送してみた</title>
+      <link>https://t-tkm.github.io/blog/posts/2020/07/aws_firelens_practice/</link>
+      <pubDate>Sun, 26 Jul 2020 00:00:00 +0900</pubDate>
+      
+      <guid>https://t-tkm.github.io/blog/posts/2020/07/aws_firelens_practice/</guid>
+      <description>はじめに 通常はTwelve-Factor Appに「ログをイベントストリームとして扱う」とあるように、コンテナアプリケーションのログは標準出力を集約先とするのが設計原則です。しかし、もともと仮想マシンで動かしていたサーバをコンテナ化しようとする時など、
+「まずはアプリケーションコンテナを極力改修せず(ログ出力先を、ファイルから標準出力に変更)になんとかならないか。。。」
+というニーズもあるかと思います。ここでは、ファイル出力されたアプリケーションコンテナのログをFireLens(Fluentbit)を使ってCloudWatchへ転送する方法を紹介します。尚、FireLensを使わずとも、サイドカー(Fluentd)を自前で準備する方法として「Fargateで起動するコンテナのログをFluentd経由でS3に保存してみた」というのもあり、ご一緒に確認されると良いかと思います。
+検証の流れ 検証は、次の手順で進めています。
+ Fluentbitコンテナ作成 :設定ファイルの取込みと、ECRへイメージpush アプリケーションコンテナ作成 : tomcat上にsample.warをデプロイと、ECRへイメージpush Task定義作成 : CloudFormationのテンプレートを準備したので、それを使ってスタック作成 Fargateクラスタ&amp;amp;サービス作成: AWSマネジメントコンソールから操作 アプリケーションへアクセス : ブラウザから ログの確認(Cloud Watch Logs)  システム構成は、こんな感じになります。   また、コンテナをビルドしたりするために使用したファイル(プロジェクト)はこちらです。
+$ tree . ├── my-fluentbit │ ├── Dockerfile │ └── extra.conf //Fluentbit用設定ファイル ├── my-tomcat | └── Dockerfile ├── task-def.yaml //Cloud Formationにこのテンプレートファイルを指定して、スタック作成 コンテナイメージ作成 Fluentbitコンテナ Fluentbitの設定ファイル(extra.conf)を作成します。
+[INPUT] Name tail Path /usr/local/tomcat/logs/localhost_access_log.*.txt Tag file-app-logs [OUTPUT] Name cloudwatch Match fargate-fluentbit-app* region ap-northeast-1 log_group_name fluentbit-cloudwatch-stdout log_stream_prefix fluentbit-stdout- auto_create_group true [OUTPUT] Name cloudwatch Match file-app-logs* region ap-northeast-1 log_group_name fluentbit-cloudwatch-file log_stream_prefix fluentbit-file- auto_create_group true [補足]tailプラグインではpos_fileで、どのファイルのどの部分まで読込み済みかチェックするための指定ができたりしますが、今回は省略しています。</description>
+    </item>
+    
+    <item>
       <title>Favorite TED Talks</title>
       <link>https://t-tkm.github.io/blog/posts/2018/04/favorite_ted/</link>
       <pubDate>Sun, 08 Apr 2018 16:07:59 +0900</pubDate>
