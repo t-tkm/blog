@@ -1,4 +1,5 @@
 baseurl = "https://t-tkm.github.io/blog/"
+publishDir = "docs"
 title = "Takumi Tomita's Blog"
 languageCode = "ja"
 theme = "pickles"
