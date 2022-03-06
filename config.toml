@@ -1,6 +1,6 @@
 baseurl = "https://t-tkm.github.io/blog/"
 publishDir = "docs"
-title = "Takumi Tomita's Blog"
+title = "My Tech Blog Posts"
 languageCode = "ja"
 theme = "pickles"
 copyright = "&copy; 2021 Takumi Tomita Powered by Hugo & Pickles."
@@ -12,3 +12,23 @@ copyright = "&copy; 2021 Takumi Tomita Powered by Hugo & Pickles."
   linkedin = "takumitomta"
   github = "t-tkm"
   gitlab = "t-tkm"
+
+# Disqus shortname
+ author = "Takumi Tomita"
+ avatar = "https://media-exp1.licdn.com/dms/image/C5603AQES22WgxtTKxQ/profile-displayphoto-shrink_200_200/0/1620520987423?e=1652313600&v=beta&t=WuqLsCqR-bhfAitwI6xdCoE-6_UmP2nwtuVj6CnptZo"
+ bio = "横浜でSWエンジニアやってます。"
+
+[[menu.main]]
+    name = "Blog"
+    url = "/"
+    weight = 1
+
+[[menu.main]]
+    name = "About"
+    url = "/about"
+    weight = 2
+
+[[menu.main]]
+    name = "Tags"
+    url = "/tags"
+    weight = 4
