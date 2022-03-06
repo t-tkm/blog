@@ -1,13 +1,22 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Takumi Tomita&#39;s Blog</title>
+    <title>My Tech Blog Posts</title>
     <link>https://t-tkm.github.io/blog/</link>
-    <description>Recent content on Takumi Tomita&#39;s Blog</description>
+    <description>Recent content on My Tech Blog Posts</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>&amp;copy; 2021 Takumi Tomita Powered by Hugo &amp; Pickles.</copyright>
     <lastBuildDate>Fri, 26 Mar 2021 00:00:00 +0900</lastBuildDate><atom:link href="https://t-tkm.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title></title>
+      <link>https://t-tkm.github.io/blog/about/</link>
+      <pubDate>Sun, 06 Mar 2022 00:00:00 +0900</pubDate>
+      
+      <guid>https://t-tkm.github.io/blog/about/</guid>
+      <description>TBD</description>
+    </item>
+    
     <item>
       <title>Alexaでかけ算ゲーム</title>
       <link>https://t-tkm.github.io/blog/posts/2021/03/aws_alexa_practice/</link>
