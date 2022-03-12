@@ -12,7 +12,7 @@ AWS App2Containerは、起動中のjavaアプリをコンテナイメージに�
 
 {{< figure alt="img4" src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_app2container/img4.png" link="https://github.com/t-tkm/blog_images/raw/main/2022/aws_app2container/img4.png">}}
 
-下記、App2ContainerのUerGuideにある通り、サポートされるプラットフォームと、そうでない場合で挙動が変わるため、本記事ではその辺を試してみたいと思います(従って、ECSやEKSでの稼働検証は含まれません)。
+下記、App2ContainerのUerGuideにある通り、サポートされるプラットフォームと、そうでない場合で挙動が変わるため、本記事ではその辺を試してみたいと思います(ここでは、ECSやEKSでの稼働検証は含まれません)。
 
 > For supported application frameworks, App2Container targets only the application files and dependencies that are needed for containerization, thereby minimizing the size of the resulting container image. This is known as application mode.
 
@@ -20,10 +20,11 @@ AWS App2Containerは、起動中のjavaアプリをコンテナイメージに�
 
 以降は、次の流れで検証します。
 - App2Containerのインストール&セットアップ
-- Tomcatのインストール&セットアップ
-- Spring Boot CLIのインストール&セットアップ
+- Tomcatアプリ準備
+- SpringBootアプリ準備
 - App2Containerの利用
 
+図にすると、こんな感じになります。
 {{< figure alt="img5" src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_app2container/img5.png" link="https://github.com/t-tkm/blog_images/raw/main/2022/aws_app2container/img5.png">}}
 
 # App2Containerのインストール&セットアップ
@@ -136,7 +137,7 @@ Configuration saved
 All application artifacts will be created under /root/app2container. Please ensure that the folder permissions are secure.
 ```
 
-## Tomcatのインストール&セットアップ
+## Tomcatアプリ準備
 今回は、APTパッケージを使わず、一般的なインストールを行いました。
 
 ```bash
@@ -220,7 +221,7 @@ https://docs.aws.amazon.com/ja_jp/cloud9/latest/user-guide/app-preview.html#app-
 
 
 
-## Spring Boot CLIのインストール&セットアップ
+## SpringBootアプリ準備
 Spring Bootのインストールには、SDKMAN!を利用しました。
 
 ```bash
@@ -444,7 +445,7 @@ root@ip-10-0-1-112:~# docker stop 55d
 55d
 ```
 
-次に、springbootアプリのコンテナイメージを作成します(15分ほどかかりました)。
+次に、springbootアプリのコンテナイメージを作成します(15分〜20分ほどかかりました)。
 ```bash
 root@ip-10-0-1-112:~# app2container containerize --application-id java-generic-6ef9339e
 ✔ AWS prerequisite check succeeded
