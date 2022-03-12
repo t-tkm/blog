@@ -2,63 +2,63 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on My Tech Blog Posts</title>
-    <link>/tags/</link>
+    <link>https://t-tkm.github.io/blog/tags/</link>
     <description>Recent content in Tags on My Tech Blog Posts</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>&amp;copy; 2021 Takumi Tomita Powered by Hugo &amp; Pickles.</copyright>
-    <lastBuildDate>Sat, 12 Mar 2022 00:00:00 +0900</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 12 Mar 2022 00:00:00 +0900</lastBuildDate><atom:link href="https://t-tkm.github.io/blog/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>App2Container</title>
-      <link>/tags/app2container/</link>
+      <link>https://t-tkm.github.io/blog/tags/app2container/</link>
       <pubDate>Sat, 12 Mar 2022 00:00:00 +0900</pubDate>
       
-      <guid>/tags/app2container/</guid>
+      <guid>https://t-tkm.github.io/blog/tags/app2container/</guid>
       <description></description>
     </item>
     
     <item>
       <title>AWS</title>
-      <link>/tags/aws/</link>
+      <link>https://t-tkm.github.io/blog/tags/aws/</link>
       <pubDate>Sat, 12 Mar 2022 00:00:00 +0900</pubDate>
       
-      <guid>/tags/aws/</guid>
+      <guid>https://t-tkm.github.io/blog/tags/aws/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Container</title>
-      <link>/tags/container/</link>
+      <link>https://t-tkm.github.io/blog/tags/container/</link>
       <pubDate>Sat, 12 Mar 2022 00:00:00 +0900</pubDate>
       
-      <guid>/tags/container/</guid>
+      <guid>https://t-tkm.github.io/blog/tags/container/</guid>
       <description></description>
     </item>
     
     <item>
       <title>ECS</title>
-      <link>/tags/ecs/</link>
+      <link>https://t-tkm.github.io/blog/tags/ecs/</link>
       <pubDate>Sat, 12 Mar 2022 00:00:00 +0900</pubDate>
       
-      <guid>/tags/ecs/</guid>
+      <guid>https://t-tkm.github.io/blog/tags/ecs/</guid>
       <description></description>
     </item>
     
     <item>
       <title>EKS</title>
-      <link>/tags/eks/</link>
+      <link>https://t-tkm.github.io/blog/tags/eks/</link>
       <pubDate>Sat, 12 Mar 2022 00:00:00 +0900</pubDate>
       
-      <guid>/tags/eks/</guid>
+      <guid>https://t-tkm.github.io/blog/tags/eks/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Alexa</title>
-      <link>/tags/alexa/</link>
+      <link>https://t-tkm.github.io/blog/tags/alexa/</link>
       <pubDate>Fri, 26 Mar 2021 00:00:00 +0900</pubDate>
       
-      <guid>/tags/alexa/</guid>
+      <guid>https://t-tkm.github.io/blog/tags/alexa/</guid>
       <description></description>
     </item>
     

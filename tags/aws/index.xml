@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>AWS on My Tech Blog Posts</title>
-    <link>/tags/aws/</link>
+    <link>https://t-tkm.github.io/blog/tags/aws/</link>
     <description>Recent content in AWS on My Tech Blog Posts</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>&amp;copy; 2021 Takumi Tomita Powered by Hugo &amp; Pickles.</copyright>
-    <lastBuildDate>Sat, 12 Mar 2022 00:00:00 +0900</lastBuildDate><atom:link href="/tags/aws/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 12 Mar 2022 00:00:00 +0900</lastBuildDate><atom:link href="https://t-tkm.github.io/blog/tags/aws/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>AWS App2Container(お試し編)</title>
-      <link>/posts/2022/aws_app2container/</link>
+      <link>https://t-tkm.github.io/blog/posts/2022/aws_app2container/</link>
       <pubDate>Sat, 12 Mar 2022 00:00:00 +0900</pubDate>
       
-      <guid>/posts/2022/aws_app2container/</guid>
+      <guid>https://t-tkm.github.io/blog/posts/2022/aws_app2container/</guid>
       <description>はじめに AWS App2Containerは、起動中のjavaアプリをコンテナイメージに変換し、ECSやEKSで稼働させるためのテンプレートを生成するツールになります。
 Accelerating your Migration to AWS
   下記、App2ContainerのUerGuideにある通り、サポートされるプラットフォームと、そうでない場合で挙動が変わるため、本記事ではその辺を試してみたいと思います(ここでは、ECSやEKSでの稼働検証は含まれません)。
@@ -23,10 +23,10 @@ Accelerating your Migration to AWS
     
     <item>
       <title>AWS App2Container(イメージ最適化編)</title>
-      <link>/posts/2022/aws_app2container_opt/</link>
+      <link>https://t-tkm.github.io/blog/posts/2022/aws_app2container_opt/</link>
       <pubDate>Sat, 12 Mar 2022 00:00:00 +0900</pubDate>
       
-      <guid>/posts/2022/aws_app2container_opt/</guid>
+      <guid>https://t-tkm.github.io/blog/posts/2022/aws_app2container_opt/</guid>
       <description>はじめに 前回(「AWS App2Container(お試し編)」)で試した非サポートアプリの場合(ex. SpringBootアプリ)、サポートされるtomcatアプリと比較すると(802MB)、デフォルトで生成されたコンテナイメージは16.1GBとかなりのサイズとなっていました。
   root@ip-10-0-1-112:~# docker image ls REPOSITORY TAG IMAGE ID CREATED SIZE java-generic-6ef9339e latest 8ef7ef3e7db0 38 minutes ago 16.1GB java-tomcat-5da060de latest cc2de1db6ef8 58 minutes ago 802MB そこで、ここでは、下記ガイドラインに従いサイズをスリム化してみようと思います。
 Optimize AWS App2Container generated Docker images
@@ -37,10 +37,10 @@ root@ip-10-0-1-112:~# wget https://github.com/wagoodman/dive/releases/download/v
     
     <item>
       <title>Alexaでかけ算ゲーム</title>
-      <link>/posts/2021/03/aws_alexa_practice/</link>
+      <link>https://t-tkm.github.io/blog/posts/2021/03/aws_alexa_practice/</link>
       <pubDate>Fri, 26 Mar 2021 00:00:00 +0900</pubDate>
       
-      <guid>/posts/2021/03/aws_alexa_practice/</guid>
+      <guid>https://t-tkm.github.io/blog/posts/2021/03/aws_alexa_practice/</guid>
       <description>Alexaでかけ算ゲーム はじめに 今年の正月は、コロナ禍ということで帰省ができなかったため、以前より気になっていたAlexaに手を出してみました。あわよくば、今回の勉強を通して「Alexa認定」も取得できるかも？と思ったのですが、そこまで甘い世界ではありませんでした1。。。
 Alexa全体像の理解 さて、実際始めようとすると、今まで公私共に全く触った事の無いサービスという事もあり、どこから手をつけてよいものかわかりません。。。そこでとっかかりとして、Alexa公式 動画シリーズ「Alexa道場」から始めることにしました。こちらの教材がとても丁寧で、ストーリを追って段階的に学習できお勧めです！一通り動画を視聴し終わると、なんとなく(開発含めた)全体像が把握できると思います(とりあえずスキルを作ってみたいというのであれば、Season1〜3で十分)。
 #スキル開発 では早速開発、と言ってもゼロベースでコードを作成するのは流石に大変ですで、お手本になるサンプル探しを開始。そこで気がついた事は、Alexaのスキル自体はたくさん公開されているのですが、コードはさほどネットには落ちてない感じでした(私の探し方が十分で無い可能性もございます)。そこで見つけたのが、クジラ飛行机さんのやさしくはじめる スマートスピーカープログラミング。このサンプルをベースに、スキル作成にチャレンジさせて頂きました。
@@ -51,10 +51,10 @@ const Alexa = require(&amp;#39;ask-sdk&amp;#39;); const TABLE_NAME = &amp;#39;my
     
     <item>
       <title>我が家のマイクラサーバー(AWS編)</title>
-      <link>/posts/2021/03/minecraft_server_aws_ecs/</link>
+      <link>https://t-tkm.github.io/blog/posts/2021/03/minecraft_server_aws_ecs/</link>
       <pubDate>Sun, 21 Mar 2021 00:00:00 +0900</pubDate>
       
-      <guid>/posts/2021/03/minecraft_server_aws_ecs/</guid>
+      <guid>https://t-tkm.github.io/blog/posts/2021/03/minecraft_server_aws_ecs/</guid>
       <description>はじめに マイクラサーバ(javaアプリ)をECS+Fargate+EFSで動かしてみた備忘録になります。趣味であるこのシステムの運用を通じて、今後周辺ノウハウを強化していきたいというのが(私、インフラエンジニア)目的ですw
 我が家はマイクラのヘビーユーザで、息子3人(小学生)と母親が、同じ世界(マイクラではワールドと呼ぶ)にログインして、各々の建築を見せあったり、道具を揃えて洞窟を冒険したり楽しんでいます。私はそのマルチサーバをお守りしており、以前はVM上にサーバを構築して運用していました。しかし、1つのサーバで展開できるワールドは1つであり、色々複数のワールドを家族に提供するには、複数サーバを立てる必要があります。そこで、最近ではアプリをitzg氏が作成・メンテしているコンテナ1を使い、複数ワールドをフットプリント軽く運用していました。
 ECS+Fargateに目をつけた理由 VMにDockerをインストールして、複数コンテナを運用していたのですが「Fargateを使えばVMのメンテが不要になるのでは？」と漠然と考えていました。しかし、マイクラサーバは、ワールドデータを自身のディスク(ファイルシステム)に永続化する必要があるため、Fargateでは諦めていたところ、2020.4月にFargateがEFSをサポート！というアナウンスを受け、これは試すしかないと思ったのがきっかけになります。 ※試してみたのは昨年4月なのですが、今頃記事を書いているのは単に私の怠慢ですw
@@ -65,10 +65,10 @@ ELBの設定  マイクラサーバはHTTP(S)などL7プロトコルでなく、
     
     <item>
       <title>FireLensを使ってFargateコンテナのファイルログを転送してみた</title>
-      <link>/posts/2020/07/aws_firelens_practice/</link>
+      <link>https://t-tkm.github.io/blog/posts/2020/07/aws_firelens_practice/</link>
       <pubDate>Sun, 26 Jul 2020 00:00:00 +0900</pubDate>
       
-      <guid>/posts/2020/07/aws_firelens_practice/</guid>
+      <guid>https://t-tkm.github.io/blog/posts/2020/07/aws_firelens_practice/</guid>
       <description>はじめに 通常はTwelve-Factor Appに「ログをイベントストリームとして扱う」とあるように、コンテナアプリケーションのログは標準出力を集約先とするのが設計原則です。しかし、もともと仮想マシンで動かしていたサーバをコンテナ化しようとする時など、
 「まずはアプリケーションコンテナを極力改修せず(ログ出力先を、ファイルから標準出力に変更)になんとかならないか。。。」
 というニーズもあるかと思います。ここでは、ファイル出力されたアプリケーションコンテナのログをFireLens(Fluentbit)を使ってCloudWatchへ転送する方法を紹介します。尚、FireLensを使わずとも、サイドカー(Fluentd)を自前で準備する方法として「Fargateで起動するコンテナのログをFluentd経由でS3に保存してみた」というのもあり、ご一緒に確認されると良いかと思います。
