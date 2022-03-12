@@ -1,5 +1,3 @@
-# baseurl = "https://t-tkm.github.io/blog/"
-# publishDir = "docs"
 title = "My Tech Blog Posts"
 languageCode = "ja"
 theme = "pickles"
