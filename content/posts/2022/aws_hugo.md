@@ -6,7 +6,8 @@ title = "Hugoでハンズオンサイト(AWS)"
 +++
 
 # はじめに
-TBD 
+サンプル画像
+{{< figure alt="img1" src="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img1.png?raw=true" link="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img1.png?raw=true">}}
 
 # 参考
 - [Deploy and Host Hugo Content on AWS](https://hosting-hugo-content.workshop.aws/)
