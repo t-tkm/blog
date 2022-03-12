@@ -1,3 +1,4 @@
+baseurl = "https://t-tkm.github.io/blog/"
 title = "My Tech Blog Posts"
 languageCode = "ja"
 theme = "pickles"
