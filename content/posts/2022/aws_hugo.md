@@ -27,6 +27,16 @@ https://hosting-hugo-content.workshop.aws/
 
 ※ハンズオンの主目的は、Hugoの使い方でなく、AWS Amplifyを活用したホスティングサイト構築手法(CICD込み)ですw
 
+# 構成図
+本記事の構成になります。記事の編集、追加などは、Cloud9(EC2)からAmplify CLI経由で操作(amplify push)します。
+{{< figure alt="img10" src="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img10.png?raw=true" link="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img10.png?raw=true">}}
+
+[AWS Workshops](https://hosting-hugo-content.workshop.aws/)のハンズオンでは、6章「CONTENT CI/CD PIPELINE」でCodeCommitを経由したCICDが学べます。
+{{< figure alt="img11" src="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img11.png?raw=true" link="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img11.png?raw=true">}}
+
+また、AmplifyのHosting environmentsは、GitHubなどとの連携も可能ですので、こういう構成も可能かと思います。
+{{< figure alt="img12" src="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img12.png?raw=true" link="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img12.png?raw=true">}}
+
 # Hugoセットアップ
 詳細はハンズオンを見てもらうとして、Cloud9を使っていきます。初めにHugoをインストールします。Goで作られたシングルバイナリなので、ダウンロード後に解凍し、パスの通ったディレクトリへ実行ファイルを置くだけで利用できます。
 ```bash
