@@ -1,5 +1,4 @@
 baseurl = "https://t-tkm.github.io/blog/"
-publishDir = "docs"
 title = "My Tech Blog Posts"
 languageCode = "ja"
 theme = "pickles"
@@ -16,7 +15,7 @@ copyright = "&copy; 2021 Takumi Tomita Powered by Hugo & Pickles."
 # Disqus shortname
  author = "Takumi Tomita"
  avatar = "https://media-exp1.licdn.com/dms/image/C5603AQES22WgxtTKxQ/profile-displayphoto-shrink_200_200/0/1620520987423?e=1652313600&v=beta&t=WuqLsCqR-bhfAitwI6xdCoE-6_UmP2nwtuVj6CnptZo"
- bio = "横浜でSWエンジニアやってます。"
+ bio = "横浜でSWエンジニアやってます。2021 APN Ambassadorsに選出いただきました。"
 
 [[menu.main]]
     name = "Blog"
