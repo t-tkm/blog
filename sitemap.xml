@@ -3,17 +3,47 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://t-tkm.github.io/blog/tags/app2container/</loc>
-    <lastmod>2022-03-12T00:00:00+09:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://t-tkm.github.io/blog/tags/aws/</loc>
-    <lastmod>2022-03-12T00:00:00+09:00</lastmod>
+    <lastmod>2022-03-13T00:00:00+09:00</lastmod>
   </url>
   
   <url>
     <loc>https://t-tkm.github.io/blog/categories/aws/</loc>
+    <lastmod>2022-03-13T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/categories/</loc>
+    <lastmod>2022-03-13T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/tags/hugo/</loc>
+    <lastmod>2022-03-13T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/posts/2022/aws_hugo/</loc>
+    <lastmod>2022-03-13T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/</loc>
+    <lastmod>2022-03-13T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/posts/</loc>
+    <lastmod>2022-03-13T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/tags/</loc>
+    <lastmod>2022-03-13T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/tags/app2container/</loc>
     <lastmod>2022-03-12T00:00:00+09:00</lastmod>
   </url>
   
@@ -24,11 +54,6 @@
   
   <url>
     <loc>https://t-tkm.github.io/blog/posts/2022/aws_app2container_opt/</loc>
-    <lastmod>2022-03-12T00:00:00+09:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://t-tkm.github.io/blog/categories/</loc>
     <lastmod>2022-03-12T00:00:00+09:00</lastmod>
   </url>
   
@@ -44,31 +69,6 @@
   
   <url>
     <loc>https://t-tkm.github.io/blog/tags/eks/</loc>
-    <lastmod>2022-03-12T00:00:00+09:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://t-tkm.github.io/blog/tags/hugo/</loc>
-    <lastmod>2022-03-12T00:00:00+09:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://t-tkm.github.io/blog/posts/2022/aws_hugo/</loc>
-    <lastmod>2022-03-12T00:00:00+09:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://t-tkm.github.io/blog/</loc>
-    <lastmod>2022-03-12T00:00:00+09:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://t-tkm.github.io/blog/posts/</loc>
-    <lastmod>2022-03-12T00:00:00+09:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://t-tkm.github.io/blog/tags/</loc>
     <lastmod>2022-03-12T00:00:00+09:00</lastmod>
   </url>
   

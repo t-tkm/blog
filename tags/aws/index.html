@@ -59,6 +59,37 @@
 
 <article class="c-article p-list-article">
   <header>
+    <h2 class="c-title c-article__title"><a href="https://t-tkm.github.io/blog/posts/2022/aws_hugo/">Hugoでハンズオンサイト(AWS)</a></h2>
+    <p class="c-article__meta">
+      Posted on
+<time datetime="2022-03-13T00:00:00&#43;09:00">
+  Mar 13, 2022
+</time>
+
+    </p>
+  </header>
+  <div class="c-article__summary">
+    はじめに 唐突ですが、AWS Workshopsというサイトをご存知でしょうか？
+AWS Workshopsは、AWSが公式に提供しているハンズオンコンテンツで、AWS各種サービスについて、実際に手を動かしてみたい場合に大変重宝するサイトです。
+https://workshops.aws/
+さてこのサイト、とてもお洒落な作りになっていますが、どのように作られているのでしょうか？
+答えは、Hugoと言われるGo製の静的サイトジェネレータと、Learnと呼ばれるテーマ(Theme)を使って作られているようです。
+ https://gohugo.io/ https://jamstackthemes.dev/theme/hugo-theme-learn/  実はこのAWS Workshopsに。このようなハンズオンサイトの作り方のハンズオンがあります！折角なので、試してみたいと思います。
+https://hosting-hugo-content.workshop.aws/
+  ※ハンズオンの主目的は、Hugoの使い方でなく、AWS Amplifyを活用したホスティングサイト構築手法(CICD込み)ですw
+Hugoセットアップ 詳細はハンズオンを見てもらうとして、Cloud9を使っていきます。初めにHugoをインストールします。Goで作られたシングルバイナリなので、ダウンロード後に解凍し、パスの通ったディレクトリへ実行ファイルを置くだけで利用できます。
+$ wget https://github.com/gohugoio/hugo/releases/download/v0.71.0/hugo_extended_0.71.0_Linux-64bit.tar.gz -O hugo_extended_0.71.0_Linux-64bit.tar.gz $ HUGO_TAR=&#34;$(find . -name &#34;*Linux-64bit.tar.gz&#34;)&#34; $ tar -xzf $HUGO_TAR $ chmod +x hugo $ mkdir bin $ mv hugo bin/ $ cd ~/environment/ # Hugoがインストールできているかの確認 $ hugo version Hugo Static Site Generator v0.71.0-06150C87/extended linux/amd64 BuildDate: 2020-05-18T16:15:29Z サンプルサイトの確認 # 事前に、Hugoで作ったサンプルサイトをダウンロードします $ git clone -b v1.0 --single-branch https://github.
+  </div>
+  
+  <a href="https://t-tkm.github.io/blog/posts/2022/aws_hugo/" class="c-article__btn p-list-article__btn">Read more</a>
+  
+</article>
+
+
+
+
+<article class="c-article p-list-article">
+  <header>
     <h2 class="c-title c-article__title"><a href="https://t-tkm.github.io/blog/posts/2022/aws_app2container/">AWS App2Container(お試し編)</a></h2>
     <p class="c-article__meta">
       Posted on
@@ -104,37 +135,6 @@ root@ip-10-0-1-112:~# wget https://github.com/wagoodman/dive/releases/download/v
   </div>
   
   <a href="https://t-tkm.github.io/blog/posts/2022/aws_app2container_opt/" class="c-article__btn p-list-article__btn">Read more</a>
-  
-</article>
-
-
-
-
-<article class="c-article p-list-article">
-  <header>
-    <h2 class="c-title c-article__title"><a href="https://t-tkm.github.io/blog/posts/2022/aws_hugo/">Hugoでハンズオンサイト(AWS)</a></h2>
-    <p class="c-article__meta">
-      Posted on
-<time datetime="2022-03-12T00:00:00&#43;09:00">
-  Mar 12, 2022
-</time>
-
-    </p>
-  </header>
-  <div class="c-article__summary">
-    はじめに 唐突ですが、AWS Workshopsというサイトをご存知でしょうか？
-AWS Workshopsは、AWSが公式に提供しているハンズオンコンテンツで、AWS各種サービスについて、実際に手を動かしてみたい場合に大変重宝するサイトです。
-https://workshops.aws/
-さてこのサイト、とてもお洒落な作りになっていますが、どのように作られているのでしょうか？
-答えは、Hugoと言われるGo製の静的サイトジェネレータと、Learnと呼ばれるテーマ(Theme)を使って作られているようです。
- https://gohugo.io/ https://jamstackthemes.dev/theme/hugo-theme-learn/  実はこのAWS Workshopsに。このようなハンズオンサイトの作り方のハンズオンがあります！折角なので、試してみたいと思います。
-https://hosting-hugo-content.workshop.aws/
-  ※ハンズオンの主目的は、Hugoの使い方でなく、AWS Amplifyを活用したホスティングサイト構築手法(CICD込み)ですw
-Hugoセットアップ 詳細はハンズオンを見てもらうとして、Cloud9を使っていきます。初めにHugoをインストールします。Goで作られたシングルバイナリなので、ダウンロード後に解凍し、パスの通ったディレクトリへ実行ファイルを置くだけで利用できます。
-$ wget https://github.com/gohugoio/hugo/releases/download/v0.71.0/hugo_extended_0.71.0_Linux-64bit.tar.gz -O hugo_extended_0.71.0_Linux-64bit.tar.gz $ HUGO_TAR=&#34;$(find . -name &#34;*Linux-64bit.tar.gz&#34;)&#34; $ tar -xzf $HUGO_TAR $ chmod +x hugo $ mkdir bin $ mv hugo bin/ $ cd ~/environment/ # Hugoがインストールできているかの確認 $ hugo version Hugo Static Site Generator v0.71.0-06150C87/extended linux/amd64 BuildDate: 2020-05-18T16:15:29Z サンプルサイトの確認 # 事前に、Hugoで作ったサンプルサイトをダウンロードします $ git clone -b v1.0 --single-branch https://github.
-  </div>
-  
-  <a href="https://t-tkm.github.io/blog/posts/2022/aws_hugo/" class="c-article__btn p-list-article__btn">Read more</a>
   
 </article>
 

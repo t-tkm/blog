@@ -7,7 +7,25 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>&amp;copy; 2021 Takumi Tomita Powered by Hugo &amp; Pickles.</copyright>
-    <lastBuildDate>Sat, 12 Mar 2022 00:00:00 +0900</lastBuildDate><atom:link href="https://t-tkm.github.io/blog/categories/aws/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 13 Mar 2022 00:00:00 +0900</lastBuildDate><atom:link href="https://t-tkm.github.io/blog/categories/aws/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Hugoでハンズオンサイト(AWS)</title>
+      <link>https://t-tkm.github.io/blog/posts/2022/aws_hugo/</link>
+      <pubDate>Sun, 13 Mar 2022 00:00:00 +0900</pubDate>
+      
+      <guid>https://t-tkm.github.io/blog/posts/2022/aws_hugo/</guid>
+      <description>はじめに 唐突ですが、AWS Workshopsというサイトをご存知でしょうか？
+AWS Workshopsは、AWSが公式に提供しているハンズオンコンテンツで、AWS各種サービスについて、実際に手を動かしてみたい場合に大変重宝するサイトです。
+https://workshops.aws/
+さてこのサイト、とてもお洒落な作りになっていますが、どのように作られているのでしょうか？
+答えは、Hugoと言われるGo製の静的サイトジェネレータと、Learnと呼ばれるテーマ(Theme)を使って作られているようです。
+ https://gohugo.io/ https://jamstackthemes.dev/theme/hugo-theme-learn/  実はこのAWS Workshopsに。このようなハンズオンサイトの作り方のハンズオンがあります！折角なので、試してみたいと思います。
+https://hosting-hugo-content.workshop.aws/
+  ※ハンズオンの主目的は、Hugoの使い方でなく、AWS Amplifyを活用したホスティングサイト構築手法(CICD込み)ですw
+Hugoセットアップ 詳細はハンズオンを見てもらうとして、Cloud9を使っていきます。初めにHugoをインストールします。Goで作られたシングルバイナリなので、ダウンロード後に解凍し、パスの通ったディレクトリへ実行ファイルを置くだけで利用できます。
+$ wget https://github.com/gohugoio/hugo/releases/download/v0.71.0/hugo_extended_0.71.0_Linux-64bit.tar.gz -O hugo_extended_0.71.0_Linux-64bit.tar.gz $ HUGO_TAR=&amp;#34;$(find . -name &amp;#34;*Linux-64bit.tar.gz&amp;#34;)&amp;#34; $ tar -xzf $HUGO_TAR $ chmod +x hugo $ mkdir bin $ mv hugo bin/ $ cd ~/environment/ # Hugoがインストールできているかの確認 $ hugo version Hugo Static Site Generator v0.71.0-06150C87/extended linux/amd64 BuildDate: 2020-05-18T16:15:29Z サンプルサイトの確認 # 事前に、Hugoで作ったサンプルサイトをダウンロードします $ git clone -b v1.0 --single-branch https://github.</description>
+    </item>
+    
     <item>
       <title>AWS App2Container(お試し編)</title>
       <link>https://t-tkm.github.io/blog/posts/2022/aws_app2container/</link>
@@ -33,24 +51,6 @@ Optimize AWS App2Container generated Docker images
 ポイントは、App2Containerは、分析結果であるanalysis.jsonをベースにイメージを生成するため、不要なファイルを含めないようにanalysis.jsonを編集することになります。   コンテナイメージ分析(dive) はじめに、コンテナイメージの中身を確認できるdiveというツールを導入して、既存のコンテナイメージを分析してみます。
 root@ip-10-0-1-112:~# wget https://github.com/wagoodman/dive/releases/download/v0.9.2/dive_0.9.2_linux_amd64.deb root@ip-10-0-1-112:~# apt install ./dive_0.9.2_linux_amd64.deb root@ip-10-0-1-112:~# dpkg -l | grep dive ii dive 0.9.2 amd64 no description given root@ip-10-0-1-112:~# dive --version dive 0.9.2 使い方は簡単で、解析したいコンテナイメージ名とタグ(option)をdiveコマンドの引数に指定するだけです。
  this can take a while for large images</description>
-    </item>
-    
-    <item>
-      <title>Hugoでハンズオンサイト(AWS)</title>
-      <link>https://t-tkm.github.io/blog/posts/2022/aws_hugo/</link>
-      <pubDate>Sat, 12 Mar 2022 00:00:00 +0900</pubDate>
-      
-      <guid>https://t-tkm.github.io/blog/posts/2022/aws_hugo/</guid>
-      <description>はじめに 唐突ですが、AWS Workshopsというサイトをご存知でしょうか？
-AWS Workshopsは、AWSが公式に提供しているハンズオンコンテンツで、AWS各種サービスについて、実際に手を動かしてみたい場合に大変重宝するサイトです。
-https://workshops.aws/
-さてこのサイト、とてもお洒落な作りになっていますが、どのように作られているのでしょうか？
-答えは、Hugoと言われるGo製の静的サイトジェネレータと、Learnと呼ばれるテーマ(Theme)を使って作られているようです。
- https://gohugo.io/ https://jamstackthemes.dev/theme/hugo-theme-learn/  実はこのAWS Workshopsに。このようなハンズオンサイトの作り方のハンズオンがあります！折角なので、試してみたいと思います。
-https://hosting-hugo-content.workshop.aws/
-  ※ハンズオンの主目的は、Hugoの使い方でなく、AWS Amplifyを活用したホスティングサイト構築手法(CICD込み)ですw
-Hugoセットアップ 詳細はハンズオンを見てもらうとして、Cloud9を使っていきます。初めにHugoをインストールします。Goで作られたシングルバイナリなので、ダウンロード後に解凍し、パスの通ったディレクトリへ実行ファイルを置くだけで利用できます。
-$ wget https://github.com/gohugoio/hugo/releases/download/v0.71.0/hugo_extended_0.71.0_Linux-64bit.tar.gz -O hugo_extended_0.71.0_Linux-64bit.tar.gz $ HUGO_TAR=&amp;#34;$(find . -name &amp;#34;*Linux-64bit.tar.gz&amp;#34;)&amp;#34; $ tar -xzf $HUGO_TAR $ chmod +x hugo $ mkdir bin $ mv hugo bin/ $ cd ~/environment/ # Hugoがインストールできているかの確認 $ hugo version Hugo Static Site Generator v0.71.0-06150C87/extended linux/amd64 BuildDate: 2020-05-18T16:15:29Z サンプルサイトの確認 # 事前に、Hugoで作ったサンプルサイトをダウンロードします $ git clone -b v1.0 --single-branch https://github.</description>
     </item>
     
     <item>
