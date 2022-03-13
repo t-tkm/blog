@@ -88,7 +88,7 @@
 <li><a href="https://gohugo.io/">https://gohugo.io/</a></li>
 <li><a href="https://jamstackthemes.dev/theme/hugo-theme-learn/">https://jamstackthemes.dev/theme/hugo-theme-learn/</a></li>
 </ul>
-<p>実はこのAWS Workshopsに。このようなハンズオンサイトの作り方のハンズオンがあります！折角なので、試してみたいと思います。</p>
+<p>実はこのAWS Workshopsのコンテンツの一つに、このようなハンズオンサイトの作り方のハンズオンがあります！折角なので、試してみたいと思います。</p>
 <p><a href="https://hosting-hugo-content.workshop.aws/">https://hosting-hugo-content.workshop.aws/</a></p>
 <figure><a href="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img1.png?raw=true">
     <img src="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img1.png?raw=true"
@@ -132,7 +132,7 @@ $ git submodule update --init
 </figure>
 
 <h1 id="amplifyセットアップ">Amplifyセットアップ</h1>
-<p>サンプルサイトはローカルで動いているため、公開サイトとしてホスティングさせます。そこで、AWS Amplifyを使って簡単構築してみます。</p>
+<p>サンプルサイトはローカルで動いているため、外部から参照できません。従って、公開サイトとしてホスティングすることになります。そこでAWS Amplifyが活躍します。</p>
 <p>Amplify CLIをインストールします。Cloud9はデフォルトでNode.jsがインストール済みなので、npmでパッケージインストールするだけです。</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ npm install -g @aws-amplify/cli@4.21.1
 
@@ -146,14 +146,14 @@ Plugin scan successful
 <p>Amplifyを初期化します。</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># Initialize AWS Amplify</span>
 $ amplify init
-</code></pre></div><p>設定パラメータは下記</p>
+</code></pre></div><p>設定パラメータは下記になります。</p>
 <figure><a href="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img5.png?raw=true">
     <img src="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img5.png?raw=true"
          alt="img5"/> </a>
 </figure>
 
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ amplify add hosting
-</code></pre></div><p>設定パラメータは下記</p>
+</code></pre></div><p>こちらも、設定パラメータを確認しておきます。</p>
 <figure><a href="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img6.png?raw=true">
     <img src="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img6.png?raw=true"
          alt="img6"/> </a>
@@ -164,12 +164,13 @@ Current Environment: main
 | Category | Resource name   | Operation | Provider plugin   |
 | -------- | --------------- | --------- | ----------------- |
 | Hosting  | S3AndCloudFront | Create    | awscloudformation |
-</code></pre></div><p>以上により、プロジェクトファイルの各種設定がAmplify CLIで設定されました。次に、この情報に基づき、AWSリソースを実際に生成します。
+</code></pre></div><p>以上により、プロジェクトファイルの各種設定がAmplify CLIで設定されました。
 <figure><a href="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img7.png?raw=true">
     <img src="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img7.png?raw=true"
          alt="img7"/> </a>
 </figure>
 </p>
+<p>それでは、上記設定内容に基づき、AWSリソースを実際に生成します。</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ amplify publish
 ✔ Successfully pulled backend environment main from the cloud.
 
@@ -220,7 +221,7 @@ Hosting endpoint: https://<span style="color:#e6db74">&lt;&lt;ランダム文字
 </figure>
 
 <h1 id="公開サイトcloudfrontの確認">公開サイト(CloudFront)の確認</h1>
-<p>無事、公開を確認できました。
+<p>無事、公開を確認できました^^ ※本当に、とても簡単でした！
 <figure><a href="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/gif.gif?raw=true">
     <img src="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/gif.gif?raw=true"
          alt="gif"/> </a>
@@ -232,7 +233,8 @@ Hosting endpoint: https://<span style="color:#e6db74">&lt;&lt;ランダム文字
 <p>Note: If you deploy this lab in any region other than US-EAST-1 it can take up to a few hours for DNS to replicate which will cause an AccessDenied error to be displayed. This is just for the first time the S3 bucket is created. Any future updates will not have a delay.</p>
 </blockquote>
 <p><a href="https://aws.amazon.com/jp/premiumsupport/knowledge-center/s3-http-307-response/">https://aws.amazon.com/jp/premiumsupport/knowledge-center/s3-http-307-response/</a></p>
-<p>素直に待つのが良いと思いますが「待ちきれない！」という方は、Amplifyの設定ファイルを少しいじって、次のようなやり方で試してみてもいいかもしれません。</p>
+<p>素直に待つのが良いと思いますが「待ちきれない！」という方は、Amplifyの設定ファイルを少しいじって、次のようなやり方で試してみてもいいかもしれません。
+(私は待てなかったので、このやり方で確認しましたw)</p>
 <p><figure><a href="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img8.png?raw=true">
     <img src="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img8.png?raw=true"
          alt="img8"/> </a>
@@ -269,16 +271,16 @@ Hosting endpoint: https://<span style="color:#e6db74">&lt;&lt;ランダム文字
   <ul id="slider" class="p-related__list">
     
     <li class="p-related__item js-related__item">
-      <a href="/blog/posts/2022/aws_app2container_opt/"
+      <a href="/blog/posts/2022/aws_app2container/"
         >
-        <span>AWS App2Container(イメージ最適化編)</span>
+        <span>AWS App2Container(お試し編)</span>
       </a>
     </li>
     
     <li class="p-related__item js-related__item">
-      <a href="/blog/posts/2022/aws_app2container/"
+      <a href="/blog/posts/2022/aws_app2container_opt/"
         >
-        <span>AWS App2Container(お試し編)</span>
+        <span>AWS App2Container(イメージ最適化編)</span>
       </a>
     </li>
     
