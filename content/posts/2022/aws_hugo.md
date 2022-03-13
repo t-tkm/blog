@@ -46,7 +46,11 @@ Hugo Static Site Generator v0.71.0-06150C87/extended linux/amd64 BuildDate: 2020
 # サンプルサイトの確認
 ```bash
 # 事前に、Hugoで作ったサンプルサイトをダウンロードします
-$ git clone -b v1.0 --single-branch https://github.com/t-tkm/aws-amplify-hugo-hosting.git && cd aws-amplify-hugo-hosting
+$ git clone -b v2.0 --single-branch https://github.com/t-tkm/aws-amplify-hugo-hosting.git && cd aws-amplify-hugo-hosting
+
+# ブランチは空
+$ git branch
+* (no branch)
 
 # 適当にブランチ名をつけておく。
 $ git switch -c hugo
