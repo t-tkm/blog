@@ -1,7 +1,7 @@
 +++ 
 Categories = ["AWS"] 
 Tags = ["AWS", "Hugo"] 
-date = "2022-03-06T00:00:00+09:00" 
+date = "2022-03-12T00:00:00+09:00" 
 title = "Hugoでハンズオンサイト(AWS)" 
 +++
 
@@ -15,6 +15,7 @@ TBD
 参考サイト(AWS Workshop)に従ってお試し。
 
 ## Hugo Setup
+Hugoをインストールします。Goで作られたシングルバイナリなので、ダウンロード後に解凍し、パスの通ったディレクトリへ実行ファイルを置くだけで利用できます。
 ```bash
 $ wget https://github.com/gohugoio/hugo/releases/download/v0.71.0/hugo_extended_0.71.0_Linux-64bit.tar.gz -O hugo_extended_0.71.0_Linux-64bit.tar.gz
 $ HUGO_TAR="$(find . -name "*Linux-64bit.tar.gz")"
@@ -23,11 +24,14 @@ $ chmod +x hugo
 $ mkdir bin
 $ mv hugo bin/
 $ cd ~/environment/
+
+# Hugoがインストールできているかの確認
 $ hugo version
 Hugo Static Site Generator v0.71.0-06150C87/extended linux/amd64 BuildDate: 2020-05-18T16:15:29Z
 ```
 
 ## Amplify Setup
+次に、Amplify CLIをインストールします。Cloud9はデフォルトでNode.jsがインストール済みなので、npmでパッケージインストールするだけです。
 ```bash
 $ npm install -g @aws-amplify/cli@4.21.1
 $ amplify -v
@@ -35,6 +39,8 @@ Scanning for plugins...
 Plugin scan successful
 4.21.1
 ```
+
+以上で準備が整いました。
 
 # Hugoサイト作成
 ```bash
