@@ -19,7 +19,7 @@ https://workshops.aws/
 - https://gohugo.io/
 - https://jamstackthemes.dev/theme/hugo-theme-learn/
 
-実はこのAWS Workshopsに。このようなハンズオンサイトの作り方のハンズオンがあります！折角なので、試してみたいと思います。
+実はこのAWS Workshopsのコンテンツの一つに、このようなハンズオンサイトの作り方のハンズオンがあります！折角なので、試してみたいと思います。
 
 https://hosting-hugo-content.workshop.aws/
 
@@ -68,7 +68,7 @@ $ hugo server -p 8080
 
 
 # Amplifyセットアップ
-サンプルサイトはローカルで動いているため、公開サイトとしてホスティングさせます。そこで、AWS Amplifyを使って簡単構築してみます。
+サンプルサイトはローカルで動いているため、外部から参照できません。従って、公開サイトとしてホスティングすることになります。そこでAWS Amplifyが活躍します。
 
 Amplify CLIをインストールします。Cloud9はデフォルトでNode.jsがインストール済みなので、npmでパッケージインストールするだけです。
 ```bash
@@ -90,7 +90,7 @@ Amplifyを初期化します。
 $ amplify init
 ```
 
-設定パラメータは下記
+設定パラメータは下記になります。
 
 {{< figure alt="img5" src="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img5.png?raw=true" link="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img5.png?raw=true">}}
 
@@ -98,7 +98,7 @@ $ amplify init
 $ amplify add hosting
 ```
 
-設定パラメータは下記
+こちらも、設定パラメータを確認しておきます。
 
 {{< figure alt="img6" src="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img6.png?raw=true" link="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img6.png?raw=true">}}
 
@@ -110,9 +110,10 @@ Current Environment: main
 | Hosting  | S3AndCloudFront | Create    | awscloudformation |
 ```
 
-以上により、プロジェクトファイルの各種設定がAmplify CLIで設定されました。次に、この情報に基づき、AWSリソースを実際に生成します。
+以上により、プロジェクトファイルの各種設定がAmplify CLIで設定されました。
 {{< figure alt="img7" src="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img7.png?raw=true" link="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img7.png?raw=true">}}
 
+それでは、上記設定内容に基づき、AWSリソースを実際に生成します。
 ```bash
 $ amplify publish
 ✔ Successfully pulled backend environment main from the cloud.
@@ -164,7 +165,7 @@ amplify publishコマンドの裏では、CloudFormationスタックが実行さ
 {{< figure alt="img4" src="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img4.png?raw=true" link="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img4.png?raw=true">}}
 
 # 公開サイト(CloudFront)の確認
-無事、公開を確認できました。
+無事、公開を確認できました^^ ※本当に、とても簡単でした！
 {{< figure alt="gif" src="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/gif.gif?raw=true" link="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/gif.gif?raw=true">}}
 
 # 補足
@@ -175,6 +176,7 @@ AWS Workshopsのガイドにも記載ありますが、US-EAST-1以外のリー�
 https://aws.amazon.com/jp/premiumsupport/knowledge-center/s3-http-307-response/
 
 素直に待つのが良いと思いますが「待ちきれない！」という方は、Amplifyの設定ファイルを少しいじって、次のようなやり方で試してみてもいいかもしれません。
+(私は待てなかったので、このやり方で確認しましたw)
 
 {{< figure alt="img8" src="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img8.png?raw=true" link="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img8.png?raw=true">}}
 {{< figure alt="img9" src="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img9.png?raw=true" link="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img9.png?raw=true">}}
