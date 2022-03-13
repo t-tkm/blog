@@ -1,6 +1,6 @@
 +++ 
 Categories = ["AWS"] 
-Tags = ["AWS", "Hugo"] 
+Tags = ["AWS", "Amplify", "Hugo"] 
 date = "2022-03-13T00:00:00+09:00" 
 title = "Hugoでハンズオンサイト(AWS)" 
 +++
