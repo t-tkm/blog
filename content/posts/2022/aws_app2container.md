@@ -18,7 +18,11 @@ AWS App2Containerは、起動中のjavaアプリをコンテナイメージに�
 
 > If App2Container does not find a supported framework running on your application server, or if you have other dependent processes running on your server, App2Container takes a conservative approach to identifying dependencies. This is known as process mode. For process mode, all non-system files on the application server are included in the container image.
 
-以降は、次の流れで検証します。
+本記事のスコープは下記になります。
+{{< figure alt="img19" src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_app2container/img19.png" link="https://github.com/t-tkm/blog_images/raw/main/2022/aws_app2container/img19.png">}}
+
+
+以降、次の流れで検証します。
 - App2Containerのインストール&セットアップ
 - Tomcatアプリ準備
 - SpringBootアプリ準備

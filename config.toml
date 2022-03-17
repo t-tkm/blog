@@ -1,5 +1,5 @@
 baseurl = "https://t-tkm.github.io/blog/"
-title = "My Tech Blog Posts"
+title = "My Tech Blog"
 languageCode = "ja"
 theme = "pickles"
 copyright = "&copy; 2021 Takumi Tomita Powered by Hugo & Pickles."
@@ -11,6 +11,9 @@ copyright = "&copy; 2021 Takumi Tomita Powered by Hugo & Pickles."
   linkedin = "takumitomta"
   github = "t-tkm"
   gitlab = "t-tkm"
+
+[markup.goldmark.renderer]
+      unsafe = true
 
 # Disqus shortname
  author = "Takumi Tomita"
