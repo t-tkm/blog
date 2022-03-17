@@ -1,13 +1,25 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>EKS on My Tech Blog Posts</title>
+    <title>EKS on My Tech Blog</title>
     <link>https://t-tkm.github.io/blog/tags/eks/</link>
-    <description>Recent content in EKS on My Tech Blog Posts</description>
+    <description>Recent content in EKS on My Tech Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>&amp;copy; 2021 Takumi Tomita Powered by Hugo &amp; Pickles.</copyright>
-    <lastBuildDate>Sat, 12 Mar 2022 00:00:00 +0900</lastBuildDate><atom:link href="https://t-tkm.github.io/blog/tags/eks/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 16 Mar 2022 00:00:00 +0900</lastBuildDate><atom:link href="https://t-tkm.github.io/blog/tags/eks/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>AWS App2Container(ECS/EKSデプロイ編)</title>
+      <link>https://t-tkm.github.io/blog/posts/2022/aws_app2container_ecs_eks/</link>
+      <pubDate>Wed, 16 Mar 2022 00:00:00 +0900</pubDate>
+      
+      <guid>https://t-tkm.github.io/blog/posts/2022/aws_app2container_ecs_eks/</guid>
+      <description>1. はじめに ここでは、前回の記事「AWS App2Container(お試し編)」では触れられなかったデプロイについて試してみます。 実際は、次の3ステップでデプロイできて衝撃的でした！
+ deployment.jsonを編集し、「ECS」か「EKS」を選択(AppRunnerも選択可)。 app2containerコマンド(オプションgenerate app-deployment)でマニフェスト作成(一部S3に格納される) CloudFormationでデプロイ  そして、ステップ2の「app2containerコマンド」の引数オプションとして「&amp;ndash;deploy」を指定すると、ステップ3すら不要です^^
+  それでは試してみましょう。
+2. マニフェスト作成   2-1. S3へ格納される成果物(ECS) $ tree a2c-java-tomcat-3c173836/ecs a2c-java-tomcat-3c173836/ecs └── subtemplates ├── ecs-cluster.yml ├── ecs-gmsa-automation-doc.yml ├── ecs-gmsa-execute.yml ├── ecs-gmsa-iam-roles.yml ├── ecs-gmsa-lambda-functions.yml ├── ecs-gmsa.yml ├── ecs-lb-webapp.yml ├── ecs-master.yml ├── ecs-private-app.yml ├── ecs-private-load-balancer.yml ├── ecs-public-load-balancer.yml ├── ecs-route53.yml └── ecs-vpc.yml 2-2. S3へ格納される成果物(EKS)  (snip)展開 $ tree a2c-java-tomcat-3c173836/eks a2c-java-tomcat-3c173836/eks ├── functions │ └── packages │ ├── CleanupLambdas │ │ └── lambda.</description>
+    </item>
+    
     <item>
       <title>AWS App2Container(お試し編)</title>
       <link>https://t-tkm.github.io/blog/posts/2022/aws_app2container/</link>
