@@ -1,5 +1,5 @@
 baseurl = "https://t-tkm.github.io/blog/"
-title = "My Tech Blog"
+title = "Takumi Tomita's Blog"
 languageCode = "ja"
 theme = "pickles"
 copyright = "&copy; 2022 Takumi Tomita Powered by Hugo & Pickles."
