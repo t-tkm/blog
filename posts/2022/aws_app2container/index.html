@@ -119,16 +119,48 @@
 </figure>
 </p>
 <h1 id="app2containerのインストールセットアップ">App2Containerのインストール&amp;セットアップ</h1>
-<p>今回の作業は、Cloud9(Ubuntu)を使い実施しました。</p>
+<p>今回の作業は、Cloud9(Ubuntu)を使い実施しました。
+Cloud9のシェルで作業します。</p>
 <figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_app2container/img3.png">
     <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_app2container/img3.png"
          alt="img3"/> </a>
 </figure>
 
-<p>Cloud9へログインして、shellで作業します。App2Container(コマンド)の実行はroot権限が必要なのでroot昇格します。</p>
+<p>App2Containerは結構なディスクを使います(docker imagesが利用)。
+デフォルトのEBSディスクサイズが小さかったため、事前にEBSサイズを10GBから300GBへ拡張しています。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ pip3 install --user --upgrade boto3
+$ export instance_id<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>curl -s http://169.254.169.254/latest/meta-data/instance-id<span style="color:#66d9ef">)</span>
+$ python -c <span style="color:#e6db74">&#34;import boto3
+</span><span style="color:#e6db74">import os
+</span><span style="color:#e6db74">from botocore.exceptions import ClientError 
+</span><span style="color:#e6db74">ec2 = boto3.client(&#39;ec2&#39;)
+</span><span style="color:#e6db74">volume_info = ec2.describe_volumes(
+</span><span style="color:#e6db74">    Filters=[
+</span><span style="color:#e6db74">        {
+</span><span style="color:#e6db74">            &#39;Name&#39;: &#39;attachment.instance-id&#39;,
+</span><span style="color:#e6db74">            &#39;Values&#39;: [
+</span><span style="color:#e6db74">                os.getenv(&#39;instance_id&#39;)
+</span><span style="color:#e6db74">            ]
+</span><span style="color:#e6db74">        }
+</span><span style="color:#e6db74">    ]
+</span><span style="color:#e6db74">)
+</span><span style="color:#e6db74">volume_id = volume_info[&#39;Volumes&#39;][0][&#39;VolumeId&#39;]
+</span><span style="color:#e6db74">try:
+</span><span style="color:#e6db74">    resize = ec2.modify_volume(    
+</span><span style="color:#e6db74">            VolumeId=volume_id,    
+</span><span style="color:#e6db74">            Size=300
+</span><span style="color:#e6db74">    )
+</span><span style="color:#e6db74">    print(resize)
+</span><span style="color:#e6db74">except ClientError as e:
+</span><span style="color:#e6db74">    if e.response[&#39;Error&#39;][&#39;Code&#39;] == &#39;InvalidParameterValue&#39;:
+</span><span style="color:#e6db74">        print(&#39;ERROR MESSAGE: {}&#39;.format(e))&#34;</span>
+<span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> $? -eq <span style="color:#ae81ff">0</span> <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
+    sudo reboot
+<span style="color:#66d9ef">fi</span>
+</code></pre></div><p>再起動(reboot)後、再びCloud9のシェルに戻ります。
+App2Container(コマンド)の実行はroot権限が必要なので、以降はroot昇格して作業しています。</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ sudo su -
-</code></pre></div><p>App2Containerは結構なディスクを使います。デフォルトのEBSディスクサイズが小さかったため、事前にEBSサイズを10GBから300GBへ拡張しています。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@ip-10-0-1-112:~# df -h
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@ip-10-0-1-112:~# df -h
 Filesystem      Size  Used Avail Use% Mounted on
 <span style="color:#f92672">(</span>snip<span style="color:#f92672">)</span>
 /dev/nvme0n1p1  291G  8.6G  283G   3% /
