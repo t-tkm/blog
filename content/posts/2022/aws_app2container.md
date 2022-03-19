@@ -33,16 +33,50 @@ AWS App2Containerは、起動中のjavaアプリをコンテナイメージに�
 
 # App2Containerのインストール&セットアップ
 今回の作業は、Cloud9(Ubuntu)を使い実施しました。
+Cloud9のシェルで作業します。
 
 {{< figure alt="img3" src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_app2container/img3.png" link="https://github.com/t-tkm/blog_images/raw/main/2022/aws_app2container/img3.png">}}
 
-Cloud9へログインして、shellで作業します。App2Container(コマンド)の実行はroot権限が必要なのでroot昇格します。
+App2Containerは結構なディスクを使います(docker imagesが利用)。
+デフォルトのEBSディスクサイズが小さかったため、事前にEBSサイズを10GBから300GBへ拡張しています。
+
+```bash
+$ pip3 install --user --upgrade boto3
+$ export instance_id=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
+$ python -c "import boto3
+import os
+from botocore.exceptions import ClientError 
+ec2 = boto3.client('ec2')
+volume_info = ec2.describe_volumes(
+    Filters=[
+        {
+            'Name': 'attachment.instance-id',
+            'Values': [
+                os.getenv('instance_id')
+            ]
+        }
+    ]
+)
+volume_id = volume_info['Volumes'][0]['VolumeId']
+try:
+    resize = ec2.modify_volume(    
+            VolumeId=volume_id,    
+            Size=300
+    )
+    print(resize)
+except ClientError as e:
+    if e.response['Error']['Code'] == 'InvalidParameterValue':
+        print('ERROR MESSAGE: {}'.format(e))"
+if [ $? -eq 0 ]; then
+    sudo reboot
+fi
+```
+再起動(reboot)後、再びCloud9のシェルに戻ります。
+App2Container(コマンド)の実行はroot権限が必要なので、以降はroot昇格して作業しています。
 
 ```bash
 $ sudo su -
 ```
-
-App2Containerは結構なディスクを使います。デフォルトのEBSディスクサイズが小さかったため、事前にEBSサイズを10GBから300GBへ拡張しています。
 
 ```bash
 root@ip-10-0-1-112:~# df -h
