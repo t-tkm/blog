@@ -3,6 +3,8 @@ title = "Takumi Tomita's Blog"
 languageCode = "ja"
 theme = "pickles"
 copyright = "&copy; 2022 Takumi Tomita Powered by Hugo & Pickles."
+hasCJKLanguage = true # 日本語・中国語・韓国語の単語カウントを有効にする
+summaryLength = 320 # サマリーの長さを120単語にする
 
 [params]
   paginate = 10
