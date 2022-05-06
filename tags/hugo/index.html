@@ -69,16 +69,7 @@
     </p>
   </header>
   <div class="c-article__summary">
-    はじめに 唐突ですが、AWS Workshopsというサイトをご存知でしょうか？
-AWS Workshopsは、AWSが公式に提供しているハンズオンコンテンツで、AWS各種サービスについて、実際に手を動かしてみたい場合に大変重宝するサイトです。
-https://workshops.aws/
-さてこのサイト、とてもお洒落な作りになっていますが、どのように作られているのでしょうか？
-答えは、Hugoと言われるGo製の静的サイトジェネレータと、Learnと呼ばれるテーマ(Theme)を使って作られているようです。
- https://gohugo.io/ https://jamstackthemes.dev/theme/hugo-theme-learn/  実はこのAWS Workshopsのコンテンツの一つに、このようなハンズオンサイトの作り方のハンズオンがあります！折角なので、試してみたいと思います。
-https://hosting-hugo-content.workshop.aws/
-  ※ハンズオンの主目的は、Hugoの使い方でなく、AWS Amplifyを活用したホスティングサイト構築手法(CICD込み)ですw
-構成図 本記事の構成になります。記事の編集、追加などは、Cloud9(EC2)からAmplify CLI経由で操作(amplify push)します。   AWS Workshopsのハンズオンでは、6章「CONTENT CI/CD PIPELINE」でCodeCommitを経由したCICDが学べます。   また、AmplifyのHosting environmentsは、GitHubなどとの連携も可能ですので、こういう構成も可能かと思います。   Hugoセットアップ 詳細はハンズオンを見てもらうとして、Cloud9を使っていきます。初めにHugoをインストールします。Goで作られたシングルバイナリなので、ダウンロード後に解凍し、パスの通ったディレクトリへ実行ファイルを置くだけで利用できます。
-$ wget https://github.com/gohugoio/hugo/releases/download/v0.71.0/hugo_extended_0.71.0_Linux-64bit.tar.gz -O hugo_extended_0.71.0_Linux-64bit.tar.gz $ HUGO_TAR=&#34;$(find . -name &#34;*Linux-64bit.tar.gz&#34;)&#34; $ tar -xzf $HUGO_TAR $ chmod +x hugo $ mkdir bin $ mv hugo bin/ $ cd ~/environment/ # Hugoがインストールできているかの確認 $ hugo version Hugo Static Site Generator v0.
+    はじめに 唐突ですが、AWS Workshopsというサイトをご存知でしょうか？ AWS Workshopsは、AWSが公式に提供しているハンズオンコンテンツで、AWS各種サービスについて、実際に手を動かしてみたい場合に大変重宝するサイトです。 https://workshops.aws/ さてこのサイト、とてもお洒落な作りになっていますが、どのように作られているのでしょうか？ 答えは、Hugoと言われるGo製の静的サイトジェネレータと、Learnと呼ばれるテーマ(Theme)を使って作られているようです。 https://gohugo.io/ https://jamstackthemes.dev/theme/hugo-theme-learn/ 実はこのAWS Workshopsのコンテンツの一つに、このようなハンズオンサイトの作り方のハンズオンがあります！折角なので、試してみたいと思います。 https://hosting-hugo-content.workshop.aws/ ※ハンズオンの主目的は、Hugoの
   </div>
   
   <a href="https://t-tkm.github.io/blog/posts/2022/aws_hugo/" class="c-article__btn p-list-article__btn">Read more</a>
