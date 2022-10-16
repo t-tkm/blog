@@ -85,6 +85,7 @@
 しかしこのままでは、yumの更新、npmなど各種パッケージ経由でのツール導入、(インターネットにあるRESTエンドポイントを使う)AWS CLI操作などできません。</p>
 <p>そこで今回は、インターネットへのアウトバウンド通信を許可するためにNAT GWを設置しようと思います。トラフィックを少し管理するために。Network Firewall
 というIPS/IDS相当のサービスを設置したいと思います。</p>
+<p>なお、今回の検証で、Network Firewallは1,400円/日程度の費用が発生しました。(1 endpoints x 24 hours x 0.395 USD = 9.48 USD 148円/USD 換算)</p>
 <h1 id="参考">参考</h1>
 <ol>
 <li><a href="https://aws.amazon.com/jp/blogs/news/webinar-bb-awsnetworkfirewallintroduction-2021/">[AWS Black Belt Online Seminar] AWS Network Firewall 入門 資料公開</a></li>
@@ -429,16 +430,16 @@ Resolving Dependencies
     </li>
     
     <li class="p-related__item js-related__item">
-      <a href="/blog/posts/2022/aws_app2container_opt/"
+      <a href="/blog/posts/2022/aws_app2container/"
         >
-        <span>AWS App2Container(イメージ最適化編)</span>
+        <span>AWS App2Container(お試し編)</span>
       </a>
     </li>
     
     <li class="p-related__item js-related__item">
-      <a href="/blog/posts/2022/aws_app2container/"
+      <a href="/blog/posts/2022/aws_app2container_opt/"
         >
-        <span>AWS App2Container(お試し編)</span>
+        <span>AWS App2Container(イメージ最適化編)</span>
       </a>
     </li>
     

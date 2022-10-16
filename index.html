@@ -67,7 +67,7 @@
     </p>
   </header>
   <div class="c-article__summary">
-    はじめに 前回は、VPCにInternet Gatewayを設置しない完全にプライベートな環境での、ブラウザを使うEC2操作を見ました。 しかしこのままでは、yumの更新、npmなど各種パッケージ経由でのツール導入、(インターネットにあるRESTエンドポイントを使う)AWS CLI操作などできません。 そこで今回は、インターネットへのアウトバウンド通信を許可するためにNAT GWを設置しようと思います。トラフィックを少し管理するために。Network Firewall というIPS/IDS相当のサービスを設置したいと思います。 参考 [AWS Black Belt Online Seminar] AWS Network Firewall 入門 資料公開 [AWS Black Belt Online Seminar]AWS Network Firewall 応用編1 資料公開 AWSブログ: 【開催報告】アップデート紹介とちょっぴり DiveDeep する AWS の時間 第二十二
+    はじめに 前回は、VPCにInternet Gatewayを設置しない完全にプライベートな環境での、ブラウザを使うEC2操作を見ました。 しかしこのままでは、yumの更新、npmなど各種パッケージ経由でのツール導入、(インターネットにあるRESTエンドポイントを使う)AWS CLI操作などできません。 そこで今回は、インターネットへのアウトバウンド通信を許可するためにNAT GWを設置しようと思います。トラフィックを少し管理するために。Network Firewall というIPS/IDS相当のサービスを設置したいと思います。 なお、今回の検証で、Network Firewallは1,400円/日程度の費用が発生しました。(1 endpoints x 24 hours x 0.395 USD = 9.48 USD 148円/USD 換算
   </div>
   
   <a href="https://t-tkm.github.io/blog/posts/2022/aws_secure_bastion_2/" class="c-article__btn p-list-article__btn">Read more</a>
