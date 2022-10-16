@@ -12,6 +12,8 @@ title = "踏台VPCの作成(Internet Gateway有り)(AWS)"
 そこで今回は、インターネットへのアウトバウンド通信を許可するためにNAT GWを設置しようと思います。トラフィックを少し管理するために。Network Firewall
 というIPS/IDS相当のサービスを設置したいと思います。
 
+なお、今回の検証で、Network Firewallは1,400円/日程度の費用が発生しました。(1 endpoints x 24 hours x 0.395 USD = 9.48 USD 148円/USD 換算)
+
 # 参考
 1. [[AWS Black Belt Online Seminar] AWS Network Firewall 入門 資料公開](https://aws.amazon.com/jp/blogs/news/webinar-bb-awsnetworkfirewallintroduction-2021/)
 2. [[AWS Black Belt Online Seminar]AWS Network Firewall 応用編1 資料公開](https://aws.amazon.com/jp/blogs/news/webinar-bb-aws-network-firewall-advanced-part1-2021/)
