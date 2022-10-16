@@ -4,16 +4,16 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
   
-  <title>Tags</title>
-  <meta property="og:title" content="Tags" />
-  <meta name="twitter:title" content="Tags" />
+  <title>Terraform</title>
+  <meta property="og:title" content="Terraform" />
+  <meta name="twitter:title" content="Terraform" />
   
 
   
 
   <meta name="author" content="Takumi Tomita"/>
   <meta property="og:site_name" content="Takumi Tomita&#39;s Blog" />
-  <meta property="og:url" content="https://t-tkm.github.io/blog/tags/" />
+  <meta property="og:url" content="https://t-tkm.github.io/blog/tags/terraform/" />
 
   
   <meta name="twitter:card" content="summary" />
@@ -52,34 +52,87 @@
 
   <main id="main" class="l-main">
 
+<h2 class="c-title p-tag-title">Terraform</h2>
 
-<section>
-  <h2>Tags</h2>
-  <ul>
+
+
+
+<article class="c-article p-list-article">
+  <header>
+    <h2 class="c-title c-article__title"><a href="https://t-tkm.github.io/blog/posts/2022/aws_secure_bastion_2/">踏台VPCの作成(Internet Gateway有り)(AWS)</a></h2>
+    <p class="c-article__meta">
+      Posted on
+<time datetime="2022-10-16T00:00:00&#43;09:00">
+  Oct 16, 2022
+</time>
+
+    </p>
+  </header>
+  <div class="c-article__summary">
+    はじめに 前回は、VPCにInternet Gatewayを設置しない完全にプライベートな環境での、ブラウザを使うEC2操作を見ました。 しかしこのままでは、yumの更新、npmなど各種パッケージ経由でのツール導入、(インターネットにあるRESTエンドポイントを使う)AWS CLI操作などできません。 そこで今回は、インターネットへのアウトバウンド通信を許可するためにNAT GWを設置しようと思います。トラフィックを少し管理するために。Network Firewall というIPS/IDS相当のサービスを設置したいと思います。 参考 [AWS Black Belt Online Seminar] AWS Network Firewall 入門 資料公開 [AWS Black Belt Online Seminar]AWS Network Firewall 応用編1 資料公開 AWSブログ: 【開催報告】アップデート紹介とちょっぴり DiveDeep する AWS の時間 第二十二
+  </div>
+  
+  <a href="https://t-tkm.github.io/blog/posts/2022/aws_secure_bastion_2/" class="c-article__btn p-list-article__btn">Read more</a>
+  
+</article>
+
+
+
+
+<article class="c-article p-list-article">
+  <header>
+    <h2 class="c-title c-article__title"><a href="https://t-tkm.github.io/blog/posts/2022/aws_secure_bastion_1/">踏台VPCの作成(Internet Gateway無し)(AWS)</a></h2>
+    <p class="c-article__meta">
+      Posted on
+<time datetime="2022-10-16T00:00:00&#43;09:00">
+  Oct 16, 2022
+</time>
+
+    </p>
+  </header>
+  <div class="c-article__summary">
+    はじめに VPCにInternet GWを割当てず、プライベートサブネットにあるサーバ(EC2)を操作する方法です。Cloud9(Amazon Linux)と、Windows Server(ブラウザを使ったGUI操作)を説明します。 [参考]Systems Manager を使用してインターネットアクセスなしでプライベート EC2 インスタンスを管理できるように、VPC エンドポイントを作成するにはどうすればよいですか? 構成 基盤構築(Terraform) ネットワークなどの基盤構築には、Terraformを活用しました。コードはこちら(GitHub)からダウンロードできます。 VPCパラメータ resource &#34;aws_vpc&#34; &#34;Main&#34; { cidr_block = var.main_vpc_cidr instance_tenancy = &#34;default&#34; enable_dns_hostnames = true enable_dns_support = true tags = { Name = &#34;${var.system_name}-vpc&#34; } } Bastionサブネットパラメー
+  </div>
+  
+  <a href="https://t-tkm.github.io/blog/posts/2022/aws_secure_bastion_1/" class="c-article__btn p-list-article__btn">Read more</a>
+  
+</article>
+
+
+
+<nav class="c-pagination p-pagination">
+  <div class="c-pagination__ctrl">
+    <div class="c-pagination__newer">
+      
+    </div>
+    <div class="c-pagination__older">
+      
+    </div>
+  </div>
+  <span class="c-pagination__count p-pagination__count">Page 1 of 1</span>
+</nav>
+
+
+<aside class="p-author">
+  
+  <div class="c-avatar p-author__avatar">
+    <img alt="Author Avatar" src="https://www.gravatar.com/avatar/01f65fbc400bf554d948aec41084a9fa" />
+  </div>
+  
+  
+  <div class="p-author__body">
+    
+    <p class="c-title p-author__name ">Takumi Tomita</p>
     
     
-    <li><a href="https://t-tkm.github.io/blog/tags/alexa">alexa</a> (2)</li>
+    <p>横浜でSWエンジニアやってます。2021, 2022 APN Ambassador (AWS)に選出いただきました。</p>
     
-    <li><a href="https://t-tkm.github.io/blog/tags/amplify">amplify</a> (1)</li>
     
-    <li><a href="https://t-tkm.github.io/blog/tags/app2container">app2container</a> (3)</li>
-    
-    <li><a href="https://t-tkm.github.io/blog/tags/aws">aws</a> (9)</li>
-    
-    <li><a href="https://t-tkm.github.io/blog/tags/bastion">bastion</a> (2)</li>
-    
-    <li><a href="https://t-tkm.github.io/blog/tags/container">container</a> (3)</li>
-    
-    <li><a href="https://t-tkm.github.io/blog/tags/ecs">ecs</a> (4)</li>
-    
-    <li><a href="https://t-tkm.github.io/blog/tags/eks">eks</a> (3)</li>
-    
-    <li><a href="https://t-tkm.github.io/blog/tags/hugo">hugo</a> (1)</li>
-    
-    <li><a href="https://t-tkm.github.io/blog/tags/terraform">terraform</a> (2)</li>
-    
-  </ul>
-</section>
+  </div>
+  
+</aside>
+
+
   </main>
   
 <nav class="l-nav p-menu">

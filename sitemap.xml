@@ -3,27 +3,62 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://t-tkm.github.io/blog/tags/aws/</loc>
+    <lastmod>2022-10-16T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/categories/aws/</loc>
+    <lastmod>2022-10-16T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/tags/bastion/</loc>
+    <lastmod>2022-10-16T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/categories/</loc>
+    <lastmod>2022-10-16T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/posts/</loc>
+    <lastmod>2022-10-16T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/tags/</loc>
+    <lastmod>2022-10-16T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/</loc>
+    <lastmod>2022-10-16T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/tags/terraform/</loc>
+    <lastmod>2022-10-16T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/posts/2022/aws_secure_bastion_2/</loc>
+    <lastmod>2022-10-16T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/posts/2022/aws_secure_bastion_1/</loc>
+    <lastmod>2022-10-16T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://t-tkm.github.io/blog/tags/app2container/</loc>
     <lastmod>2022-03-16T00:00:00+09:00</lastmod>
   </url>
   
   <url>
-    <loc>https://t-tkm.github.io/blog/tags/aws/</loc>
-    <lastmod>2022-03-16T00:00:00+09:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://t-tkm.github.io/blog/categories/aws/</loc>
-    <lastmod>2022-03-16T00:00:00+09:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://t-tkm.github.io/blog/posts/2022/aws_app2container_ecs_eks/</loc>
-    <lastmod>2022-03-16T00:00:00+09:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://t-tkm.github.io/blog/categories/</loc>
     <lastmod>2022-03-16T00:00:00+09:00</lastmod>
   </url>
   
@@ -39,21 +74,6 @@
   
   <url>
     <loc>https://t-tkm.github.io/blog/tags/eks/</loc>
-    <lastmod>2022-03-16T00:00:00+09:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://t-tkm.github.io/blog/posts/</loc>
-    <lastmod>2022-03-16T00:00:00+09:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://t-tkm.github.io/blog/tags/</loc>
-    <lastmod>2022-03-16T00:00:00+09:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://t-tkm.github.io/blog/</loc>
     <lastmod>2022-03-16T00:00:00+09:00</lastmod>
   </url>
   
