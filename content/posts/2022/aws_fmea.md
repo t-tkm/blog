@@ -2,7 +2,7 @@
 Categories = ["AWS"] 
 Tags = ["AWS", "FMEA", "reliability", "resiliency"] 
 date = "2022-12-07T00:00:00+09:00" 
-title = "信頼性とFMEA(信頼性を高めるための工学技法)" 
+title = "AWSホワイトペーパを題材にFMEAを見る" 
 +++
 
 この記事は、[Japan APN Ambassador Advent Calendar 2022](https://qiita.com/advent-calendar/2022/japan-aws-ambassador)の9日目のエントリになります。
