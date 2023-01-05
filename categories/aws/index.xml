@@ -7,7 +7,16 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>&amp;copy; 2022 Takumi Tomita Powered by Hugo &amp; Pickles.</copyright>
-    <lastBuildDate>Fri, 09 Dec 2022 00:00:00 +0900</lastBuildDate><atom:link href="https://t-tkm.github.io/blog/categories/aws/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 05 Jan 2023 00:00:00 +0900</lastBuildDate><atom:link href="https://t-tkm.github.io/blog/categories/aws/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>AWS FAN!</title>
+      <link>https://t-tkm.github.io/blog/posts/2022/aws_fan/</link>
+      <pubDate>Thu, 05 Jan 2023 00:00:00 +0900</pubDate>
+      
+      <guid>https://t-tkm.github.io/blog/posts/2022/aws_fan/</guid>
+      <description>はじめに 明けましておめでとうございます。2023年もスタートし、一発目の記事になります。私は普段、AWSを中心としたクラウド活用のソリューション設計を専門に仕事している一方、個人としてもAWSユーザとして、様々なクラウドサービスを楽しませていただいています。 本格的に触り始めたのは2018年頃からとだいぶ遅いスタートではありますが、少し振り返ってみようと思います。 ※本コンテンツは2022年の年末、とあるAWSコミュニティーの「お祭りイベント」で公演させて頂いたものになります。 スマートホーム(2018年〜2019年頃) 会社の小集団活動も活用し、趣味のラズパイやArduinoといったマイコンいじりであれこれプロトタイピングを楽しんでいまし</description>
+    </item>
+    
     <item>
       <title>AWSホワイトペーパを題材にFMEAを見る</title>
       <link>https://t-tkm.github.io/blog/posts/2022/aws_fmea/</link>

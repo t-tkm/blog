@@ -4,12 +4,52 @@
   
   <url>
     <loc>https://t-tkm.github.io/blog/tags/aws/</loc>
-    <lastmod>2022-12-09T00:00:00+09:00</lastmod>
+    <lastmod>2023-01-05T00:00:00+09:00</lastmod>
   </url>
   
   <url>
     <loc>https://t-tkm.github.io/blog/categories/aws/</loc>
-    <lastmod>2022-12-09T00:00:00+09:00</lastmod>
+    <lastmod>2023-01-05T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/posts/2022/aws_fan/</loc>
+    <lastmod>2023-01-05T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/categories/</loc>
+    <lastmod>2023-01-05T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/tags/ecs/</loc>
+    <lastmod>2023-01-05T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/tags/freertos/</loc>
+    <lastmod>2023-01-05T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/tags/iot/</loc>
+    <lastmod>2023-01-05T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/posts/</loc>
+    <lastmod>2023-01-05T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/tags/</loc>
+    <lastmod>2023-01-05T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/</loc>
+    <lastmod>2023-01-05T00:00:00+09:00</lastmod>
   </url>
   
   <url>
@@ -18,17 +58,7 @@
   </url>
   
   <url>
-    <loc>https://t-tkm.github.io/blog/categories/</loc>
-    <lastmod>2022-12-09T00:00:00+09:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://t-tkm.github.io/blog/tags/fmea/</loc>
-    <lastmod>2022-12-09T00:00:00+09:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://t-tkm.github.io/blog/posts/</loc>
     <lastmod>2022-12-09T00:00:00+09:00</lastmod>
   </url>
   
@@ -39,16 +69,6 @@
   
   <url>
     <loc>https://t-tkm.github.io/blog/tags/resiliency/</loc>
-    <lastmod>2022-12-09T00:00:00+09:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://t-tkm.github.io/blog/tags/</loc>
-    <lastmod>2022-12-09T00:00:00+09:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://t-tkm.github.io/blog/</loc>
     <lastmod>2022-12-09T00:00:00+09:00</lastmod>
   </url>
   
@@ -84,11 +104,6 @@
   
   <url>
     <loc>https://t-tkm.github.io/blog/tags/container/</loc>
-    <lastmod>2022-03-16T00:00:00+09:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://t-tkm.github.io/blog/tags/ecs/</loc>
     <lastmod>2022-03-16T00:00:00+09:00</lastmod>
   </url>
   
