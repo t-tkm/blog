@@ -90,6 +90,15 @@
     </item>
     
     <item>
+      <title>AWS移行 - ApplicationDiscoveryService(ADS)でのインベントリ情報収集</title>
+      <link>https://t-tkm.github.io/blog/posts/2021/03/aws_ads/</link>
+      <pubDate>Fri, 30 Jul 2021 00:00:00 +0900</pubDate>
+      
+      <guid>https://t-tkm.github.io/blog/posts/2021/03/aws_ads/</guid>
+      <description>AWS移行 - ApplicationDiscoveryService(ADS)でのインベントリ情報収集 Application Discovery Service(ADS)の検証記事(Qiita)</description>
+    </item>
+    
+    <item>
       <title>Alexaでかけ算ゲーム</title>
       <link>https://t-tkm.github.io/blog/posts/2021/03/aws_alexa_practice/</link>
       <pubDate>Fri, 26 Mar 2021 00:00:00 +0900</pubDate>
