@@ -17,5 +17,14 @@
       <description>AWS移行 - ApplicationDiscoveryService(ADS)でのインベントリ情報収集 Application Discovery Service(ADS)の検証記事(Qiita)</description>
     </item>
     
+    <item>
+      <title>AWS移行 - Multi-AZのHA構成のためのDRBD性能検証</title>
+      <link>https://t-tkm.github.io/blog/posts/2021/07/aws_drbd/</link>
+      <pubDate>Fri, 30 Jul 2021 00:00:00 +0900</pubDate>
+      
+      <guid>https://t-tkm.github.io/blog/posts/2021/07/aws_drbd/</guid>
+      <description>AWS移行 - Multi-AZのHA構成のためのDRBD性能検証 Multi-AZのHA構成のためのDRBD性能検証(Qiita)</description>
+    </item>
+    
   </channel>
 </rss>

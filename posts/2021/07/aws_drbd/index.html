@@ -4,16 +4,16 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
   
-  <title>AWS FAN!</title>
-  <meta property="og:title" content="AWS FAN!" />
-  <meta name="twitter:title" content="AWS FAN!" />
+  <title>AWS移行 - Multi-AZのHA構成のためのDRBD性能検証</title>
+  <meta property="og:title" content="AWS移行 - Multi-AZのHA構成のためのDRBD性能検証" />
+  <meta name="twitter:title" content="AWS移行 - Multi-AZのHA構成のためのDRBD性能検証" />
   
 
   
 
   <meta name="author" content="Takumi Tomita"/>
   <meta property="og:site_name" content="Takumi Tomita&#39;s Blog" />
-  <meta property="og:url" content="https://t-tkm.github.io/blog/posts/2022/aws_fan/" />
+  <meta property="og:url" content="https://t-tkm.github.io/blog/posts/2021/07/aws_drbd/" />
 
   
   <meta name="twitter:card" content="summary" />
@@ -58,13 +58,13 @@
 
 <article class="p-article">
   <header>
-    <h1>AWS FAN!</h1>
+    <h1>AWS移行 - Multi-AZのHA構成のためのDRBD性能検証</h1>
     <div>
       
         <div class="c-time">
           Posted on
-<time datetime="2023-01-05T00:00:00&#43;09:00">
-  Jan 5, 2023
+<time datetime="2021-07-30T00:00:00&#43;09:00">
+  Jul 30, 2021
 </time>
 
         </div>
@@ -72,134 +72,20 @@
       
       <a href="https://t-tkm.github.io/blog/tags/aws" class="c-tag">AWS</a>
       
-      <a href="https://t-tkm.github.io/blog/tags/iot" class="c-tag">IoT</a>
+      <a href="https://t-tkm.github.io/blog/tags/drbd" class="c-tag">drbd</a>
       
-      <a href="https://t-tkm.github.io/blog/tags/ecs" class="c-tag">ECS</a>
+      <a href="https://t-tkm.github.io/blog/tags/ha" class="c-tag">HA</a>
       
-      <a href="https://t-tkm.github.io/blog/tags/freertos" class="c-tag">FreeRTOS</a>
+      <a href="https://t-tkm.github.io/blog/tags/%E7%A7%BB%E8%A1%8C" class="c-tag">移行</a>
+      
+      <a href="https://t-tkm.github.io/blog/tags/%E5%85%B1%E6%9C%89%E3%83%87%E3%82%A3%E3%82%B9%E3%82%AF" class="c-tag">共有ディスク</a>
       
     </div>
   </header>
   
   <section id="js-article" class="p-article__body">
-    <h1 id="はじめに">はじめに</h1>
-<p>明けましておめでとうございます。2023年もスタートし、一発目の記事になります。私は普段、AWSを中心としたクラウド活用のソリューション設計を専門に仕事している一方、個人としてもAWSユーザとして、様々なクラウドサービスを楽しませていただいています。</p>
-<p>本格的に触り始めたのは2018年頃からとだいぶ遅いスタートではありますが、少し振り返ってみようと思います。</p>
-<p>※本コンテンツは2022年の年末、とあるAWSコミュニティーの「お祭りイベント」で公演させて頂いたものになります。</p>
-<h1 id="スマートホーム2018年2019年頃">スマートホーム(2018年〜2019年頃)</h1>
-<p><figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img1.png">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img1.png"
-         alt="img1"/> </a>
-</figure>
-
-<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img2.png">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img2.png"
-         alt="img2"/> </a>
-</figure>
-</p>
-<p>会社の小集団活動も活用し、趣味のラズパイやArduinoといったマイコンいじりであれこれプロトタイピングを楽しんでいました。ただ、当時このシステムを作ったきっかけは、Vueを使ったフロントエンドの開発の勉強が目的でした。</p>
-<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img3.png">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img3.png"
-         alt="img3"/> </a>
-</figure>
-
-<p>モニター分離の体重計は、<a href="https://www.amazon.co.jp/dp/B00A1ZU2XY">こちら</a>の商品を活用させて頂きましたが、現在Amazonでは「この商品は現在お取り扱いできません。」となっていますね。また、赤外線の信号パターンは自分で解読しましたが、当時先輩からは「メーカーに背景を伝えた上で仕様を聞いてみたら？」というアドバイスも頂きました。なんとなく稼働していたのでそれで良しと済ませましたが、今ならすぐに問合せしてみるかなと思います。</p>
-<h1 id="オンラインゲーム2020年頃">オンラインゲーム(2020年頃)</h1>
-<p><figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img4.png">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img4.png"
-         alt="img4"/> </a>
-</figure>
-
-<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img5.png">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img5.png"
-         alt="img5"/> </a>
-</figure>
-</p>
-<p>詳細は「<a href="https://t-tkm.github.io/blog/posts/2021/03/minecraft_server_aws_ecs/">我が家のマイクラサーバー(AWS編)</a>」へ。</p>
-<h1 id="音声アシスタント2021年頃">音声アシスタント(2021年頃)</h1>
-<p><figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img6.png">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img6.png"
-         alt="img6"/> </a>
-</figure>
-
-<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img7.png">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img7.png"
-         alt="img7"/> </a>
-</figure>
-</p>
-<p>詳細は「<a href="https://t-tkm.github.io/blog/posts/2021/03/aws_alexa_practice/">Alexaでかけ算ゲーム</a>」へ。</p>
-<h1 id="ai画像処理1wip2021年秋">AI・画像処理1(WIP!)(2021年秋)</h1>
-<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img9.png">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img9.png"
-         alt="img9"/> </a>
-</figure>
-
-<p>待望のプロトタイピング集「<a href="https://www.amazon.co.jp/dp/4798064289/">IoTデバイス×Webアプリでホームネットワーク AWS クラウドサービス開発テクニック</a>」、大変勉強になります！</p>
-<p><figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img10.png">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img10.png"
-         alt="img10"/> </a>
-</figure>
-
-<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img11.gif">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img11.gif"
-         alt="img11"/> </a>
-</figure>
-</p>
-<p>こちらのプロトタイプも、AWSでの分析よりは、エッジでのAI分析(PyTorchとYOLOv3による物体検出)がメイン。ラズパイのCPUでは画像処理がおぼつかなく(1FPS程度)、Googleが設計・開発した<a href="https://coral.ai/products/accelerator/">Coral USB Accelerator(Edge TPU coprocessor)</a>で5倍速するなど遊んでおりました(机上にUSBドングルが写っておりますが、これがCoral USB Accelerator)。</p>
-<p>ただ、もともとやりたかった「子供達のデバイス利用時間(スクリーンの前にいる時間)計測」のユースケースでは、リアルタイム物体検出は不要で、定期的に写真を取得し分析すれば良いだけで済むものです。要件整理不十分、実装に先走り「あれ、そもそもリアルタイム物体検出不要だったな」と後から思い返した次第ですw</p>
-<p>(ちなみに、USB Acceleratorを使わずラズパイ3のCPUで頑張ったケースは↓。解析がもたついております。)
-<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img19.gif">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img19.gif"
-         alt="img19"/> </a>
-</figure>
-</p>
-<h1 id="リアルタイムoswip2022年春">リアルタイムOS(WIP!)(2022年春)</h1>
-<p><figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img12.png">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img12.png"
-         alt="img12"/> </a>
-</figure>
-
-<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img13.png">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img13.png"
-         alt="img13"/> </a>
-</figure>
-</p>
-<p>こちらの書籍「<a href="https://www.amazon.co.jp/gp/product/4774199192/">内藤春雄(著)「Arduinoで楽しむ鉄道模型 ~簡単なプログラムで信号機や踏切遮断機を動かす!</a>」をお手本にさせていただきました。</p>
-<p><figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img14.gif">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img14.gif"
-         alt="img14"/> </a>
-</figure>
-
-<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img15.png">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img15.png"
-         alt="img15"/> </a>
-</figure>
-</p>
-<p>通常のNゲージは、線路に電気を流し、コントローラで電圧(0〜12V)を調整し車両のモーターを動かす「アナログ方式」です(<a href="https://www.kato-start.com/blank-1">Nゲージのしくみ</a>)。これではクラウドから車両を制御といって、やれる事は制限されるのですが、最近では「DCC(Digital Command Control)」と呼ばれる車両にマイコン(デコーダーという)を載せて、コントローラで制御する方式があります。車両のデコーダーは2千円程度で購入でき、コントローラも例えば<a href="https://desktopstation.net/wiki/doku.php/dsshield2">DSshield2</a>などでDIYできそうです。時間を見つけてチャレンジしてみたいですね！</p>
-<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img16.png">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img16.png"
-         alt="img16"/> </a>
-</figure>
-
-<p>その前に、FreeRTOS/OTAを理解を深める必要がありますが、AWS公式ドキュメントも充実しており、大変助かります。</p>
-<ul>
-<li><a href="https://docs.aws.amazon.com/ja_jp/freertos/latest/userguide/freertos-ota-dev.html">FreeRTOS 無線通信経由更新</a></li>
-<li><a href="https://interface.cqpub.co.jp/magazine/202104/">リアルタイムOS新時代に突入！クラウド接続もスタンドアロンも！Amazon×マイコン FreeRTOS入門</a></li>
-</ul>
-<h1 id="再ai画像処理wip2022年秋">(再)AI・画像処理(WIP!)(2022年秋)</h1>
-<p><figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img17.png">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img17.png"
-         alt="img17"/> </a>
-</figure>
-
-<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img18.png">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img18.png"
-         alt="img18"/> </a>
-</figure>
-</p>
-<p>現在のマイブームは天体観測。この世界はとても奥が深く、とても興味深いものです。自動化をクラウド(AWS)活用してと考えてみたものの、ちょっと的外れかと思い直しました。。。天体画像を処理するソフトウェア(OSS)もありますが、高度な画像処理は、Photoshopや、天体専用の商用ソフトが主流であり、OSSなどどの程度活用可能か、技術的に課題ありです。また、生データ(素材)の良さを保ちつつ、いかに画像処理を行うか、この辺は職人芸(アート)の世界でもあり、AI・ソフトウェアによるお任せニーズは低い気がします。活用ユースケースとしては、レントゲン写真から病気を抽出するといった医療分野などが適切な気がします。ただ、技術的には、本質は似ている点もありそうです^^</p>
-<h1 id="さいごに">さいごに</h1>
-<p>以上、私個人の趣味(マイコンいじり)と、AWSサービスとの関わりを振り返ってみました。もちろん、ここに挙げたサンプルは一部で、他にも魅力的なサービスは多々あります。クラウドの良さは、簡単にサービス・情報にアクセスでき、お試し(プロトタイピング)しやすい点にあります。これからも、いつでも、どこでも、簡単にアクセスできる利点を活かし、どんどん遊んでみたいと思います！</p>
+    <h1 id="aws移行---multi-azのha構成のためのdrbd性能検証">AWS移行 - Multi-AZのHA構成のためのDRBD性能検証</h1>
+<p><a href="https://qiita.com/t-taku/items/b69135f4d59607883b47">Multi-AZのHA構成のためのDRBD性能検証(Qiita)</a></p>
 
   </section>
   <footer>
@@ -210,11 +96,12 @@
       <div class="c-pagination__ctrl">
         <div class="c-pagination__newer">
           
+          <a href="https://t-tkm.github.io/blog/posts/2021/03/aws_ads/">Newer</a>
           
         </div>
         <div class="c-pagination__older">
           
-          <a href="https://t-tkm.github.io/blog/posts/2022/aws_fmea/">Older</a>
+          <a href="https://t-tkm.github.io/blog/posts/2021/03/aws_alexa_practice/">Older</a>
           
         </div>
       </div>
@@ -226,23 +113,16 @@
   <ul id="slider" class="p-related__list">
     
     <li class="p-related__item js-related__item">
-      <a href="/blog/posts/2022/aws_app2container_ecs_eks/"
+      <a href="/blog/posts/2021/03/aws_ads/"
         >
-        <span>AWS App2Container(ECS/EKSデプロイ編)</span>
+        <span>AWS移行 - ApplicationDiscoveryService(ADS)でのインベントリ情報収集</span>
       </a>
     </li>
     
     <li class="p-related__item js-related__item">
-      <a href="/blog/posts/2022/aws_app2container_opt/"
+      <a href="/blog/posts/2021/03/aws_alexa_practice/"
         >
-        <span>AWS App2Container(イメージ最適化編)</span>
-      </a>
-    </li>
-    
-    <li class="p-related__item js-related__item">
-      <a href="/blog/posts/2022/aws_app2container/"
-        >
-        <span>AWS App2Container(お試し編)</span>
+        <span>Alexaでかけ算ゲーム</span>
       </a>
     </li>
     
@@ -254,16 +134,9 @@
     </li>
     
     <li class="p-related__item js-related__item">
-      <a href="/blog/posts/2022/aws_fmea/"
+      <a href="/blog/posts/2020/07/aws_firelens_practice/"
         >
-        <span>AWSホワイトペーパを題材にFMEAを見る</span>
-      </a>
-    </li>
-    
-    <li class="p-related__item js-related__item">
-      <a href="/blog/posts/2022/aws_secure_bastion_2/"
-        >
-        <span>踏台VPCの作成(Internet Gateway有り)(AWS)</span>
+        <span>FireLensを使ってFargateコンテナのファイルログを転送してみた</span>
       </a>
     </li>
     

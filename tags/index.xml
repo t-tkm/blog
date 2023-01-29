@@ -144,11 +144,38 @@
     </item>
     
     <item>
+      <title>drbd</title>
+      <link>https://t-tkm.github.io/blog/tags/drbd/</link>
+      <pubDate>Fri, 30 Jul 2021 00:00:00 +0900</pubDate>
+      
+      <guid>https://t-tkm.github.io/blog/tags/drbd/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>HA</title>
+      <link>https://t-tkm.github.io/blog/tags/ha/</link>
+      <pubDate>Fri, 30 Jul 2021 00:00:00 +0900</pubDate>
+      
+      <guid>https://t-tkm.github.io/blog/tags/ha/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>migration</title>
       <link>https://t-tkm.github.io/blog/tags/migration/</link>
       <pubDate>Fri, 30 Jul 2021 00:00:00 +0900</pubDate>
       
       <guid>https://t-tkm.github.io/blog/tags/migration/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>共有ディスク</title>
+      <link>https://t-tkm.github.io/blog/tags/%E5%85%B1%E6%9C%89%E3%83%87%E3%82%A3%E3%82%B9%E3%82%AF/</link>
+      <pubDate>Fri, 30 Jul 2021 00:00:00 +0900</pubDate>
+      
+      <guid>https://t-tkm.github.io/blog/tags/%E5%85%B1%E6%9C%89%E3%83%87%E3%82%A3%E3%82%B9%E3%82%AF/</guid>
       <description></description>
     </item>
     
