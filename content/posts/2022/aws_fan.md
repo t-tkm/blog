@@ -11,6 +11,7 @@ title = "AWS FAN!"
 本格的に触り始めたのは2018年頃からとだいぶ遅いスタートではありますが、少し振り返ってみようと思います。
 
 ※本コンテンツは2022年の年末、とあるAWSコミュニティーの「お祭りイベント」で公演させて頂いたものになります。
+{{< figure alt="img1" src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img20.png" link="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img20.png">}}
 
 # スマートホーム(2018年〜2019年頃)
 {{< figure alt="img1" src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img1.png" link="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img1.png">}}
