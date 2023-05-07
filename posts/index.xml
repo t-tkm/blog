@@ -7,7 +7,16 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>&amp;copy; 2022 Takumi Tomita Powered by Hugo &amp; Pickles.</copyright>
-    <lastBuildDate>Thu, 05 Jan 2023 00:00:00 +0900</lastBuildDate><atom:link href="https://t-tkm.github.io/blog/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 07 May 2023 00:00:00 +0900</lastBuildDate><atom:link href="https://t-tkm.github.io/blog/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>ChatGPTによる認知バイアスエラー回避の可能性</title>
+      <link>https://t-tkm.github.io/blog/posts/2023/essay_cognitive_psychology/</link>
+      <pubDate>Sun, 07 May 2023 00:00:00 +0900</pubDate>
+      
+      <guid>https://t-tkm.github.io/blog/posts/2023/essay_cognitive_psychology/</guid>
+      <description>はじめに 随分前の話しなりますが(今から約7年前)、会社の先輩から 「頭脳明瞭な経営者(経営委員会)が、時に非合理な判断の結果、失敗するケースへの理解になるかもしれない」 と薦めてもらった面白い本があります。 タニエル・カーネマン著「ファスト&amp;amp;スロー 」 本書は、ノーベル経済学賞を受賞されたダニエル・カーネマン氏による著作で、人間の思考が2つの異なるシステムに分かれていることを示しています。 システム1(ファスト)は、自動的かつ直感的な思考を司り、短時間での判断や反応に適しています。しかし、時には感情的な判断を引き起こし、誤った結論に至ることもあります。 一方、システム2(スロー)は、論理的で分析的な思考を司り、より長い時間をかけて問題に取</description>
+    </item>
+    
     <item>
       <title>AWS FAN!</title>
       <link>https://t-tkm.github.io/blog/posts/2022/aws_fan/</link>

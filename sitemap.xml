@@ -3,6 +3,51 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://t-tkm.github.io/blog/categories/aws/</loc>
+    <lastmod>2023-05-07T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/categories/</loc>
+    <lastmod>2023-05-07T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/posts/2023/essay_cognitive_psychology/</loc>
+    <lastmod>2023-05-07T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/tags/cognitive-psychology/</loc>
+    <lastmod>2023-05-07T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/tags/daniel-kahneman/</loc>
+    <lastmod>2023-05-07T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/tags/essay/</loc>
+    <lastmod>2023-05-07T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/posts/</loc>
+    <lastmod>2023-05-07T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/tags/</loc>
+    <lastmod>2023-05-07T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/</loc>
+    <lastmod>2023-05-07T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://t-tkm.github.io/blog/about/</loc>
     <lastmod>2023-01-05T00:00:00+09:00</lastmod>
   </url>
@@ -13,17 +58,7 @@
   </url>
   
   <url>
-    <loc>https://t-tkm.github.io/blog/categories/aws/</loc>
-    <lastmod>2023-01-05T00:00:00+09:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://t-tkm.github.io/blog/posts/2022/aws_fan/</loc>
-    <lastmod>2023-01-05T00:00:00+09:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://t-tkm.github.io/blog/categories/</loc>
     <lastmod>2023-01-05T00:00:00+09:00</lastmod>
   </url>
   
@@ -39,21 +74,6 @@
   
   <url>
     <loc>https://t-tkm.github.io/blog/tags/iot/</loc>
-    <lastmod>2023-01-05T00:00:00+09:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://t-tkm.github.io/blog/posts/</loc>
-    <lastmod>2023-01-05T00:00:00+09:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://t-tkm.github.io/blog/tags/</loc>
-    <lastmod>2023-01-05T00:00:00+09:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://t-tkm.github.io/blog/</loc>
     <lastmod>2023-01-05T00:00:00+09:00</lastmod>
   </url>
   
