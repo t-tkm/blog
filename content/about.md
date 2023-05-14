@@ -1,9 +1,13 @@
 +++
-date = "2023-01-05T00:00:00+09:00"
+date = "2023-05-14T00:00:00+09:00"
 +++
 
 # AWS関連
 - [AWS Ambassador Partner Program](https://aws.amazon.com/jp/partners/ambassadors/?cards-body.sort-by=item.additionalFields.ambassadorName&cards-body.sort-order=asc&awsf.apn-ambassadors-location=*all&cards-body.q=japan&cards-body.q_operator=AND&awsm.page-cards-body=2)
+
+## 2023年
+- [[AWS JAPAN APN ブログ]2023 Japan AWS Ambassadors の発表](https://aws.amazon.com/jp/blogs/psa/2022-japan-aws-partner-ambassador-2022-apn-aws-top-engineers/)
+- [「2023 Japan AWS Ambassadors」「2023 Japan AWS Top Engineers」他に日立社員が選出](https://www.hitachi.co.jp/products/it/harmonious/cloud/news/2023/info_2305_01.html?it0509)
 
 ## 2022年
 - [[AWS JAPAN APN ブログ]2022 Japan AWS Partner Ambassador / 2022 APN AWS Top Engineers の発表](https://aws.amazon.com/jp/blogs/psa/2022-japan-aws-partner-ambassador-2022-apn-aws-top-engineers/)
