@@ -107,7 +107,50 @@ chatGPTの回答は、(人間の直感的な非合理回答と比べ)統計事�
 (※)選択アーキテクトは、行動経済学において、人々が意思決定を行う際の環境や枠組みを設計する人のことを指します。
 例えば、商品を陳列する店員や、ウェブサイトのUIを設計するデザイナー、保険や退職金のプランを提供する企業の担当者などが、
 選択アーキテクトの役割を担うようです。
-# 付録
+
+# 付録1 GPT-4での実験
+2022.5.14更新。GPT-4は、より長い問合せや会話を処理でき、事実の誤りが少ないと聞きました。そこで、2023.4.21にTwitter上で
+[Perplexity AI](https://www.perplexity.ai/)(※)というサービスが、拡張モードでGPT-4をサポートしていると知り、
+早速試してみました。3回同じ文面で問合せた結果、いずれも正しく回答してくれました。**ただし、Perplexity AIが提示している
+参考サイトを見ると、この問合せ(問題)自体が有名なものであるため
+(→例えば[こちら](https://www.cut-the-knot.org/Probability/RedBlueTaxicabs.shtml))、あらゆる集合知をAIエンジンが
+適して回答してくれたか、本当に認知バイアスによる判断エラー回避の救世主となるか、この問いだけでは判断しかねる、もっと使いこなし
+てみないと実力値は分からない、ということが分かりました。**
+
+※Perplexity AIは、情報の元ソース(や出典)を明記してくれるため、内容の正確さの評価もしやすいといったメリットがあります。
+
+- Enhancedバージョンを選択
+{{< figure alt="img5" src="https://github.com/t-tkm/blog_images/raw/main/2023/essay_cognitive_psychology/img5.png">}}
+
+- 1回目問合せ(正解)
+{{< figure alt="img6" src="https://github.com/t-tkm/blog_images/raw/main/2023/essay_cognitive_psychology/img6.png">}}
+  - Perplexity AIが提示した参考サイト
+    1. https://plus.maths.org/content/solution-taxi-problem-revisited
+    2. https://www.cut-the-knot.org/Probability/RedBlueTaxicabs.shtml 
+
+
+- 2回目問合せ(正解)
+{{< figure alt="img7" src="https://github.com/t-tkm/blog_images/raw/main/2023/essay_cognitive_psychology/img7.png">}}
+  - Perplexity AIが提示した参考サイト
+    1. https://math.stackexchange.com/questions/1256007/find-the-probability-of-the-following-event
+    2. https://www.futilitycloset.com/2019/06/08/the-taxicab-problem/ 
+
+
+- 3回目問合せ(正解)
+{{< figure alt="img8" src="https://github.com/t-tkm/blog_images/raw/main/2023/essay_cognitive_psychology/img8.png">}}
+  - Perplexity AIが提示した参考サイト
+    1. https://math.stackexchange.com/questions/1256007/find-the-probability-of-the-following-event
+    2. https://www.maa.org/external_archive/devlin/devlin_july.html 
+
+
+
+
+
+
+
+
+
+# 付録2 書籍「ファスト＆スロー」書籍紹介
 以前、書籍紹介に使った資料を共有します。
 
 {{< figure alt="slide1" src="https://github.com/t-tkm/blog_images/raw/main/2023/essay_cognitive_psychology/slide1.jpeg">}}
