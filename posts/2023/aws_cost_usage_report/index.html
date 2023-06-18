@@ -687,76 +687,76 @@ RedashをローカルPCで起動させ、Athenaをデータソースにクエリ
 </code></pre></div></details>
 <details>
   <summary>Redash用docker-compose.yml(展開)</summary>
-<pre><code># This configuration file is for the **development** setup.
-# For a production example please refer to getredash/setup repository on GitHub.
-version: &quot;2.2&quot;
-x-redash-service: &amp;redash-service
-  build:
-    context: .
-    args:
-      skip_frontend_build: &quot;true&quot;  # set to empty string to build
-  volumes:
-    - .:/app
-  env_file:
-    - .env
-x-redash-environment: &amp;redash-environment
-  REDASH_LOG_LEVEL: &quot;INFO&quot;
-  REDASH_REDIS_URL: &quot;redis://redis:6379/0&quot;
-  REDASH_DATABASE_URL: &quot;postgresql://postgres@postgres/postgres&quot;
-  REDASH_RATELIMIT_ENABLED: &quot;false&quot;
-  REDASH_MAIL_DEFAULT_SENDER: &quot;redash@example.com&quot;
-  REDASH_MAIL_SERVER: &quot;email&quot;
-  REDASH_ENFORCE_CSRF: &quot;true&quot;
-  REDASH_GUNICORN_TIMEOUT: 60
-  # Set secret keys in the .env file
-services:
-  server:
-    &lt;&lt;: *redash-service
-    command: dev_server
-    depends_on:
-      - postgres
-      - redis
-    ports:
-      - &quot;5001:5000&quot;
-      - &quot;5678:5678&quot;
-    environment:
-      &lt;&lt;: *redash-environment
-      PYTHONUNBUFFERED: 0
-  scheduler:
-    &lt;&lt;: *redash-service
-    command: dev_scheduler
-    depends_on:
-      - server
-    environment:
-      &lt;&lt;: *redash-environment
-  worker:
-    &lt;&lt;: *redash-service
-    command: dev_worker
-    depends_on:
-      - server
-    environment:
-      &lt;&lt;: *redash-environment
-      PYTHONUNBUFFERED: 0
-  redis:
-    image: redis:3-alpine
-    restart: unless-stopped
-  postgres:
-    image: postgres:9.5-alpine
-    ports:
-      - &quot;15432:5432&quot;
-    # The following turns the DB into less durable, but gains significant performance improvements for the tests run (x3
-    # improvement on my personal machine). We should consider moving this into a dedicated Docker Compose configuration for
-    # tests.
-    command: &quot;postgres -c fsync=off -c full_page_writes=off -c synchronous_commit=OFF&quot;
-    restart: unless-stopped
-    environment:
-      POSTGRES_HOST_AUTH_METHOD: &quot;trust&quot;
-  email:
-    image: maildev/maildev
-    ports:
-      - &quot;1080:80&quot;
-    restart: unless-stopped
-</code></pre></details>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#75715e"># This configuration file is for the **development** setup.</span>
+<span style="color:#75715e"># For a production example please refer to getredash/setup repository on GitHub.</span>
+<span style="color:#f92672">version</span>: <span style="color:#e6db74">&#34;2.2&#34;</span>
+<span style="color:#f92672">x-redash-service</span>: <span style="color:#75715e">&amp;redash-service</span>
+  <span style="color:#f92672">build</span>:
+    <span style="color:#f92672">context</span>: <span style="color:#ae81ff">.</span>
+    <span style="color:#f92672">args</span>:
+      <span style="color:#f92672">skip_frontend_build</span>: <span style="color:#e6db74">&#34;true&#34;</span>  <span style="color:#75715e"># set to empty string to build</span>
+  <span style="color:#f92672">volumes</span>:
+    - <span style="color:#ae81ff">.:/app</span>
+  <span style="color:#f92672">env_file</span>:
+    - <span style="color:#ae81ff">.env</span>
+<span style="color:#f92672">x-redash-environment</span>: <span style="color:#75715e">&amp;redash-environment</span>
+  <span style="color:#f92672">REDASH_LOG_LEVEL</span>: <span style="color:#e6db74">&#34;INFO&#34;</span>
+  <span style="color:#f92672">REDASH_REDIS_URL</span>: <span style="color:#e6db74">&#34;redis://redis:6379/0&#34;</span>
+  <span style="color:#f92672">REDASH_DATABASE_URL</span>: <span style="color:#e6db74">&#34;postgresql://postgres@postgres/postgres&#34;</span>
+  <span style="color:#f92672">REDASH_RATELIMIT_ENABLED</span>: <span style="color:#e6db74">&#34;false&#34;</span>
+  <span style="color:#f92672">REDASH_MAIL_DEFAULT_SENDER</span>: <span style="color:#e6db74">&#34;redash@example.com&#34;</span>
+  <span style="color:#f92672">REDASH_MAIL_SERVER</span>: <span style="color:#e6db74">&#34;email&#34;</span>
+  <span style="color:#f92672">REDASH_ENFORCE_CSRF</span>: <span style="color:#e6db74">&#34;true&#34;</span>
+  <span style="color:#f92672">REDASH_GUNICORN_TIMEOUT</span>: <span style="color:#ae81ff">60</span>
+  <span style="color:#75715e"># Set secret keys in the .env file</span>
+<span style="color:#f92672">services</span>:
+  <span style="color:#f92672">server</span>:
+    <span style="color:#f92672">&lt;&lt;</span>: <span style="color:#75715e">*redash-service</span>
+    <span style="color:#f92672">command</span>: <span style="color:#ae81ff">dev_server</span>
+    <span style="color:#f92672">depends_on</span>:
+      - <span style="color:#ae81ff">postgres</span>
+      - <span style="color:#ae81ff">redis</span>
+    <span style="color:#f92672">ports</span>:
+      - <span style="color:#e6db74">&#34;5001:5000&#34;</span>
+      - <span style="color:#e6db74">&#34;5678:5678&#34;</span>
+    <span style="color:#f92672">environment</span>:
+      <span style="color:#f92672">&lt;&lt;</span>: <span style="color:#75715e">*redash-environment</span>
+      <span style="color:#f92672">PYTHONUNBUFFERED</span>: <span style="color:#ae81ff">0</span>
+  <span style="color:#f92672">scheduler</span>:
+    <span style="color:#f92672">&lt;&lt;</span>: <span style="color:#75715e">*redash-service</span>
+    <span style="color:#f92672">command</span>: <span style="color:#ae81ff">dev_scheduler</span>
+    <span style="color:#f92672">depends_on</span>:
+      - <span style="color:#ae81ff">server</span>
+    <span style="color:#f92672">environment</span>:
+      <span style="color:#f92672">&lt;&lt;</span>: <span style="color:#75715e">*redash-environment</span>
+  <span style="color:#f92672">worker</span>:
+    <span style="color:#f92672">&lt;&lt;</span>: <span style="color:#75715e">*redash-service</span>
+    <span style="color:#f92672">command</span>: <span style="color:#ae81ff">dev_worker</span>
+    <span style="color:#f92672">depends_on</span>:
+      - <span style="color:#ae81ff">server</span>
+    <span style="color:#f92672">environment</span>:
+      <span style="color:#f92672">&lt;&lt;</span>: <span style="color:#75715e">*redash-environment</span>
+      <span style="color:#f92672">PYTHONUNBUFFERED</span>: <span style="color:#ae81ff">0</span>
+  <span style="color:#f92672">redis</span>:
+    <span style="color:#f92672">image</span>: <span style="color:#ae81ff">redis:3-alpine</span>
+    <span style="color:#f92672">restart</span>: <span style="color:#ae81ff">unless-stopped</span>
+  <span style="color:#f92672">postgres</span>:
+    <span style="color:#f92672">image</span>: <span style="color:#ae81ff">postgres:9.5-alpine</span>
+    <span style="color:#f92672">ports</span>:
+      - <span style="color:#e6db74">&#34;15432:5432&#34;</span>
+    <span style="color:#75715e"># The following turns the DB into less durable, but gains significant performance improvements for the tests run (x3</span>
+    <span style="color:#75715e"># improvement on my personal machine). We should consider moving this into a dedicated Docker Compose configuration for</span>
+    <span style="color:#75715e"># tests.</span>
+    <span style="color:#f92672">command</span>: <span style="color:#e6db74">&#34;postgres -c fsync=off -c full_page_writes=off -c synchronous_commit=OFF&#34;</span>
+    <span style="color:#f92672">restart</span>: <span style="color:#ae81ff">unless-stopped</span>
+    <span style="color:#f92672">environment</span>:
+      <span style="color:#f92672">POSTGRES_HOST_AUTH_METHOD</span>: <span style="color:#e6db74">&#34;trust&#34;</span>
+  <span style="color:#f92672">email</span>:
+    <span style="color:#f92672">image</span>: <span style="color:#ae81ff">maildev/maildev</span>
+    <span style="color:#f92672">ports</span>:
+      - <span style="color:#e6db74">&#34;1080:80&#34;</span>
+    <span style="color:#f92672">restart</span>: <span style="color:#ae81ff">unless-stopped</span>
+</code></pre></div></details>
 <figure><a href="https://github.com/t-tkm/blog_images/raw/main/2023/aws_cost_usage_report/img19.png">
     <img src="https://github.com/t-tkm/blog_images/raw/main/2023/aws_cost_usage_report/img19.png"
          alt="img19"/> </a>
