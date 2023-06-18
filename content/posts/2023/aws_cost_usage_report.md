@@ -32,7 +32,7 @@ AWSには「Amazon Managed Grafana/Amazon CloudWatch」や「Amazon QuickSight�
 次の手順で進めます:
 - ステップ(1): AWS Cost and Usate Reportの有効化
 - ステップ(2): Amazon Athenaからレポート確認
-- ステップ(3): BIツールからレポート確認
+- ステップ(3): 分析ツールからレポート確認
   
 {{< figure alt="img2" src="https://github.com/t-tkm/blog_images/raw/main/2023/aws_cost_usage_report/img2.png" link="https://github.com/t-tkm/blog_images/raw/main/2023/aws_cost_usage_report/img2.png">}}
 
@@ -416,7 +416,7 @@ Athenaから、クエリを実行して費用データが取得できること�
 
 [AWS CUR QUERY LIBRARY](https://wellarchitectedlabs.com/cost/300_labs/300_cur_queries/#queries)
 
-## ステップ(3): BIツールからレポート確認
+## ステップ(3): 分析ツールからレポート確認
 ### IAMユーザ作成
 Grafana/RedashからAWSへのアクセスは、今回は簡単のためアクセスキー&シークレットキーを使います。
 IAMユーザを作成し、「AWSQuicksightAthenaAccess」「AmazonS3FullAccess」を付与しました。
@@ -485,8 +485,8 @@ Athena pluginにはCUR用のテンプレート(ダッシュボード)が準備�
 {{< figure alt="img14" src="https://github.com/t-tkm/blog_images/raw/main/2023/aws_cost_usage_report/img14.png" link="https://github.com/t-tkm/blog_images/raw/main/2023/aws_cost_usage_report/img14.png">}}
 
 ### Redash構築
-こちら([redash/Docker Based Developer Installation Guide](https://redash.io/help/open-source/dev-guide/docker))
-の手順に従い、ローカルPCでGrafana(コンテナ)を動かします。Grafanaと異なり、リソースのビルドが
+こちら([Redash/Docker Based Developer Installation Guide](https://redash.io/help/open-source/dev-guide/docker))
+の手順に従い、ローカルPCでRedash(コンテナ)を動かします。Grafanaと異なり、リソースのビルドが
 必要で少し手間がかかります。
 
 コマンドログ
@@ -499,7 +499,7 @@ Athena pluginにはCUR用のテンプレート(ダッシュボード)が準備�
 //シークレットを生成し、.envファイルに記載。
 % pwgen -1s 32
 
-//これでredashサーバは起動するが、後述フロントエンド(GUI)のビルド、DB構築が必要
+//これでRedashサーバは起動するが、後述フロントエンド(GUI)のビルド、DB構築が必要
 % docker compose up -d
 
 //手順通りyarnコマンドを実行するが、nodejsのバージョンエラー。nodejsのバージョンを変更。 
@@ -551,7 +551,7 @@ ORDER BY
 以上、AWS Cost Usage Report(AWS CUR)サービスを有効化し、AWS費用データをS3バケットに格納
 しました。次に、Athenaで格納されたS3データ(parquet圧縮ファイル)をSQL分析するために、
 Glueサービスを用いてレポートのクローリング、及びデータカタログを作成しました。最後に、Grafana、
-redashをローカルPCで起動させ、Athenaをデータソースにクエリ実行、ダッシュボードが作成できる事を
+RedashをローカルPCで起動させ、Athenaをデータソースにクエリ実行、ダッシュボードが作成できる事を
 確認できました。
 
 Next Stepとして、参考文献を活用し、(例えば下記のようなダッシュボードなど)本格的な「分析」
@@ -605,7 +605,7 @@ volumes:
 </details>
 
 <details>
-  <summary>redash用docker-compose.yml(展開)</summary>
+  <summary>Redash用docker-compose.yml(展開)</summary>
 
 ```
 # This configuration file is for the **development** setup.
