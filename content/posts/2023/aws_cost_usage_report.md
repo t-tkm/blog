@@ -77,7 +77,7 @@ billing-report-20230608-00001.csv(元ファイルはbilling-report-20230608-0000
 {{< figure alt="img5" src="https://github.com/t-tkm/blog_images/raw/main/2023/aws_cost_usage_report/img5.png" link="https://github.com/t-tkm/blog_images/raw/main/2023/aws_cost_usage_report/img5.png">}}
 
 ParquetをCSVへ変換するpythonスクリプト:
-```python 
+```python3
 import pyarrow.parquet as pq
 import pandas as pd
 
@@ -97,7 +97,7 @@ GrafanaやRedashから、直接S3バケットにある費用データ(parquet)�
 CloudFormationのテンプレートができていると思います。これをCloud Formationから読み込み
 実行するだけ！(スタック名はなんでも良いです)
 
-```yml
+```yaml
 AWSTemplateFormatVersion: 2010-09-09
 Resources:
 
@@ -113,7 +113,7 @@ Resources:
 <details>
   <summary>crawler-cfn.yml(展開)</summary>
 
-```yml
+```yaml
 AWSTemplateFormatVersion: 2010-09-09
 Resources:
 
@@ -437,7 +437,7 @@ IAMユーザを作成し、「AWSQuicksightAthenaAccess」「AmazonS3FullAccess�
 image: grafana/grafana-enterprise -> image: grafana/grafana-oss
 
 docker-compose.yml
-```yml
+```yaml
 version: "3.8"
 services:
   grafana:
@@ -525,7 +525,7 @@ Grafanaのケースと異なり、CUR用の公式ダッシュボードがある�
 ※費用データは、先ほどAWS W-A Labsの「[LEVEL 200: COST AND USAGE ANALYSIS](https://wellarchitectedlabs.com/cost/200_labs/200_4_cost_and_usage_analysis/1_verify_cur/)」
 のサンプルを使っています。Glueカタログのデータベース名、テーブル名は「"cost"."t_tkm_billing_sample"」。
 
-```SQL
+```sql
 SELECT
     DATE_TRUNC('day', line_item_usage_start_date) AS date,
     line_item_product_code AS AWS_Service,
@@ -588,7 +588,7 @@ https://aws.amazon.com/jp/blogs/mt/visualize-and-gain-insights-into-your-aws-cos
 <details>
   <summary>Grafana用docker-compose.yml(展開)</summary>
 
-```
+```yaml
 version: "3.8"
 services:
   grafana:
