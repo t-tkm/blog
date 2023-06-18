@@ -111,7 +111,7 @@
 <ul>
 <li>ステップ(1): AWS Cost and Usate Reportの有効化</li>
 <li>ステップ(2): Amazon Athenaからレポート確認</li>
-<li>ステップ(3): BIツールからレポート確認</li>
+<li>ステップ(3): 分析ツールからレポート確認</li>
 </ul>
 <figure><a href="https://github.com/t-tkm/blog_images/raw/main/2023/aws_cost_usage_report/img2.png">
     <img src="https://github.com/t-tkm/blog_images/raw/main/2023/aws_cost_usage_report/img2.png"
@@ -496,7 +496,7 @@ CloudFormationのテンプレートができていると思います。これを
 <p>尚、Athenaだけでも、分析は十分可能です。興味がある方は、AWS W-A Labsにあるクエリライブラリ
 を参考にして下さい↓</p>
 <p><a href="https://wellarchitectedlabs.com/cost/300_labs/300_cur_queries/#queries">AWS CUR QUERY LIBRARY</a></p>
-<h2 id="ステップ3-biツールからレポート確認">ステップ(3): BIツールからレポート確認</h2>
+<h2 id="ステップ3-分析ツールからレポート確認">ステップ(3): 分析ツールからレポート確認</h2>
 <h3 id="iamユーザ作成">IAMユーザ作成</h3>
 <p>Grafana/RedashからAWSへのアクセスは、今回は簡単のためアクセスキー&amp;シークレットキーを使います。
 IAMユーザを作成し、「AWSQuicksightAthenaAccess」「AmazonS3FullAccess」を付与しました。
@@ -571,8 +571,8 @@ IAMユーザを作成し、「AWSQuicksightAthenaAccess」「AmazonS3FullAccess�
 </figure>
 
 <h3 id="redash構築">Redash構築</h3>
-<p>こちら(<a href="https://redash.io/help/open-source/dev-guide/docker">redash/Docker Based Developer Installation Guide</a>)
-の手順に従い、ローカルPCでGrafana(コンテナ)を動かします。Grafanaと異なり、リソースのビルドが
+<p>こちら(<a href="https://redash.io/help/open-source/dev-guide/docker">Redash/Docker Based Developer Installation Guide</a>)
+の手順に従い、ローカルPCでRedash(コンテナ)を動かします。Grafanaと異なり、リソースのビルドが
 必要で少し手間がかかります。</p>
 <p>コマンドログ</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-zsh" data-lang="zsh">% git clone https://github.com/getredash/redash.git
@@ -583,7 +583,7 @@ IAMユーザを作成し、「AWSQuicksightAthenaAccess」「AmazonS3FullAccess�
 //シークレットを生成し、.envファイルに記載。
 % pwgen -1s <span style="color:#ae81ff">32</span>
 
-//これでredashサーバは起動するが、後述フロントエンド<span style="color:#f92672">(</span>GUI<span style="color:#f92672">)</span>のビルド、DB構築が必要
+//これでRedashサーバは起動するが、後述フロントエンド<span style="color:#f92672">(</span>GUI<span style="color:#f92672">)</span>のビルド、DB構築が必要
 % docker compose up -d
 
 //手順通りyarnコマンドを実行するが、nodejsのバージョンエラー。nodejsのバージョンを変更。 
@@ -639,7 +639,7 @@ IAMユーザを作成し、「AWSQuicksightAthenaAccess」「AmazonS3FullAccess�
 <p>以上、AWS Cost Usage Report(AWS CUR)サービスを有効化し、AWS費用データをS3バケットに格納
 しました。次に、Athenaで格納されたS3データ(parquet圧縮ファイル)をSQL分析するために、
 Glueサービスを用いてレポートのクローリング、及びデータカタログを作成しました。最後に、Grafana、
-redashをローカルPCで起動させ、Athenaをデータソースにクエリ実行、ダッシュボードが作成できる事を
+RedashをローカルPCで起動させ、Athenaをデータソースにクエリ実行、ダッシュボードが作成できる事を
 確認できました。</p>
 <p>Next Stepとして、参考文献を活用し、(例えば下記のようなダッシュボードなど)本格的な「分析」
 を楽しみたいですね！</p>
@@ -686,7 +686,7 @@ redashをローカルPCで起動させ、Athenaをデータソースにクエリ
   <span style="color:#f92672">grafana_storage</span>: {}
 </code></pre></div></details>
 <details>
-  <summary>redash用docker-compose.yml(展開)</summary>
+  <summary>Redash用docker-compose.yml(展開)</summary>
 <pre><code># This configuration file is for the **development** setup.
 # For a production example please refer to getredash/setup repository on GitHub.
 version: &quot;2.2&quot;
