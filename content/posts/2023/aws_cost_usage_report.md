@@ -607,7 +607,7 @@ volumes:
 <details>
   <summary>Redash用docker-compose.yml(展開)</summary>
 
-```
+```yaml
 # This configuration file is for the **development** setup.
 # For a production example please refer to getredash/setup repository on GitHub.
 version: "2.2"
