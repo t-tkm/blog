@@ -3,18 +3,63 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://t-tkm.github.io/blog/about/</loc>
-    <lastmod>2023-05-14T00:00:00+09:00</lastmod>
+    <loc>https://t-tkm.github.io/blog/tags/athena/</loc>
+    <lastmod>2023-06-18T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/tags/aws/</loc>
+    <lastmod>2023-06-18T00:00:00+09:00</lastmod>
   </url>
   
   <url>
     <loc>https://t-tkm.github.io/blog/categories/aws/</loc>
-    <lastmod>2023-05-07T00:00:00+09:00</lastmod>
+    <lastmod>2023-06-18T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/posts/2023/aws_cost_usage_report/</loc>
+    <lastmod>2023-06-18T00:00:00+09:00</lastmod>
   </url>
   
   <url>
     <loc>https://t-tkm.github.io/blog/categories/</loc>
-    <lastmod>2023-05-07T00:00:00+09:00</lastmod>
+    <lastmod>2023-06-18T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/tags/cost/</loc>
+    <lastmod>2023-06-18T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/tags/cur/</loc>
+    <lastmod>2023-06-18T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/tags/finops/</loc>
+    <lastmod>2023-06-18T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/posts/</loc>
+    <lastmod>2023-06-18T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/tags/</loc>
+    <lastmod>2023-06-18T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/</loc>
+    <lastmod>2023-06-18T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/about/</loc>
+    <lastmod>2023-05-14T00:00:00+09:00</lastmod>
   </url>
   
   <url>
@@ -35,26 +80,6 @@
   <url>
     <loc>https://t-tkm.github.io/blog/tags/essay/</loc>
     <lastmod>2023-05-07T00:00:00+09:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://t-tkm.github.io/blog/posts/</loc>
-    <lastmod>2023-05-07T00:00:00+09:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://t-tkm.github.io/blog/tags/</loc>
-    <lastmod>2023-05-07T00:00:00+09:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://t-tkm.github.io/blog/</loc>
-    <lastmod>2023-05-07T00:00:00+09:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://t-tkm.github.io/blog/tags/aws/</loc>
-    <lastmod>2023-01-05T00:00:00+09:00</lastmod>
   </url>
   
   <url>
