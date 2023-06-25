@@ -13,7 +13,7 @@ title = "AWS Cost Usage Reportの可視化"
 
 近年益々「オブザーバビリティ(Observability)」や「ビジネスインテリジェンス(BI)」といったデータ可視化が重要になっています。そのような中、データ活用の入口として、OSSに代表されるような多様な可視化ツールの味見やデモに
 対するニーズも増えてきている気がします。
-- Observability系: Nagios、Graphite、Grafana(Prometheus)、OpenTelemetry、OpenCensus、Jaeger etc.
+- Observability系: Nagios、Graphite、Grafana(Prometheus)、Kibana(ELK)、OpenTelemetry、OpenCensus、Jaeger etc.
 - BI系: Redash、Apache Superset、Metabase etc.
 
 AWSには「Amazon Managed Grafana/Amazon CloudWatch」や「Amazon QuickSight」とマネージドなサービスが揃っており、素直にこれらを活用するのが素直な選択ではあります。
@@ -60,13 +60,9 @@ Parquet圧縮形式では、Amazon Redshift/Amazon QuickSightと連携できな�
 
 設定後、24時間以内にレポートが生成されます。裏を返すと、1日待ちましょうという事で、直ぐにレポート
 確認はできない点は注意が必要です。最終的に、指定したS3バケットの中身は、このような感じに
-なっておりました:
+なります:
 
 {{< figure alt="img4" src="https://github.com/t-tkm/blog_images/raw/main/2023/aws_cost_usage_report/img4.png" link="https://github.com/t-tkm/blog_images/raw/main/2023/aws_cost_usage_report/img4.png">}}
-
-※S3バケットに、このタイミングで上記オブジェクトが全て揃っていないかもしれませんのでご注意ください。
-後述、いろいろ試したあとのバケット状況で、どのタイミングでどのオブジェクトが生成されたかトレース
-していません。
 
 費用データを確認してみます。ただし、費用データはParquetで圧縮されているため、エクセルなどで
 確認できるようにCSVなどに変換しました。
@@ -553,6 +549,9 @@ ORDER BY
 Glueサービスを用いてレポートのクローリング、及びデータカタログを作成しました。最後に、Grafana、
 RedashをローカルPCで起動させ、Athenaをデータソースにクエリ実行、ダッシュボードが作成できる事を
 確認できました。
+
+今回クライアント(Grafana/Redash)で登録したSQLデータソース(Athena)は、RDB(SQL)とは違うという点は注意
+が必要です。Athenaへのクエリ性能や、クエリ毎に費用がかかる、という点は理解しておく必要があります。
 
 Next Stepとして、参考文献を活用し、(例えば下記のようなダッシュボードなど)本格的な「分析」
 を楽しみたいですね！
