@@ -31,3 +31,9 @@ date = "2023-09-24T00:00:00+09:00"
 
 # Links
 - [AWS Ambassador Partner Program](https://aws.amazon.com/jp/partners/ambassadors/?cards-body.sort-by=item.additionalFields.ambassadorName&cards-body.sort-order=asc&awsf.apn-ambassadors-location=*all&cards-body.q=japan&cards-body.q_operator=AND&awsm.page-cards-body=2)
+
+# Archives
+- [2023](http://localhost:1313/blog/archives/2023/)
+- [2022](http://localhost:1313/blog/archives/2022/)
+- [2021](http://localhost:1313/blog/archives/2021/)
+- [2020](http://localhost:1313/blog/archives/2020/)
