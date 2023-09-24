@@ -21,6 +21,9 @@ Cubeのサイトにあるコンセプト画像がとてもわかりやすく、�
 (私自身)フロントエンド学習環境として、React、Angular、Vueや、REST API、GraphQLなど、バックエンド(APIサーバ)の準備を「面倒だなぁ」
 と思う事もあり、このツールはまとめて学習できる多機能な点が気に入りました。
 
+※ちなみに今回は、データソースとして前回構築したAthenaを使いましたが、cube公式サイトによる公開PostgreSQLもありますので、
+手持ちのデータソースが無くても、すぐにお試しすることができます。
+
 # 全体構成
 今回Cube Coreを試した全体構成です。
 {{< figure alt="img1" src="https://github.com/t-tkm/blog_images/raw/main/2023/aws_cost_usage_report2/img1.png" link="https://github.com/t-tkm/blog_images/raw/main/2023/aws_cost_usage_report2/img1.png">}}
@@ -65,6 +68,11 @@ services:
 
 http://localhost:4000にアクセスすると、Databse connection画面が表示されますので、AWS Athenaを選択して、
 必要な情報を入力します。
+
+※公式による公開PostgreSQLを使う場合は、データソースの情報として↓が使えます。
+
+https://cube.dev/docs/product/getting-started/core/create-a-project#connect-a-data-source
+
 {{< figure alt="img1" src="https://github.com/t-tkm/blog_images/raw/main/2023/aws_cost_usage_report2/img4.png" link="https://github.com/t-tkm/blog_images/raw/main/2023/aws_cost_usage_report2/img4.png">}}
 
 うまく接続できれば、プロジェクトフォルダに「.env」ファイルが作成されます。
