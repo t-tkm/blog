@@ -95,6 +95,8 @@ SaaS版(Cube Cloud)も提供されています。「セマンティックレイ�
 Cubeのサイトにあるコンセプト画像がとてもわかりやすく、興味ある方はそちらもぜひご確認頂ければと思います。</p>
 <p>(私自身)フロントエンド学習環境として、React、Angular、Vueや、REST API、GraphQLなど、バックエンド(APIサーバ)の準備を「面倒だなぁ」
 と思う事もあり、このツールはまとめて学習できる多機能な点が気に入りました。</p>
+<p>※ちなみに今回は、データソースとして前回構築したAthenaを使いましたが、cube公式サイトによる公開PostgreSQLもありますので、
+手持ちのデータソースが無くても、すぐにお試しすることができます。</p>
 <h1 id="全体構成">全体構成</h1>
 <p>今回Cube Coreを試した全体構成です。
 <figure><a href="https://github.com/t-tkm/blog_images/raw/main/2023/aws_cost_usage_report2/img1.png">
@@ -136,12 +138,14 @@ Cubeのサイトにあるコンセプト画像がとてもわかりやすく、�
 </code></pre></div><p>後はアプリ(コンテナ)を起動するのみ！</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-zsh" data-lang="zsh">% docker compose up -d
 </code></pre></div><p>http://localhost:4000にアクセスすると、Databse connection画面が表示されますので、AWS Athenaを選択して、
-必要な情報を入力します。
+必要な情報を入力します。</p>
+<p>※公式による公開PostgreSQLを使う場合は、データソースの情報として↓が使えます。</p>
+<p><a href="https://cube.dev/docs/product/getting-started/core/create-a-project#connect-a-data-source">https://cube.dev/docs/product/getting-started/core/create-a-project#connect-a-data-source</a></p>
 <figure><a href="https://github.com/t-tkm/blog_images/raw/main/2023/aws_cost_usage_report2/img4.png">
     <img src="https://github.com/t-tkm/blog_images/raw/main/2023/aws_cost_usage_report2/img4.png"
          alt="img1"/> </a>
 </figure>
-</p>
+
 <p>うまく接続できれば、プロジェクトフォルダに「.env」ファイルが作成されます。
 <figure><a href="https://github.com/t-tkm/blog_images/raw/main/2023/aws_cost_usage_report2/img5.png">
     <img src="https://github.com/t-tkm/blog_images/raw/main/2023/aws_cost_usage_report2/img5.png"
@@ -501,16 +505,16 @@ CUBEJS_AWS_ATHENA_CATALOG=AwsDataCatalog
     </li>
     
     <li class="p-related__item js-related__item">
-      <a href="/blog/posts/2022/aws_secure_bastion_2/"
+      <a href="/blog/posts/2022/aws_secure_bastion_1/"
         >
-        <span>踏台VPCの作成(Internet Gateway有り)(AWS)</span>
+        <span>踏台VPCの作成(Internet Gateway無し)(AWS)</span>
       </a>
     </li>
     
     <li class="p-related__item js-related__item">
-      <a href="/blog/posts/2022/aws_secure_bastion_1/"
+      <a href="/blog/posts/2022/aws_secure_bastion_2/"
         >
-        <span>踏台VPCの作成(Internet Gateway無し)(AWS)</span>
+        <span>踏台VPCの作成(Internet Gateway有り)(AWS)</span>
       </a>
     </li>
     
