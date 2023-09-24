@@ -7,11 +7,11 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>&amp;copy; 2022 Takumi Tomita Powered by Hugo &amp; Pickles.</copyright>
-    <lastBuildDate>Sat, 23 Sep 2023 00:00:00 +0900</lastBuildDate><atom:link href="https://t-tkm.github.io/blog/tags/cur/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 24 Sep 2023 00:00:00 +0900</lastBuildDate><atom:link href="https://t-tkm.github.io/blog/tags/cur/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>AWS Cost Usage Reportの可視化(2) -ヘッドレスBIツールCubeを試してみる</title>
       <link>https://t-tkm.github.io/blog/posts/2023/aws_cost_usage_report2/</link>
-      <pubDate>Sat, 23 Sep 2023 00:00:00 +0900</pubDate>
+      <pubDate>Sun, 24 Sep 2023 00:00:00 +0900</pubDate>
       
       <guid>https://t-tkm.github.io/blog/posts/2023/aws_cost_usage_report2/</guid>
       <description>はじめに 「AWS Cost Usage Reportの可視化」の続編になります。 前回記事では、AWS費用のレポートがS3に定期的に溜め、S3データをSQLで検索できるマネージドサービスAthenaを構築し、AthenaをデータソースとしてGrafanaやRedashといったBIツールで可視化基盤を構築しました。 その後も、Apache Supersetや各種NotebooksといったBIツールで可視化していたものの、今度はReactやVueといった フロントエンド開発を通し、カスタムダッシュボートを開発・構築したい、という思いに至りました。 そこで目にしたのが、記事の副表題にもあるヘッドレスBIツールCube CoreというOSSになります。 このOSSですが、C</description>
