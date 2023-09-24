@@ -21,7 +21,7 @@ Cubeのサイトにあるコンセプト画像がとてもわかりやすく、�
 (私自身)フロントエンド学習環境として、React、Angular、Vueや、REST API、GraphQLなど、バックエンド(APIサーバ)の準備を「面倒だなぁ」
 と思う事もあり、このツールはまとめて学習できる多機能な点が気に入りました。
 
-## 全体構成
+# 全体構成
 今回Cube Coreを試した全体構成です。
 {{< figure alt="img1" src="https://github.com/t-tkm/blog_images/raw/main/2023/aws_cost_usage_report2/img1.png" link="https://github.com/t-tkm/blog_images/raw/main/2023/aws_cost_usage_report2/img1.png">}}
 
@@ -30,7 +30,7 @@ Cubeのサイトにあるコンセプト画像がとてもわかりやすく、�
 ご参考に、最終のプロジェクト構成はこのようになりました。
 {{< figure alt="img1" src="https://github.com/t-tkm/blog_images/raw/main/2023/aws_cost_usage_report2/img12.png" link="https://github.com/t-tkm/blog_images/raw/main/2023/aws_cost_usage_report2/img12.png">}} 
 
-## Step1: ローカル開発
+# Step1: ローカル開発
 ローカルPCにCube Coreを導入します。
 {{< figure alt="img1" src="https://github.com/t-tkm/blog_images/raw/main/2023/aws_cost_usage_report2/img2.png" link="https://github.com/t-tkm/blog_images/raw/main/2023/aws_cost_usage_report2/img2.png">}}
 
@@ -96,7 +96,7 @@ Athenaから取得されたテーブルが表示されるので、テーブル�
 更に、オンラインエディタ[CodeSandbox](https://codesandbox.io/)で編集させてみることもできます！(学習者には至れり尽くせりといった印象です)
 {{< figure alt="img1" src="https://github.com/t-tkm/blog_images/raw/main/2023/aws_cost_usage_report2/img9.png" link="https://github.com/t-tkm/blog_images/raw/main/2023/aws_cost_usage_report2/img9.png">}}
 
-## Step2: AWSデプロイ
+# Step2: AWSデプロイ
 AWSへのデプロイには、CDKを使いました。
 {{< figure alt="img1" src="https://github.com/t-tkm/blog_images/raw/main/2023/aws_cost_usage_report2/img3.png" link="https://github.com/t-tkm/blog_images/raw/main/2023/aws_cost_usage_report2/img3.png">}} 
 
@@ -137,18 +137,18 @@ CUBEJS_AWS_ATHENA_CATALOG=AwsDataCatalog
 
 CDKの本体、lib/cdk-stack.tsを次のようにします:
 - 8-9: .envにある環境変数を取込むためのツール設定
-- 15: インターネット経由でAWSロードバランサALBへアクセスする際、自分のIPからのみ接続許可
+- 15, 60-64: インターネット経由でAWSロードバランサALBへアクセスする際、自分のIPからのみ接続許可
 
-```typescript {linenos=true, hl_lines=["8-9", 15]}
+```typescript {linenos=true, hl_lines=["8-9", 15, "60-64"]}
 import { Duration, Stack, StackProps } from 'aws-cdk-lib';
 import ec2 = require('aws-cdk-lib/aws-ec2');
 import ecs = require('aws-cdk-lib/aws-ecs');
 import ecs_patterns = require('aws-cdk-lib/aws-ecs-patterns');
-import {SecurityGroup} from 'aws-cdk-lib/aws-ec2';
-import {ApplicationLoadBalancer} from 'aws-cdk-lib/aws-elasticloadbalancingv2';
+import { SecurityGroup } from 'aws-cdk-lib/aws-ec2';
+import { ApplicationLoadBalancer } from 'aws-cdk-lib/aws-elasticloadbalancingv2';
 import { Construct } from 'constructs';
 import * as dotenv from 'dotenv';
-dotenv.config(); // .env load
+dotenv.config(); // .envファイルから環境変数を読み込む
 
 export class CdkStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -156,18 +156,25 @@ export class CdkStack extends Stack {
 
     const MY_IP: string = "xxx.xxx.xxx.xxx/32"
 
+    // 1. 仮想プライベートクラウド（VPC）を作成
     const vpc = new ec2.Vpc(this, 'MyVpc', { maxAzs: 2 });
 
+    // 2. Amazon ECSクラスタを作成
     const cluster = new ecs.Cluster(this, 'MyCluster', {
       vpc,
     });
     
+    // 3. Amazon ECS Fargateタスク定義を作成
     const task = new ecs.FargateTaskDefinition(this, 'MyTask', {
+      memoryLimitMiB: 4096,
+      cpu: 2048
     });
 
+    // 4. コンテナイメージを指定してコンテナをタスクに追加
     const container = task.addContainer('MyContainer', {
       image: ecs.ContainerImage.fromRegistry('cubejs/cube:latest'),
       environment: {
+        // 5. 環境変数の設定（デフォルト値または環境変数から読み込む）
         CUBEJS_DEV_MODE: process.env.CUBEJS_DEV_MODE ?? "",
         CUBEJS_DB_TYPE: process.env.CUBEJS_DB_TYPE ?? "",
         CUBEJS_AWS_KEY: process.env.CUBEJS_AWS_KEY ?? "",
@@ -186,16 +193,19 @@ export class CdkStack extends Stack {
       containerPort: 15432,
     });
 
+    // 6. アプリケーションロードバランサー(ALB)のセキュリティグループを作成
     const alb_securityGroup = new SecurityGroup(this, "MySG", {
       vpc: vpc,
       allowAllOutbound: true,
     });
 
+    // 7. ALBへのアクセスを指定したIPアドレスに制限
     alb_securityGroup.addIngressRule(
       ec2.Peer.ipv4(MY_IP),
       ec2.Port.tcp(80),
     );
 
+    // 8. アプリケーションロードバランサー(ALB)を作成
     const alb = new ApplicationLoadBalancer(this,'MyALB',{
       internetFacing: true,
       loadBalancerName: 'my-alb',
@@ -203,6 +213,7 @@ export class CdkStack extends Stack {
       vpc
     })
 
+    // 9. アプリケーションロードバランサー(ALB)を使用するFargateサービスを作成
     const loadBalancedFargateService = new ecs_patterns.ApplicationLoadBalancedFargateService(this, 'MyService', {
       cluster,
       taskDefinition: task,
@@ -234,7 +245,7 @@ export class CdkStack extends Stack {
 % npx cdk destroy
 ```
 
-## まとめ
+# まとめ
 AWS Athena(AWS費用レポートテーブル)をデータソースとして、ヘッドレスBIツールCube Coreを試してみました。
 手元ですぐに試してみたいといったニーズでは、シングルコンテナ構成という事もあり、煩わしい依存関係に悩む事なく、
 簡単に手元の開発PC、AWSのコンテナ基盤で動かすことができました。
@@ -242,7 +253,7 @@ AWS Athena(AWS費用レポートテーブル)をデータソースとして、�
 冒頭にある「セマンティックレイヤー」コンセプト理解や、フロントエンド開発の流れを学習するために、もう少し
 遊んでみようと思います。
 
-## 補足
+# 補足
 今回は、手軽にという事で諸所省略した部分があります。「ちょっとお試ししてみる」以上に使いこなす場合は、公式ドキュメント
 や、AWSベスプラに従った設計が必要です。
 - 環境変数は、パラメータストアやSecret Managerに格納するのがベスプラです。
@@ -258,3 +269,10 @@ AWS Athena(AWS費用レポートテーブル)をデータソースとして、�
 - 今回はお試し環境ということでシングルコンテナでしたが(環境変数「CUBEJS_DEV_MODE=true」を利用)、公式ドキュメントには、よりスケール
 するような構成も準備されています。
   - [Documentation / Deployment / Cube Core](https://cube.dev/docs/product/deployment/core)
+
+# 付録
+環境変数についてはChatGPTさんも指摘してくれました。
+{{< figure alt="img1" src="https://github.com/t-tkm/blog_images/raw/main/2023/aws_cost_usage_report2/img15.png" link="https://github.com/t-tkm/blog_images/raw/main/2023/aws_cost_usage_report2/img15.png">}}
+
+元のコードでは、コメントも書いていなかったのですが、その部分はChatGPTさんへお願いして修正しました。
+{{< figure alt="img1" src="https://github.com/t-tkm/blog_images/raw/main/2023/aws_cost_usage_report2/img14.png" link="https://github.com/t-tkm/blog_images/raw/main/2023/aws_cost_usage_report2/img14.png">}}
