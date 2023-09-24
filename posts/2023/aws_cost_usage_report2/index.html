@@ -95,7 +95,7 @@ SaaS版(Cube Cloud)も提供されています。「セマンティックレイ�
 Cubeのサイトにあるコンセプト画像がとてもわかりやすく、興味ある方はそちらもぜひご確認頂ければと思います。</p>
 <p>(私自身)フロントエンド学習環境として、React、Angular、Vueや、REST API、GraphQLなど、バックエンド(APIサーバ)の準備を「面倒だなぁ」
 と思う事もあり、このツールはまとめて学習できる多機能な点が気に入りました。</p>
-<h2 id="全体構成">全体構成</h2>
+<h1 id="全体構成">全体構成</h1>
 <p>今回Cube Coreを試した全体構成です。
 <figure><a href="https://github.com/t-tkm/blog_images/raw/main/2023/aws_cost_usage_report2/img1.png">
     <img src="https://github.com/t-tkm/blog_images/raw/main/2023/aws_cost_usage_report2/img1.png"
@@ -109,7 +109,7 @@ Cubeのサイトにあるコンセプト画像がとてもわかりやすく、�
          alt="img1"/> </a>
 </figure>
 </p>
-<h2 id="step1-ローカル開発">Step1: ローカル開発</h2>
+<h1 id="step1-ローカル開発">Step1: ローカル開発</h1>
 <p>ローカルPCにCube Coreを導入します。
 <figure><a href="https://github.com/t-tkm/blog_images/raw/main/2023/aws_cost_usage_report2/img2.png">
     <img src="https://github.com/t-tkm/blog_images/raw/main/2023/aws_cost_usage_report2/img2.png"
@@ -188,7 +188,7 @@ CUBEJS_SCHEMA_PATH=model
          alt="img1"/> </a>
 </figure>
 </p>
-<h2 id="step2-awsデプロイ">Step2: AWSデプロイ</h2>
+<h1 id="step2-awsデプロイ">Step2: AWSデプロイ</h1>
 <p>AWSへのデプロイには、CDKを使いました。
 <figure><a href="https://github.com/t-tkm/blog_images/raw/main/2023/aws_cost_usage_report2/img3.png">
     <img src="https://github.com/t-tkm/blog_images/raw/main/2023/aws_cost_usage_report2/img3.png"
@@ -218,7 +218,7 @@ CUBEJS_AWS_ATHENA_CATALOG=AwsDataCatalog
 </code></pre></div><p>CDKの本体、lib/cdk-stack.tsを次のようにします:</p>
 <ul>
 <li>8-9: .envにある環境変数を取込むためのツール設定</li>
-<li>15: インターネット経由でAWSロードバランサALBへアクセスする際、自分のIPからのみ接続許可</li>
+<li>15, 60-64: インターネット経由でAWSロードバランサALBへアクセスする際、自分のIPからのみ接続許可</li>
 </ul>
 <div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
@@ -281,12 +281,12 @@ CUBEJS_AWS_ATHENA_CATALOG=AwsDataCatalog
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">60
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">61
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">62
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">63
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">64
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">65
+</span><span style="display:block;width:100%;background-color:#3c3d38"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">60
+</span></span><span style="display:block;width:100%;background-color:#3c3d38"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">61
+</span></span><span style="display:block;width:100%;background-color:#3c3d38"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">62
+</span></span><span style="display:block;width:100%;background-color:#3c3d38"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">63
+</span></span><span style="display:block;width:100%;background-color:#3c3d38"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">64
+</span></span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">65
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">66
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">67
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">68
@@ -294,17 +294,28 @@ CUBEJS_AWS_ATHENA_CATALOG=AwsDataCatalog
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">70
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">71
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">72
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">73
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">74
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">75
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">76
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">77
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">78
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">79
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">80
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">81
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">82
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">83
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
 <pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript"><span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">Duration</span>, <span style="color:#a6e22e">Stack</span>, <span style="color:#a6e22e">StackProps</span> } <span style="color:#66d9ef">from</span> <span style="color:#e6db74">&#39;aws-cdk-lib&#39;</span>;
 <span style="color:#66d9ef">import</span> <span style="color:#a6e22e">ec2</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">require</span>(<span style="color:#e6db74">&#39;aws-cdk-lib/aws-ec2&#39;</span>);
 <span style="color:#66d9ef">import</span> <span style="color:#a6e22e">ecs</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">require</span>(<span style="color:#e6db74">&#39;aws-cdk-lib/aws-ecs&#39;</span>);
 <span style="color:#66d9ef">import</span> <span style="color:#a6e22e">ecs_patterns</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">require</span>(<span style="color:#e6db74">&#39;aws-cdk-lib/aws-ecs-patterns&#39;</span>);
-<span style="color:#66d9ef">import</span> {<span style="color:#a6e22e">SecurityGroup</span>} <span style="color:#66d9ef">from</span> <span style="color:#e6db74">&#39;aws-cdk-lib/aws-ec2&#39;</span>;
-<span style="color:#66d9ef">import</span> {<span style="color:#a6e22e">ApplicationLoadBalancer</span>} <span style="color:#66d9ef">from</span> <span style="color:#e6db74">&#39;aws-cdk-lib/aws-elasticloadbalancingv2&#39;</span>;
+<span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">SecurityGroup</span> } <span style="color:#66d9ef">from</span> <span style="color:#e6db74">&#39;aws-cdk-lib/aws-ec2&#39;</span>;
+<span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">ApplicationLoadBalancer</span> } <span style="color:#66d9ef">from</span> <span style="color:#e6db74">&#39;aws-cdk-lib/aws-elasticloadbalancingv2&#39;</span>;
 <span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">Construct</span> } <span style="color:#66d9ef">from</span> <span style="color:#e6db74">&#39;constructs&#39;</span>;
 <span style="display:block;width:100%;background-color:#3c3d38"><span style="color:#66d9ef">import</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">as</span> <span style="color:#a6e22e">dotenv</span> <span style="color:#66d9ef">from</span> <span style="color:#e6db74">&#39;dotenv&#39;</span>;
-</span><span style="display:block;width:100%;background-color:#3c3d38"><span style="color:#a6e22e">dotenv</span>.<span style="color:#a6e22e">config</span>(); <span style="color:#75715e">// .env load
+</span><span style="display:block;width:100%;background-color:#3c3d38"><span style="color:#a6e22e">dotenv</span>.<span style="color:#a6e22e">config</span>(); <span style="color:#75715e">// .envファイルから環境変数を読み込む
 </span></span><span style="color:#75715e"></span>
 <span style="color:#66d9ef">export</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">CdkStack</span> <span style="color:#66d9ef">extends</span> <span style="color:#a6e22e">Stack</span> {
   <span style="color:#66d9ef">constructor</span>(<span style="color:#a6e22e">scope</span>: <span style="color:#66d9ef">Construct</span>, <span style="color:#a6e22e">id</span>: <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">props?</span>: <span style="color:#66d9ef">StackProps</span>) {
@@ -312,19 +323,26 @@ CUBEJS_AWS_ATHENA_CATALOG=AwsDataCatalog
 
 <span style="display:block;width:100%;background-color:#3c3d38">    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">MY_IP</span>: <span style="color:#66d9ef">string</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;xxx.xxx.xxx.xxx/32&#34;</span>
 </span>
-    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">vpc</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">ec2</span>.<span style="color:#a6e22e">Vpc</span>(<span style="color:#66d9ef">this</span>, <span style="color:#e6db74">&#39;MyVpc&#39;</span>, { <span style="color:#a6e22e">maxAzs</span>: <span style="color:#66d9ef">2</span> });
+    <span style="color:#75715e">// 1. 仮想プライベートクラウド（VPC）を作成
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">vpc</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">ec2</span>.<span style="color:#a6e22e">Vpc</span>(<span style="color:#66d9ef">this</span>, <span style="color:#e6db74">&#39;MyVpc&#39;</span>, { <span style="color:#a6e22e">maxAzs</span>: <span style="color:#66d9ef">2</span> });
 
-    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">cluster</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">ecs</span>.<span style="color:#a6e22e">Cluster</span>(<span style="color:#66d9ef">this</span>, <span style="color:#e6db74">&#39;MyCluster&#39;</span>, {
+    <span style="color:#75715e">// 2. Amazon ECSクラスタを作成
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">cluster</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">ecs</span>.<span style="color:#a6e22e">Cluster</span>(<span style="color:#66d9ef">this</span>, <span style="color:#e6db74">&#39;MyCluster&#39;</span>, {
       <span style="color:#a6e22e">vpc</span>,
     });
     
-    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">task</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">ecs</span>.<span style="color:#a6e22e">FargateTaskDefinition</span>(<span style="color:#66d9ef">this</span>, <span style="color:#e6db74">&#39;MyTask&#39;</span>, {
+    <span style="color:#75715e">// 3. Amazon ECS Fargateタスク定義を作成
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">task</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">ecs</span>.<span style="color:#a6e22e">FargateTaskDefinition</span>(<span style="color:#66d9ef">this</span>, <span style="color:#e6db74">&#39;MyTask&#39;</span>, {
+      <span style="color:#a6e22e">memoryLimitMiB</span>: <span style="color:#66d9ef">4096</span>,
+      <span style="color:#a6e22e">cpu</span>: <span style="color:#66d9ef">2048</span>
     });
 
-    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">container</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">task</span>.<span style="color:#a6e22e">addContainer</span>(<span style="color:#e6db74">&#39;MyContainer&#39;</span>, {
+    <span style="color:#75715e">// 4. コンテナイメージを指定してコンテナをタスクに追加
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">container</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">task</span>.<span style="color:#a6e22e">addContainer</span>(<span style="color:#e6db74">&#39;MyContainer&#39;</span>, {
       <span style="color:#a6e22e">image</span>: <span style="color:#66d9ef">ecs.ContainerImage.fromRegistry</span>(<span style="color:#e6db74">&#39;cubejs/cube:latest&#39;</span>),
       <span style="color:#a6e22e">environment</span><span style="color:#f92672">:</span> {
-        <span style="color:#a6e22e">CUBEJS_DEV_MODE</span>: <span style="color:#66d9ef">process.env.CUBEJS_DEV_MODE</span> <span style="color:#f92672">??</span> <span style="color:#e6db74">&#34;&#34;</span>,
+        <span style="color:#75715e">// 5. 環境変数の設定（デフォルト値または環境変数から読み込む）
+</span><span style="color:#75715e"></span>        <span style="color:#a6e22e">CUBEJS_DEV_MODE</span>: <span style="color:#66d9ef">process.env.CUBEJS_DEV_MODE</span> <span style="color:#f92672">??</span> <span style="color:#e6db74">&#34;&#34;</span>,
         <span style="color:#a6e22e">CUBEJS_DB_TYPE</span>: <span style="color:#66d9ef">process.env.CUBEJS_DB_TYPE</span> <span style="color:#f92672">??</span> <span style="color:#e6db74">&#34;&#34;</span>,
         <span style="color:#a6e22e">CUBEJS_AWS_KEY</span>: <span style="color:#66d9ef">process.env.CUBEJS_AWS_KEY</span> <span style="color:#f92672">??</span> <span style="color:#e6db74">&#34;&#34;</span>,
         <span style="color:#a6e22e">CUBEJS_AWS_SECRET</span>: <span style="color:#66d9ef">process.env.CUBEJS_AWS_SECRET</span> <span style="color:#f92672">??</span> <span style="color:#e6db74">&#34;&#34;</span>,
@@ -342,24 +360,28 @@ CUBEJS_AWS_ATHENA_CATALOG=AwsDataCatalog
       <span style="color:#a6e22e">containerPort</span>: <span style="color:#66d9ef">15432</span>,
     });
 
-    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">alb_securityGroup</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">SecurityGroup</span>(<span style="color:#66d9ef">this</span>, <span style="color:#e6db74">&#34;MySG&#34;</span>, {
+    <span style="color:#75715e">// 6. アプリケーションロードバランサー(ALB)のセキュリティグループを作成
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">alb_securityGroup</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">SecurityGroup</span>(<span style="color:#66d9ef">this</span>, <span style="color:#e6db74">&#34;MySG&#34;</span>, {
       <span style="color:#a6e22e">vpc</span>: <span style="color:#66d9ef">vpc</span>,
       <span style="color:#a6e22e">allowAllOutbound</span>: <span style="color:#66d9ef">true</span>,
     });
 
-    <span style="color:#a6e22e">alb_securityGroup</span>.<span style="color:#a6e22e">addIngressRule</span>(
-      <span style="color:#a6e22e">ec2</span>.<span style="color:#a6e22e">Peer</span>.<span style="color:#a6e22e">ipv4</span>(<span style="color:#a6e22e">MY_IP</span>),
-      <span style="color:#a6e22e">ec2</span>.<span style="color:#a6e22e">Port</span>.<span style="color:#a6e22e">tcp</span>(<span style="color:#ae81ff">80</span>),
-    );
-
-    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">alb</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">ApplicationLoadBalancer</span>(<span style="color:#66d9ef">this</span>,<span style="color:#e6db74">&#39;MyALB&#39;</span>,{
+<span style="display:block;width:100%;background-color:#3c3d38">    <span style="color:#75715e">// 7. ALBへのアクセスを指定したIPアドレスに制限
+</span></span><span style="display:block;width:100%;background-color:#3c3d38"><span style="color:#75715e"></span>    <span style="color:#a6e22e">alb_securityGroup</span>.<span style="color:#a6e22e">addIngressRule</span>(
+</span><span style="display:block;width:100%;background-color:#3c3d38">      <span style="color:#a6e22e">ec2</span>.<span style="color:#a6e22e">Peer</span>.<span style="color:#a6e22e">ipv4</span>(<span style="color:#a6e22e">MY_IP</span>),
+</span><span style="display:block;width:100%;background-color:#3c3d38">      <span style="color:#a6e22e">ec2</span>.<span style="color:#a6e22e">Port</span>.<span style="color:#a6e22e">tcp</span>(<span style="color:#ae81ff">80</span>),
+</span><span style="display:block;width:100%;background-color:#3c3d38">    );
+</span>
+    <span style="color:#75715e">// 8. アプリケーションロードバランサー(ALB)を作成
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">alb</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">ApplicationLoadBalancer</span>(<span style="color:#66d9ef">this</span>,<span style="color:#e6db74">&#39;MyALB&#39;</span>,{
       <span style="color:#a6e22e">internetFacing</span>: <span style="color:#66d9ef">true</span>,
       <span style="color:#a6e22e">loadBalancerName</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;my-alb&#39;</span>,
       <span style="color:#a6e22e">securityGroup</span>: <span style="color:#66d9ef">alb_securityGroup</span>,
       <span style="color:#a6e22e">vpc</span>
     })
 
-    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">loadBalancedFargateService</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">ecs_patterns</span>.<span style="color:#a6e22e">ApplicationLoadBalancedFargateService</span>(<span style="color:#66d9ef">this</span>, <span style="color:#e6db74">&#39;MyService&#39;</span>, {
+    <span style="color:#75715e">// 9. アプリケーションロードバランサー(ALB)を使用するFargateサービスを作成
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">loadBalancedFargateService</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">ecs_patterns</span>.<span style="color:#a6e22e">ApplicationLoadBalancedFargateService</span>(<span style="color:#66d9ef">this</span>, <span style="color:#e6db74">&#39;MyService&#39;</span>, {
       <span style="color:#a6e22e">cluster</span>,
       <span style="color:#a6e22e">taskDefinition</span>: <span style="color:#66d9ef">task</span>,
       <span style="color:#a6e22e">desiredCount</span>: <span style="color:#66d9ef">1</span>,
@@ -389,13 +411,13 @@ CUBEJS_AWS_ATHENA_CATALOG=AwsDataCatalog
 おいおい確認してみたいと思います。</p>
 <p>作業が完了したら、リソースを削除します。</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-zsh" data-lang="zsh">% npx cdk destroy
-</code></pre></div><h2 id="まとめ">まとめ</h2>
+</code></pre></div><h1 id="まとめ">まとめ</h1>
 <p>AWS Athena(AWS費用レポートテーブル)をデータソースとして、ヘッドレスBIツールCube Coreを試してみました。
 手元ですぐに試してみたいといったニーズでは、シングルコンテナ構成という事もあり、煩わしい依存関係に悩む事なく、
 簡単に手元の開発PC、AWSのコンテナ基盤で動かすことができました。</p>
 <p>冒頭にある「セマンティックレイヤー」コンセプト理解や、フロントエンド開発の流れを学習するために、もう少し
 遊んでみようと思います。</p>
-<h2 id="補足">補足</h2>
+<h1 id="補足">補足</h1>
 <p>今回は、手軽にという事で諸所省略した部分があります。「ちょっとお試ししてみる」以上に使いこなす場合は、公式ドキュメント
 や、AWSベスプラに従った設計が必要です。</p>
 <ul>
@@ -419,6 +441,19 @@ CUBEJS_AWS_ATHENA_CATALOG=AwsDataCatalog
 </ul>
 </li>
 </ul>
+<h1 id="付録">付録</h1>
+<p>環境変数についてはChatGPTさんも指摘してくれました。
+<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2023/aws_cost_usage_report2/img15.png">
+    <img src="https://github.com/t-tkm/blog_images/raw/main/2023/aws_cost_usage_report2/img15.png"
+         alt="img1"/> </a>
+</figure>
+</p>
+<p>元のコードでは、コメントも書いていなかったのですが、その部分はChatGPTさんへお願いして修正しました。
+<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2023/aws_cost_usage_report2/img14.png">
+    <img src="https://github.com/t-tkm/blog_images/raw/main/2023/aws_cost_usage_report2/img14.png"
+         alt="img1"/> </a>
+</figure>
+</p>
 
   </section>
   <footer>
