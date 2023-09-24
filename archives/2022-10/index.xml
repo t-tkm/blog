@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>2022-10 on Takumi Tomita&#39;s Blog</title>
+    <link>https://t-tkm.github.io/blog/archives/2022-10/</link>
+    <description>Recent content in 2022-10 on Takumi Tomita&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <copyright>&amp;copy; 2022 Takumi Tomita Powered by Hugo &amp; Pickles.</copyright>
+    <lastBuildDate>Sun, 16 Oct 2022 00:00:00 +0900</lastBuildDate><atom:link href="https://t-tkm.github.io/blog/archives/2022-10/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>踏台VPCの作成(Internet Gateway有り)(AWS)</title>
+      <link>https://t-tkm.github.io/blog/posts/2022/aws_secure_bastion_2/</link>
+      <pubDate>Sun, 16 Oct 2022 00:00:00 +0900</pubDate>
+      
+      <guid>https://t-tkm.github.io/blog/posts/2022/aws_secure_bastion_2/</guid>
+      <description>はじめに 前回は、VPCにInternet Gatewayを設置しない完全にプライベートな環境での、ブラウザを使うEC2操作を見ました。 しかしこのままでは、yumの更新、npmなど各種パッケージ経由でのツール導入、(インターネットにあるRESTエンドポイントを使う)AWS CLI操作などできません。 そこで今回は、インターネットへのアウトバウンド通信を許可するためにNAT GWを設置しようと思います。トラフィックを少し管理するために。Network Firewall というIPS/IDS相当のサービスを設置したいと思います。 なお、今回の検証で、Network Firewallは1,400円/日程度の費用が発生しました。(1 endpoints x 24 hours x 0.395 USD = 9.48 USD 148円/USD 換算</description>
+    </item>
+    
+    <item>
+      <title>踏台VPCの作成(Internet Gateway無し)(AWS)</title>
+      <link>https://t-tkm.github.io/blog/posts/2022/aws_secure_bastion_1/</link>
+      <pubDate>Sun, 16 Oct 2022 00:00:00 +0900</pubDate>
+      
+      <guid>https://t-tkm.github.io/blog/posts/2022/aws_secure_bastion_1/</guid>
+      <description>はじめに VPCにInternet GWを割当てず、プライベートサブネットにあるサーバ(EC2)を操作する方法です。Cloud9(Amazon Linux)と、Windows Server(ブラウザを使ったGUI操作)を説明します。 [参考]Systems Manager を使用してインターネットアクセスなしでプライベート EC2 インスタンスを管理できるように、VPC エンドポイントを作成するにはどうすればよいですか? 構成 基盤構築(Terraform) ネットワークなどの基盤構築には、Terraformを活用しました。コードはこちら(GitHub)からダウンロードできます。 VPCパラメータ resource &amp;#34;aws_vpc&amp;#34; &amp;#34;Main&amp;#34; { cidr_block = var.main_vpc_cidr instance_tenancy = &amp;#34;default&amp;#34; enable_dns_hostnames = true enable_dns_support = true tags = { Name = &amp;#34;${var.system_name}-vpc&amp;#34; } } Bastionサブネットパラメー</description>
+    </item>
+    
+  </channel>
+</rss>

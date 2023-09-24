@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>2021-03-21 on Takumi Tomita&#39;s Blog</title>
+    <link>https://t-tkm.github.io/blog/archives/2021-03-21/</link>
+    <description>Recent content in 2021-03-21 on Takumi Tomita&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <copyright>&amp;copy; 2022 Takumi Tomita Powered by Hugo &amp; Pickles.</copyright>
+    <lastBuildDate>Sun, 21 Mar 2021 00:00:00 +0900</lastBuildDate><atom:link href="https://t-tkm.github.io/blog/archives/2021-03-21/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>我が家のマイクラサーバー(AWS編)</title>
+      <link>https://t-tkm.github.io/blog/posts/2021/03/minecraft_server_aws_ecs/</link>
+      <pubDate>Sun, 21 Mar 2021 00:00:00 +0900</pubDate>
+      
+      <guid>https://t-tkm.github.io/blog/posts/2021/03/minecraft_server_aws_ecs/</guid>
+      <description>はじめに マイクラサーバ(javaアプリ)をECS+Fargate+EFSで動かしてみた備忘録になります。趣味であるこのシステムの運用を通じて、今後周辺ノウハウを強化していきたいというのが(私、インフラエンジニア)目的ですw 我が家はマイクラのヘビーユーザで、息子3人(小学生)と母親が、同じ世界(マイクラではワールドと呼ぶ)にログインして、各々の建築を見せあったり、道具を揃えて洞窟を冒険したり楽しんでいます。私はそのマルチサーバをお守りしており、以前はVM上にサーバを構築して運用していました。しかし、1つのサーバで展開できるワールドは1つであり、色々複数のワールドを家族に提供するには、複数サーバを立てる必要があります。そこで、最近ではア</description>
+    </item>
+    
+  </channel>
+</rss>

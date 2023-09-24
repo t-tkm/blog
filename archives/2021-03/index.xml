@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>2021-03 on Takumi Tomita&#39;s Blog</title>
+    <link>https://t-tkm.github.io/blog/archives/2021-03/</link>
+    <description>Recent content in 2021-03 on Takumi Tomita&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <copyright>&amp;copy; 2022 Takumi Tomita Powered by Hugo &amp; Pickles.</copyright>
+    <lastBuildDate>Fri, 26 Mar 2021 00:00:00 +0900</lastBuildDate><atom:link href="https://t-tkm.github.io/blog/archives/2021-03/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Alexaでかけ算ゲーム</title>
+      <link>https://t-tkm.github.io/blog/posts/2021/03/aws_alexa_practice/</link>
+      <pubDate>Fri, 26 Mar 2021 00:00:00 +0900</pubDate>
+      
+      <guid>https://t-tkm.github.io/blog/posts/2021/03/aws_alexa_practice/</guid>
+      <description>Alexaでかけ算ゲーム はじめに 今年の正月は、コロナ禍ということで帰省ができなかったため、以前より気になっていたAlexaに手を出してみました。あわよくば、今回の勉強を通して「Alexa認定」も取得できるかも？と思ったのですが、そこまで甘い世界ではありませんでした1。。。 Alexa全体像の理解 さて、実際始めようとすると、今まで公私共に全く触った事の無いサービスという事もあり、どこから手をつけてよいものかわかりません。。。そこでとっかかりとして、Alexa公式 動画シリーズ「Alexa道場」から始めることにしました。こちらの教材がとても丁寧で、ストーリを追って段階的に学習できお勧めです！一通り動画を視聴し終わると、なんとなく(開発含めた</description>
+    </item>
+    
+    <item>
+      <title>我が家のマイクラサーバー(AWS編)</title>
+      <link>https://t-tkm.github.io/blog/posts/2021/03/minecraft_server_aws_ecs/</link>
+      <pubDate>Sun, 21 Mar 2021 00:00:00 +0900</pubDate>
+      
+      <guid>https://t-tkm.github.io/blog/posts/2021/03/minecraft_server_aws_ecs/</guid>
+      <description>はじめに マイクラサーバ(javaアプリ)をECS+Fargate+EFSで動かしてみた備忘録になります。趣味であるこのシステムの運用を通じて、今後周辺ノウハウを強化していきたいというのが(私、インフラエンジニア)目的ですw 我が家はマイクラのヘビーユーザで、息子3人(小学生)と母親が、同じ世界(マイクラではワールドと呼ぶ)にログインして、各々の建築を見せあったり、道具を揃えて洞窟を冒険したり楽しんでいます。私はそのマルチサーバをお守りしており、以前はVM上にサーバを構築して運用していました。しかし、1つのサーバで展開できるワールドは1つであり、色々複数のワールドを家族に提供するには、複数サーバを立てる必要があります。そこで、最近ではア</description>
+    </item>
+    
+  </channel>
+</rss>

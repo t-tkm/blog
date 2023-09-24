@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>2022-03-16 on Takumi Tomita&#39;s Blog</title>
+    <link>https://t-tkm.github.io/blog/archives/2022-03-16/</link>
+    <description>Recent content in 2022-03-16 on Takumi Tomita&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <copyright>&amp;copy; 2022 Takumi Tomita Powered by Hugo &amp; Pickles.</copyright>
+    <lastBuildDate>Wed, 16 Mar 2022 00:00:00 +0900</lastBuildDate><atom:link href="https://t-tkm.github.io/blog/archives/2022-03-16/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>AWS App2Container(ECS/EKSデプロイ編)</title>
+      <link>https://t-tkm.github.io/blog/posts/2022/aws_app2container_ecs_eks/</link>
+      <pubDate>Wed, 16 Mar 2022 00:00:00 +0900</pubDate>
+      
+      <guid>https://t-tkm.github.io/blog/posts/2022/aws_app2container_ecs_eks/</guid>
+      <description>1. はじめに ここでは、前回の記事「AWS App2Container(お試し編)」では触れられなかったデプロイについて試してみます。 実際は、次の3ステップでデプロイできて衝撃的でした！ deployment.jsonを編集し、「ECS」か「EKS」を選択(AppRunnerも選択可)。 app2containerコマンド(オプションgenerate app-deployment)でマニフェスト作成(一部S3に格納される) CloudFormationでデプロイ そして、ステップ2の「app2containerコマンド」の引数オプションとして「&amp;ndash;deploy」を指定すると、ステップ3すら不要です^^ それでは試してみましょう。 2. マニフェス</description>
+    </item>
+    
+  </channel>
+</rss>
