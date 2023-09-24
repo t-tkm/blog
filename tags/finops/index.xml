@@ -10,19 +10,19 @@
     <lastBuildDate>Sun, 24 Sep 2023 00:00:00 +0900</lastBuildDate><atom:link href="https://t-tkm.github.io/blog/tags/finops/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>AWS Cost Usage Reportの可視化(2) -ヘッドレスBIツールCubeを試してみる</title>
-      <link>https://t-tkm.github.io/blog/posts/2023/aws_cost_usage_report2/</link>
+      <link>https://t-tkm.github.io/blog/posts/2023/09/aws_cost_usage_report2/</link>
       <pubDate>Sun, 24 Sep 2023 00:00:00 +0900</pubDate>
       
-      <guid>https://t-tkm.github.io/blog/posts/2023/aws_cost_usage_report2/</guid>
+      <guid>https://t-tkm.github.io/blog/posts/2023/09/aws_cost_usage_report2/</guid>
       <description>はじめに 「AWS Cost Usage Reportの可視化」の続編になります。 前回記事では、AWS費用のレポートがS3に定期的に溜め、S3データをSQLで検索できるマネージドサービスAthenaを構築し、AthenaをデータソースとしてGrafanaやRedashといったBIツールで可視化基盤を構築しました。 その後も、Apache Supersetや各種NotebooksといったBIツールで可視化していたものの、今度はReactやVueといった フロントエンド開発を通し、カスタムダッシュボートを開発・構築したい、という思いに至りました。 そこで目にしたのが、記事の副表題にもあるヘッドレスBIツールCube CoreというOSSになります。 このOSSですが、C</description>
     </item>
     
     <item>
       <title>AWS Cost Usage Reportの可視化</title>
-      <link>https://t-tkm.github.io/blog/posts/2023/aws_cost_usage_report/</link>
+      <link>https://t-tkm.github.io/blog/posts/2023/06/aws_cost_usage_report/</link>
       <pubDate>Sun, 18 Jun 2023 00:00:00 +0900</pubDate>
       
-      <guid>https://t-tkm.github.io/blog/posts/2023/aws_cost_usage_report/</guid>
+      <guid>https://t-tkm.github.io/blog/posts/2023/06/aws_cost_usage_report/</guid>
       <description>はじめに 本記事では、ローカルPC上でGrafana、Redashの可視化ツールを起動させ、AWSの費用レポートを データソースに可視化(接続)する手順を確認します。 近年益々「オブザーバビリティ(Observability)」や「ビジネスインテリジェンス(BI)」といったデータ可視化が重要になっています。そのような中、データ活用の入口として、OSSに代表されるような多様な可視化ツールの味見やデモに 対するニーズも増えてきている気がします。 Observability系: Nagios、Graphite、Grafana(Prometheus)、Kibana(ELK)、OpenTelemetry、OpenCensus、Jaeger etc. BI系: Red</description>
     </item>
     

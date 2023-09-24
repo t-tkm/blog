@@ -10,10 +10,10 @@
     <lastBuildDate>Sun, 18 Jun 2023 00:00:00 +0900</lastBuildDate><atom:link href="https://t-tkm.github.io/blog/archives/2023-06-18/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>AWS Cost Usage Reportの可視化</title>
-      <link>https://t-tkm.github.io/blog/posts/2023/aws_cost_usage_report/</link>
+      <link>https://t-tkm.github.io/blog/posts/2023/06/aws_cost_usage_report/</link>
       <pubDate>Sun, 18 Jun 2023 00:00:00 +0900</pubDate>
       
-      <guid>https://t-tkm.github.io/blog/posts/2023/aws_cost_usage_report/</guid>
+      <guid>https://t-tkm.github.io/blog/posts/2023/06/aws_cost_usage_report/</guid>
       <description>はじめに 本記事では、ローカルPC上でGrafana、Redashの可視化ツールを起動させ、AWSの費用レポートを データソースに可視化(接続)する手順を確認します。 近年益々「オブザーバビリティ(Observability)」や「ビジネスインテリジェンス(BI)」といったデータ可視化が重要になっています。そのような中、データ活用の入口として、OSSに代表されるような多様な可視化ツールの味見やデモに 対するニーズも増えてきている気がします。 Observability系: Nagios、Graphite、Grafana(Prometheus)、Kibana(ELK)、OpenTelemetry、OpenCensus、Jaeger etc. BI系: Red</description>
     </item>
     

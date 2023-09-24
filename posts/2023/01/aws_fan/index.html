@@ -4,16 +4,16 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
   
-  <title>AWS App2Container(ECS/EKSデプロイ編)</title>
-  <meta property="og:title" content="AWS App2Container(ECS/EKSデプロイ編)" />
-  <meta name="twitter:title" content="AWS App2Container(ECS/EKSデプロイ編)" />
+  <title>AWS FAN!</title>
+  <meta property="og:title" content="AWS FAN!" />
+  <meta name="twitter:title" content="AWS FAN!" />
   
 
   
 
   <meta name="author" content="Takumi Tomita"/>
   <meta property="og:site_name" content="Takumi Tomita&#39;s Blog" />
-  <meta property="og:url" content="https://t-tkm.github.io/blog/posts/2022/aws_app2container_ecs_eks/" />
+  <meta property="og:url" content="https://t-tkm.github.io/blog/posts/2023/01/aws_fan/" />
 
   
   <meta name="twitter:card" content="summary" />
@@ -58,13 +58,13 @@
 
 <article class="p-article">
   <header>
-    <h1>AWS App2Container(ECS/EKSデプロイ編)</h1>
+    <h1>AWS FAN!</h1>
     <div>
       
         <div class="c-time">
           Posted on
-<time datetime="2022-03-16T00:00:00&#43;09:00">
-  Mar 16, 2022
+<time datetime="2023-01-05T00:00:00&#43;09:00">
+  Jan 5, 2023
 </time>
 
         </div>
@@ -72,249 +72,139 @@
       
       <a href="https://t-tkm.github.io/blog/tags/aws" class="c-tag">AWS</a>
       
-      <a href="https://t-tkm.github.io/blog/tags/container" class="c-tag">Container</a>
+      <a href="https://t-tkm.github.io/blog/tags/iot" class="c-tag">IoT</a>
       
       <a href="https://t-tkm.github.io/blog/tags/ecs" class="c-tag">ECS</a>
       
-      <a href="https://t-tkm.github.io/blog/tags/eks" class="c-tag">EKS</a>
-      
-      <a href="https://t-tkm.github.io/blog/tags/app2container" class="c-tag">App2Container</a>
+      <a href="https://t-tkm.github.io/blog/tags/freertos" class="c-tag">FreeRTOS</a>
       
     </div>
   </header>
   
   <section id="js-article" class="p-article__body">
-    <h1 id="1-はじめに">1. はじめに</h1>
-<p>ここでは、前回の記事「AWS App2Container(お試し編)」では触れられなかったデプロイについて試してみます。
-実際は、次の3ステップでデプロイできて衝撃的でした！</p>
-<ol>
-<li>deployment.jsonを編集し、「ECS」か「EKS」を選択(AppRunnerも選択可)。</li>
-<li>app2containerコマンド(オプションgenerate app-deployment)でマニフェスト作成(一部S3に格納される)</li>
-<li>CloudFormationでデプロイ</li>
-</ol>
-<p>そして、ステップ2の「app2containerコマンド」の引数オプションとして「&ndash;deploy」を指定すると、ステップ3すら不要です^^</p>
-<figure><a href="https://github.com/t-tkm/blog_images/blob/aws_app2container_ecs_eks/2022/aws_app2container_ecs_eks/img8.png?raw=true">
-    <img src="https://github.com/t-tkm/blog_images/blob/aws_app2container_ecs_eks/2022/aws_app2container_ecs_eks/img8.png?raw=true"
-         alt="img8"/> </a>
+    <h1 id="はじめに">はじめに</h1>
+<p>明けましておめでとうございます。2023年もスタートし、一発目の記事になります。私は普段、AWSを中心としたクラウド活用のソリューション設計を専門に仕事している一方、個人としてもAWSユーザとして、様々なクラウドサービスを楽しませていただいています。</p>
+<p>本格的に触り始めたのは2018年頃からとだいぶ遅いスタートではありますが、少し振り返ってみようと思います。</p>
+<p>※本コンテンツは2022年の年末、とあるAWSコミュニティーの「お祭りイベント」で公演させて頂いたものになります。
+<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img20.png">
+    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img20.png"
+         alt="img1"/> </a>
 </figure>
-
-<p>それでは試してみましょう。</p>
-<h1 id="2-マニフェスト作成">2. マニフェスト作成</h1>
-<figure><a href="https://github.com/t-tkm/blog_images/blob/aws_app2container_ecs_eks/2022/aws_app2container_ecs_eks/img1.png?raw=true">
-    <img src="https://github.com/t-tkm/blog_images/blob/aws_app2container_ecs_eks/2022/aws_app2container_ecs_eks/img1.png?raw=true"
+</p>
+<h1 id="スマートホーム2018年2019年頃">スマートホーム(2018年〜2019年頃)</h1>
+<p><figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img1.png">
+    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img1.png"
          alt="img1"/> </a>
 </figure>
 
-<h2 id="2-1-s3へ格納される成果物ecs">2-1. S3へ格納される成果物(ECS)</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ tree a2c-java-tomcat-3c173836/ecs 
-a2c-java-tomcat-3c173836/ecs
-└── subtemplates
-    ├── ecs-cluster.yml
-    ├── ecs-gmsa-automation-doc.yml
-    ├── ecs-gmsa-execute.yml
-    ├── ecs-gmsa-iam-roles.yml
-    ├── ecs-gmsa-lambda-functions.yml
-    ├── ecs-gmsa.yml
-    ├── ecs-lb-webapp.yml
-    ├── ecs-master.yml
-    ├── ecs-private-app.yml
-    ├── ecs-private-load-balancer.yml
-    ├── ecs-public-load-balancer.yml
-    ├── ecs-route53.yml
-    └── ecs-vpc.yml
-</code></pre></div><h2 id="2-2-s3へ格納される成果物eks">2-2. S3へ格納される成果物(EKS)</h2>
-<details>
-<summary>(snip)展開</summary>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ tree a2c-java-tomcat-3c173836/eks 
-a2c-java-tomcat-3c173836/eks
-├── functions
-│   └── packages
-│       ├── CleanupLambdas
-│       │   └── lambda.zip
-│       ├── CleanupLoadBalancers
-│       │   └── lambda.zip
-│       ├── CleanupSecurityGroupDependencies
-│       │   └── lambda.zip
-│       ├── DeleteBucketContents
-│       │   └── lambda.zip
-│       ├── EksClusterResource
-│       │   └── awsqs-eks-cluster.zip
-│       ├── FargateProfile
-│       │   └── lambda.zip
-│       ├── GetCallerArn
-│       │   └── lambda.zip
-│       ├── HelmReleaseResource
-│       │   └── awsqs-kubernetes-helm.zip
-│       ├── KubeGet
-│       │   └── lambda.zip
-│       ├── KubeManifest
-│       │   └── lambda.zip
-│       ├── ResourceReader
-│       │   └── lambda.zip
-│       ├── awscliLayer
-│       │   └── lambda.zip
-│       ├── boto3Layer
-│       │   └── lambda.zip
-│       ├── crhelperLayer
-│       │   └── lambda.zip
-│       ├── kubectlLayer
-│       │   └── lambda.zip
-│       ├── kubernetesResources
-│       │   ├── awsqs_kubernetes_apply.zip
-│       │   ├── awsqs_kubernetes_apply_vpc.zip
-│       │   ├── awsqs_kubernetes_get.zip
-│       │   └── awsqs_kubernetes_get_vpc.zip
-│       ├── registerCustomResource
-│       │   └── lambda.zip
-│       └── registerType
-│           └── lambda.zip
-├── scripts
-│   ├── CustomResourceDefinition.yml
-│   ├── Deploy-CredSpec.ps1
-│   ├── Patch-Coredns.ps1
-│   ├── Setup-Webhook.ps1
-│   ├── create-signed-cert.ps1
-│   ├── credspec-cluster-role-template.yaml
-│   ├── gmsa-credspec-template.json
-│   ├── gmsa-webhook-template.yaml
-│   ├── patch-coredns-template.yaml
-│   ├── patch-webhook-template.ps1
-│   ├── windows-gmsa-setup.sh
-│   └── windows-setup.sh
-├── submodules
-│   ├── quickstart-amazon-eks-nodegroup
-│   │   ├── LICENSE.TXT
-│   │   └── templates
-│   │       └── amazon-eks-nodegroup.template.yaml
-│   └── quickstart-aws-vpc
-│       ├── ci
-│       │   ├── aws-vpc-3az-complete.json
-│       │   ├── aws-vpc-3az-public.json
-│       │   ├── aws-vpc-3az.json
-│       │   ├── aws-vpc-4az-complete.json
-│       │   ├── aws-vpc-4az-public.json
-│       │   ├── aws-vpc-4az.json
-│       │   ├── aws-vpc-complete.json
-│       │   ├── aws-vpc-dedicated.json
-│       │   ├── aws-vpc-defaults.json
-│       │   ├── aws-vpc-public.json
-│       │   ├── aws-vpc-sa-east-1.json
-│       │   └── taskcat.yml
-│       ├── docs
-│       │   └── utils
-│       │       ├── generate_parms.py
-│       │       └── requirements.txt
-│       └── templates
-│           ├── aws-vpc.template
-│           └── aws-vpc.template.yaml
-└── templates
-    ├── amazon-eks-advanced-configuration.template.yaml
-    ├── amazon-eks-alb-ingress.template.yaml
-    ├── amazon-eks-application-workload.yaml
-    ├── amazon-eks-cluster-autoscaler.template.yaml
-    ├── amazon-eks-controlplane.template.yaml
-    ├── amazon-eks-efs.template.yaml
-    ├── amazon-eks-fargate-profile.template.yaml
-    ├── amazon-eks-functions.template.yaml
-    ├── amazon-eks-gmsa-coredns.yaml
-    ├── amazon-eks-gmsa-crd.yaml
-    ├── amazon-eks-gmsa-credspec.yaml
-    ├── amazon-eks-gmsa-deployments.yaml
-    ├── amazon-eks-gmsa-webhook.yaml
-    ├── amazon-eks-grafana.template.yaml
-    ├── amazon-eks-iam.template.yaml
-    ├── amazon-eks-per-account-resources.template.yaml
-    ├── amazon-eks-per-region-resources.template.yaml
-    ├── amazon-eks-prometheus.template.yaml
-    ├── amazon-eks-test.template.yaml
-    ├── amazon-eks-windows-support-workload.template.yaml
-    ├── amazon-eks.yaml
-    ├── ecs-gmsa-automation-doc.yml
-    ├── ecs-gmsa-execute.yml
-    ├── ecs-gmsa-iam-roles.yml
-    ├── ecs-gmsa-lambda-functions.yml
-    ├── ecs-gmsa.yml
-    ├── ecs-route53.yml
-    └── eks-quickstart-region-upgrade.yaml
-</code></pre></div></details>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ tree a2c-java-tomcat-3c173836/eks 
-a2c-java-tomcat-3c173836/eks
-<span style="color:#f92672">(</span>snip<span style="color:#f92672">)</span>
-└── templates
-    ├── amazon-eks-advanced-configuration.template.yaml
-    ├── amazon-eks-alb-ingress.template.yaml
-    ├── amazon-eks-application-workload.yaml
-    ├── amazon-eks-cluster-autoscaler.template.yaml
-    ├── amazon-eks-controlplane.template.yaml
-    ├── amazon-eks-efs.template.yaml
-    ├── amazon-eks-fargate-profile.template.yaml
-    ├── amazon-eks-functions.template.yaml
-    ├── amazon-eks-gmsa-coredns.yaml
-    ├── amazon-eks-gmsa-crd.yaml
-    ├── amazon-eks-gmsa-credspec.yaml
-    ├── amazon-eks-gmsa-deployments.yaml
-    ├── amazon-eks-gmsa-webhook.yaml
-    ├── amazon-eks-grafana.template.yaml
-    ├── amazon-eks-iam.template.yaml
-    ├── amazon-eks-per-account-resources.template.yaml
-    ├── amazon-eks-per-region-resources.template.yaml
-    ├── amazon-eks-prometheus.template.yaml
-    ├── amazon-eks-test.template.yaml
-    ├── amazon-eks-windows-support-workload.template.yaml
-    ├── amazon-eks.yaml
-    ├── ecs-gmsa-automation-doc.yml
-    ├── ecs-gmsa-execute.yml
-    ├── ecs-gmsa-iam-roles.yml
-    ├── ecs-gmsa-lambda-functions.yml
-    ├── ecs-gmsa.yml
-    ├── ecs-route53.yml
-    └── eks-quickstart-region-upgrade.yaml
-</code></pre></div><h1 id="3-ecsデプロイ">3. ECSデプロイ</h1>
-<h2 id="3-1-cloud-formationでデプロイ実行">3-1. Cloud Formationでデプロイ実行</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">aws cloudformation deploy <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>	--template-file /root/app2container/java-tomcat-3c173836/EcsDeployment/ecs-master.yml <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>	--capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>	--stack-name a2c-java-tomcat-3c173836-ECS
-</code></pre></div><h2 id="3-2-cloud-formationスタック">3-2. Cloud Formationスタック</h2>
-<figure><a href="https://github.com/t-tkm/blog_images/blob/aws_app2container_ecs_eks/2022/aws_app2container_ecs_eks/img2.png?raw=true">
-    <img src="https://github.com/t-tkm/blog_images/blob/aws_app2container_ecs_eks/2022/aws_app2container_ecs_eks/img2.png?raw=true"
+<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img2.png">
+    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img2.png"
          alt="img2"/> </a>
 </figure>
-
-<h2 id="3-3-確認">3-3. 確認</h2>
-<figure><a href="https://github.com/t-tkm/blog_images/blob/aws_app2container_ecs_eks/2022/aws_app2container_ecs_eks/img3.png?raw=true">
-    <img src="https://github.com/t-tkm/blog_images/blob/aws_app2container_ecs_eks/2022/aws_app2container_ecs_eks/img3.png?raw=true"
+</p>
+<p>会社の小集団活動も活用し、趣味のラズパイやArduinoといったマイコンいじりであれこれプロトタイピングを楽しんでいました。ただ、当時このシステムを作ったきっかけは、Vueを使ったフロントエンドの開発の勉強が目的でした。</p>
+<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img3.png">
+    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img3.png"
          alt="img3"/> </a>
 </figure>
 
-<figure><a href="https://github.com/t-tkm/blog_images/blob/aws_app2container_ecs_eks/2022/aws_app2container_ecs_eks/img4.png?raw=true">
-    <img src="https://github.com/t-tkm/blog_images/blob/aws_app2container_ecs_eks/2022/aws_app2container_ecs_eks/img4.png?raw=true"
+<p>モニター分離の体重計は、<a href="https://www.amazon.co.jp/dp/B00A1ZU2XY">こちら</a>の商品を活用させて頂きましたが、現在Amazonでは「この商品は現在お取り扱いできません。」となっていますね。また、赤外線の信号パターンは自分で解読しましたが、当時先輩からは「メーカーに背景を伝えた上で仕様を聞いてみたら？」というアドバイスも頂きました。なんとなく稼働していたのでそれで良しと済ませましたが、今ならすぐに問合せしてみるかなと思います。</p>
+<h1 id="オンラインゲーム2020年頃">オンラインゲーム(2020年頃)</h1>
+<p><figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img4.png">
+    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img4.png"
          alt="img4"/> </a>
 </figure>
 
-<h1 id="4-eksデプロイ">4. EKSデプロイ</h1>
-<h2 id="4-1-cloud-formationでデプロイ実行">4-1. Cloud Formationでデプロイ実行</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">aws cloudformation deploy <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>	--template-file /root/app2container/java-tomcat-3c173836/EksDeployment/amazon-eks-entrypoint-new-vpc.yaml <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>	--capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>	--stack-name a2c-java-tomcat-3c173836-EKS
-</code></pre></div><h2 id="4-2-cloud-formationスタック">4-2. Cloud Formationスタック</h2>
-<figure><a href="https://github.com/t-tkm/blog_images/blob/aws_app2container_ecs_eks/2022/aws_app2container_ecs_eks/img5.png?raw=true">
-    <img src="https://github.com/t-tkm/blog_images/blob/aws_app2container_ecs_eks/2022/aws_app2container_ecs_eks/img5.png?raw=true"
+<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img5.png">
+    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img5.png"
          alt="img5"/> </a>
 </figure>
-
-<h2 id="4-3-確認">4-3. 確認</h2>
-<figure><a href="https://github.com/t-tkm/blog_images/blob/aws_app2container_ecs_eks/2022/aws_app2container_ecs_eks/img6.png?raw=true">
-    <img src="https://github.com/t-tkm/blog_images/blob/aws_app2container_ecs_eks/2022/aws_app2container_ecs_eks/img6.png?raw=true"
+</p>
+<p>詳細は「<a href="https://t-tkm.github.io/blog/posts/2021/03/minecraft_server_aws_ecs/">我が家のマイクラサーバー(AWS編)</a>」へ。</p>
+<h1 id="音声アシスタント2021年頃">音声アシスタント(2021年頃)</h1>
+<p><figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img6.png">
+    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img6.png"
          alt="img6"/> </a>
 </figure>
 
-<figure><a href="https://github.com/t-tkm/blog_images/blob/aws_app2container_ecs_eks/2022/aws_app2container_ecs_eks/img7.png?raw=true">
-    <img src="https://github.com/t-tkm/blog_images/blob/aws_app2container_ecs_eks/2022/aws_app2container_ecs_eks/img7.png?raw=true"
+<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img7.png">
+    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img7.png"
          alt="img7"/> </a>
 </figure>
+</p>
+<p>詳細は「<a href="https://t-tkm.github.io/blog/posts/2021/03/aws_alexa_practice/">Alexaでかけ算ゲーム</a>」へ。</p>
+<h1 id="ai画像処理1wip2021年秋">AI・画像処理1(WIP!)(2021年秋)</h1>
+<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img9.png">
+    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img9.png"
+         alt="img9"/> </a>
+</figure>
 
+<p>待望のプロトタイピング集「<a href="https://www.amazon.co.jp/dp/4798064289/">IoTデバイス×Webアプリでホームネットワーク AWS クラウドサービス開発テクニック</a>」、大変勉強になります！</p>
+<p><figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img10.png">
+    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img10.png"
+         alt="img10"/> </a>
+</figure>
+
+<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img11.gif">
+    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img11.gif"
+         alt="img11"/> </a>
+</figure>
+</p>
+<p>こちらのプロトタイプも、AWSでの分析よりは、エッジでのAI分析(PyTorchとYOLOv3による物体検出)がメイン。ラズパイのCPUでは画像処理がおぼつかなく(1FPS程度)、Googleが設計・開発した<a href="https://coral.ai/products/accelerator/">Coral USB Accelerator(Edge TPU coprocessor)</a>で5倍速するなど遊んでおりました(机上にUSBドングルが写っておりますが、これがCoral USB Accelerator)。</p>
+<p>ただ、もともとやりたかった「子供達のデバイス利用時間(スクリーンの前にいる時間)計測」のユースケースでは、リアルタイム物体検出は不要で、定期的に写真を取得し分析すれば良いだけで済むものです。要件整理不十分、実装に先走り「あれ、そもそもリアルタイム物体検出不要だったな」と後から思い返した次第ですw</p>
+<p>(ちなみに、USB Acceleratorを使わずラズパイ3のCPUで頑張ったケースは↓。解析がもたついております。)
+<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img19.gif">
+    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img19.gif"
+         alt="img19"/> </a>
+</figure>
+</p>
+<h1 id="リアルタイムoswip2022年春">リアルタイムOS(WIP!)(2022年春)</h1>
+<p><figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img12.png">
+    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img12.png"
+         alt="img12"/> </a>
+</figure>
+
+<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img13.png">
+    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img13.png"
+         alt="img13"/> </a>
+</figure>
+</p>
+<p>こちらの書籍「<a href="https://www.amazon.co.jp/gp/product/4774199192/">内藤春雄(著)「Arduinoで楽しむ鉄道模型 ~簡単なプログラムで信号機や踏切遮断機を動かす!</a>」をお手本にさせていただきました。</p>
+<p><figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img14.gif">
+    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img14.gif"
+         alt="img14"/> </a>
+</figure>
+
+<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img15.png">
+    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img15.png"
+         alt="img15"/> </a>
+</figure>
+</p>
+<p>通常のNゲージは、線路に電気を流し、コントローラで電圧(0〜12V)を調整し車両のモーターを動かす「アナログ方式」です(<a href="https://www.kato-start.com/blank-1">Nゲージのしくみ</a>)。これではクラウドから車両を制御といって、やれる事は制限されるのですが、最近では「DCC(Digital Command Control)」と呼ばれる車両にマイコン(デコーダーという)を載せて、コントローラで制御する方式があります。車両のデコーダーは2千円程度で購入でき、コントローラも例えば<a href="https://desktopstation.net/wiki/doku.php/dsshield2">DSshield2</a>などでDIYできそうです。時間を見つけてチャレンジしてみたいですね！</p>
+<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img16.png">
+    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img16.png"
+         alt="img16"/> </a>
+</figure>
+
+<p>その前に、FreeRTOS/OTAを理解を深める必要がありますが、AWS公式ドキュメントも充実しており、大変助かります。</p>
+<ul>
+<li><a href="https://docs.aws.amazon.com/ja_jp/freertos/latest/userguide/freertos-ota-dev.html">FreeRTOS 無線通信経由更新</a></li>
+<li><a href="https://interface.cqpub.co.jp/magazine/202104/">リアルタイムOS新時代に突入！クラウド接続もスタンドアロンも！Amazon×マイコン FreeRTOS入門</a></li>
+</ul>
+<h1 id="再ai画像処理wip2022年秋">(再)AI・画像処理(WIP!)(2022年秋)</h1>
+<p><figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img17.png">
+    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img17.png"
+         alt="img17"/> </a>
+</figure>
+
+<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img18.png">
+    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img18.png"
+         alt="img18"/> </a>
+</figure>
+</p>
+<p>現在のマイブームは天体観測。この世界はとても奥が深く、とても興味深いものです。自動化をクラウド(AWS)活用してと考えてみたものの、ちょっと的外れかと思い直しました。。。天体画像を処理するソフトウェア(OSS)もありますが、高度な画像処理は、Photoshopや、天体専用の商用ソフトが主流であり、OSSなどどの程度活用可能か、技術的に課題ありです。また、生データ(素材)の良さを保ちつつ、いかに画像処理を行うか、この辺は職人芸(アート)の世界でもあり、AI・ソフトウェアによるお任せニーズは低い気がします。活用ユースケースとしては、レントゲン写真から病気を抽出するといった医療分野などが適切な気がします。ただ、技術的には、本質は似ている点もありそうです^^</p>
+<h1 id="さいごに">さいごに</h1>
+<p>以上、私個人の趣味(マイコンいじり)と、AWSサービスとの関わりを振り返ってみました。もちろん、ここに挙げたサンプルは一部で、他にも魅力的なサービスは多々あります。クラウドの良さは、簡単にサービス・情報にアクセスでき、お試し(プロトタイピング)しやすい点にあります。これからも、いつでも、どこでも、簡単にアクセスできる利点を活かし、どんどん遊んでみたいと思います！</p>
 
   </section>
   <footer>
@@ -325,12 +215,12 @@ a2c-java-tomcat-3c173836/eks
       <div class="c-pagination__ctrl">
         <div class="c-pagination__newer">
           
-          <a href="https://t-tkm.github.io/blog/posts/2022/aws_secure_bastion_1/">Newer</a>
+          <a href="https://t-tkm.github.io/blog/posts/2023/05/essay_cognitive_psychology/">Newer</a>
           
         </div>
         <div class="c-pagination__older">
           
-          <a href="https://t-tkm.github.io/blog/posts/2022/aws_hugo/">Older</a>
+          <a href="https://t-tkm.github.io/blog/posts/2022/12/aws_fmea/">Older</a>
           
         </div>
       </div>
@@ -342,14 +232,21 @@ a2c-java-tomcat-3c173836/eks
   <ul id="slider" class="p-related__list">
     
     <li class="p-related__item js-related__item">
-      <a href="/blog/posts/2022/aws_app2container/"
+      <a href="/blog/posts/2022/03/aws_app2container_ecs_eks/"
+        >
+        <span>AWS App2Container(ECS/EKSデプロイ編)</span>
+      </a>
+    </li>
+    
+    <li class="p-related__item js-related__item">
+      <a href="/blog/posts/2022/03/aws_app2container/"
         >
         <span>AWS App2Container(お試し編)</span>
       </a>
     </li>
     
     <li class="p-related__item js-related__item">
-      <a href="/blog/posts/2022/aws_app2container_opt/"
+      <a href="/blog/posts/2022/03/aws_app2container_opt/"
         >
         <span>AWS App2Container(イメージ最適化編)</span>
       </a>
@@ -363,23 +260,16 @@ a2c-java-tomcat-3c173836/eks
     </li>
     
     <li class="p-related__item js-related__item">
-      <a href="/blog/posts/2022/aws_hugo/"
+      <a href="/blog/posts/2022/12/aws_fmea/"
         >
-        <span>Hugoでハンズオンサイト(AWS)</span>
+        <span>AWSホワイトペーパを題材にFMEAを見る</span>
       </a>
     </li>
     
     <li class="p-related__item js-related__item">
-      <a href="/blog/posts/2021/12/aws_books/"
+      <a href="/blog/posts/2022/10/aws_secure_bastion_2/"
         >
-        <span>クラウド技術書紹介(AWS/Azure/2021年編)</span>
-      </a>
-    </li>
-    
-    <li class="p-related__item js-related__item">
-      <a href="/blog/posts/2021/12/aws_powerbi/"
-        >
-        <span>AWS RDS(PostgreSQL)とPower BIを接続してみた</span>
+        <span>踏台VPCの作成(Internet Gateway有り)(AWS)</span>
       </a>
     </li>
     

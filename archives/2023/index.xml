@@ -10,37 +10,37 @@
     <lastBuildDate>Sun, 24 Sep 2023 00:00:00 +0900</lastBuildDate><atom:link href="https://t-tkm.github.io/blog/archives/2023/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>AWS Cost Usage Reportの可視化(2) -ヘッドレスBIツールCubeを試してみる</title>
-      <link>https://t-tkm.github.io/blog/posts/2023/aws_cost_usage_report2/</link>
+      <link>https://t-tkm.github.io/blog/posts/2023/09/aws_cost_usage_report2/</link>
       <pubDate>Sun, 24 Sep 2023 00:00:00 +0900</pubDate>
       
-      <guid>https://t-tkm.github.io/blog/posts/2023/aws_cost_usage_report2/</guid>
+      <guid>https://t-tkm.github.io/blog/posts/2023/09/aws_cost_usage_report2/</guid>
       <description>はじめに 「AWS Cost Usage Reportの可視化」の続編になります。 前回記事では、AWS費用のレポートがS3に定期的に溜め、S3データをSQLで検索できるマネージドサービスAthenaを構築し、AthenaをデータソースとしてGrafanaやRedashといったBIツールで可視化基盤を構築しました。 その後も、Apache Supersetや各種NotebooksといったBIツールで可視化していたものの、今度はReactやVueといった フロントエンド開発を通し、カスタムダッシュボートを開発・構築したい、という思いに至りました。 そこで目にしたのが、記事の副表題にもあるヘッドレスBIツールCube CoreというOSSになります。 このOSSですが、C</description>
     </item>
     
     <item>
       <title>AWS Cost Usage Reportの可視化</title>
-      <link>https://t-tkm.github.io/blog/posts/2023/aws_cost_usage_report/</link>
+      <link>https://t-tkm.github.io/blog/posts/2023/06/aws_cost_usage_report/</link>
       <pubDate>Sun, 18 Jun 2023 00:00:00 +0900</pubDate>
       
-      <guid>https://t-tkm.github.io/blog/posts/2023/aws_cost_usage_report/</guid>
+      <guid>https://t-tkm.github.io/blog/posts/2023/06/aws_cost_usage_report/</guid>
       <description>はじめに 本記事では、ローカルPC上でGrafana、Redashの可視化ツールを起動させ、AWSの費用レポートを データソースに可視化(接続)する手順を確認します。 近年益々「オブザーバビリティ(Observability)」や「ビジネスインテリジェンス(BI)」といったデータ可視化が重要になっています。そのような中、データ活用の入口として、OSSに代表されるような多様な可視化ツールの味見やデモに 対するニーズも増えてきている気がします。 Observability系: Nagios、Graphite、Grafana(Prometheus)、Kibana(ELK)、OpenTelemetry、OpenCensus、Jaeger etc. BI系: Red</description>
     </item>
     
     <item>
       <title>ChatGPTによる認知バイアスエラー回避の可能性</title>
-      <link>https://t-tkm.github.io/blog/posts/2023/essay_cognitive_psychology/</link>
+      <link>https://t-tkm.github.io/blog/posts/2023/05/essay_cognitive_psychology/</link>
       <pubDate>Sun, 07 May 2023 00:00:00 +0900</pubDate>
       
-      <guid>https://t-tkm.github.io/blog/posts/2023/essay_cognitive_psychology/</guid>
+      <guid>https://t-tkm.github.io/blog/posts/2023/05/essay_cognitive_psychology/</guid>
       <description>はじめに 随分前の話しなりますが(今から約7年前)、会社の先輩から 「頭脳明瞭な経営者(経営委員会)が、時に非合理な判断の結果、失敗するケースへの理解になるかもしれない」 と薦めてもらった面白い本があります。 タニエル・カーネマン著「ファスト&amp;amp;スロー 」 本書は、ノーベル経済学賞を受賞されたダニエル・カーネマン氏による著作で、人間の思考が2つの異なるシステムに分かれていることを示しています。 システム1(ファスト)は、自動的かつ直感的な思考を司り、短時間での判断や反応に適しています。しかし、時には感情的な判断を引き起こし、誤った結論に至ることもあります。 一方、システム2(スロー)は、論理的で分析的な思考を司り、より長い時間をかけて問題に取</description>
     </item>
     
     <item>
       <title>AWS FAN!</title>
-      <link>https://t-tkm.github.io/blog/posts/2022/aws_fan/</link>
+      <link>https://t-tkm.github.io/blog/posts/2023/01/aws_fan/</link>
       <pubDate>Thu, 05 Jan 2023 00:00:00 +0900</pubDate>
       
-      <guid>https://t-tkm.github.io/blog/posts/2022/aws_fan/</guid>
+      <guid>https://t-tkm.github.io/blog/posts/2023/01/aws_fan/</guid>
       <description>はじめに 明けましておめでとうございます。2023年もスタートし、一発目の記事になります。私は普段、AWSを中心としたクラウド活用のソリューション設計を専門に仕事している一方、個人としてもAWSユーザとして、様々なクラウドサービスを楽しませていただいています。 本格的に触り始めたのは2018年頃からとだいぶ遅いスタートではありますが、少し振り返ってみようと思います。 ※本コンテンツは2022年の年末、とあるAWSコミュニティーの「お祭りイベント」で公演させて頂いたものになります。 スマートホーム(2018年〜2019年頃) 会社の小集団活動も活用し、趣味のラズパイやArduinoといったマイコンいじりであれこれプロトタイピングを楽しんでいまし</description>
     </item>
     

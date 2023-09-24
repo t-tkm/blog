@@ -10,28 +10,28 @@
     <lastBuildDate>Wed, 16 Mar 2022 00:00:00 +0900</lastBuildDate><atom:link href="https://t-tkm.github.io/blog/tags/container/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>AWS App2Container(ECS/EKSデプロイ編)</title>
-      <link>https://t-tkm.github.io/blog/posts/2022/aws_app2container_ecs_eks/</link>
+      <link>https://t-tkm.github.io/blog/posts/2022/03/aws_app2container_ecs_eks/</link>
       <pubDate>Wed, 16 Mar 2022 00:00:00 +0900</pubDate>
       
-      <guid>https://t-tkm.github.io/blog/posts/2022/aws_app2container_ecs_eks/</guid>
+      <guid>https://t-tkm.github.io/blog/posts/2022/03/aws_app2container_ecs_eks/</guid>
       <description>1. はじめに ここでは、前回の記事「AWS App2Container(お試し編)」では触れられなかったデプロイについて試してみます。 実際は、次の3ステップでデプロイできて衝撃的でした！ deployment.jsonを編集し、「ECS」か「EKS」を選択(AppRunnerも選択可)。 app2containerコマンド(オプションgenerate app-deployment)でマニフェスト作成(一部S3に格納される) CloudFormationでデプロイ そして、ステップ2の「app2containerコマンド」の引数オプションとして「&amp;ndash;deploy」を指定すると、ステップ3すら不要です^^ それでは試してみましょう。 2. マニフェス</description>
     </item>
     
     <item>
       <title>AWS App2Container(お試し編)</title>
-      <link>https://t-tkm.github.io/blog/posts/2022/aws_app2container/</link>
+      <link>https://t-tkm.github.io/blog/posts/2022/03/aws_app2container/</link>
       <pubDate>Sat, 12 Mar 2022 00:00:00 +0900</pubDate>
       
-      <guid>https://t-tkm.github.io/blog/posts/2022/aws_app2container/</guid>
+      <guid>https://t-tkm.github.io/blog/posts/2022/03/aws_app2container/</guid>
       <description>はじめに AWS App2Containerは、起動中のjavaアプリをコンテナイメージに変換し、ECSやEKSで稼働させるためのテンプレートを生成するツールになります。 Accelerating your Migration to AWS 下記、App2ContainerのUerGuideにある通り、サポートされるプラットフォームと、そうでない場合で挙動が変わるため、本記事ではその辺を試してみたいと思います(ここでは、ECSやEKSでの稼働検証は含まれません)。 For supported application frameworks, App2Container targets only the application files and dependencies that are needed for containerization, thereby minimizing the size of the resulting container image. This is known as application mode. If App2Container does not find a supported framework running on your application server, or if you have other dependent processes running on your server, App2Container takes a conservative approach to identifying dependencies. This is known as process mode. For process mode, all non-system files on the application server are included in the container image. 本記事のスコープは下記になります。 以降、次の流れで検証します。 App2</description>
     </item>
     
     <item>
       <title>AWS App2Container(イメージ最適化編)</title>
-      <link>https://t-tkm.github.io/blog/posts/2022/aws_app2container_opt/</link>
+      <link>https://t-tkm.github.io/blog/posts/2022/03/aws_app2container_opt/</link>
       <pubDate>Sat, 12 Mar 2022 00:00:00 +0900</pubDate>
       
-      <guid>https://t-tkm.github.io/blog/posts/2022/aws_app2container_opt/</guid>
+      <guid>https://t-tkm.github.io/blog/posts/2022/03/aws_app2container_opt/</guid>
       <description>はじめに 前回(「AWS App2Container(お試し編)」)で試した非サポートアプリの場合(ex. SpringBootアプリ)、サポートされるtomcatアプリと比較すると(802MB)、デフォルトで生成されたコンテナイメージは16.1GBとかなりのサイズとなっていました。 root@ip-10-0-1-112:~# docker image ls REPOSITORY TAG IMAGE ID CREATED SIZE java-generic-6ef9339e latest 8ef7ef3e7db0 38 minutes ago 16.1GB java-tomcat-5da060de latest cc2de1db6ef8 58 minutes ago 802MB そこで、ここでは、下記ガイドラインに従いサイズをスリム化してみようと思います。 Optimize AWS App2Container generated Docker images ポイントは、App2Containerは、分析結果であるanalysis.jsonをベースにイメージを生成するため、不要なファイルを含めないようにanalysis.jsonを編集することになります。 コンテナイメージ分析(di</description>
     </item>
     

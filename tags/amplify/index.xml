@@ -10,10 +10,10 @@
     <lastBuildDate>Sun, 13 Mar 2022 00:00:00 +0900</lastBuildDate><atom:link href="https://t-tkm.github.io/blog/tags/amplify/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Hugoでハンズオンサイト(AWS)</title>
-      <link>https://t-tkm.github.io/blog/posts/2022/aws_hugo/</link>
+      <link>https://t-tkm.github.io/blog/posts/2022/03/aws_hugo/</link>
       <pubDate>Sun, 13 Mar 2022 00:00:00 +0900</pubDate>
       
-      <guid>https://t-tkm.github.io/blog/posts/2022/aws_hugo/</guid>
+      <guid>https://t-tkm.github.io/blog/posts/2022/03/aws_hugo/</guid>
       <description>はじめに 唐突ですが、AWS Workshopsというサイトをご存知でしょうか？ AWS Workshopsは、AWSが公式に提供しているハンズオンコンテンツで、AWS各種サービスについて、実際に手を動かしてみたい場合に大変重宝するサイトです。 https://workshops.aws/ さてこのサイト、とてもお洒落な作りになっていますが、どのように作られているのでしょうか？ 答えは、Hugoと言われるGo製の静的サイトジェネレータと、Learnと呼ばれるテーマ(Theme)を使って作られているようです。 https://gohugo.io/ https://jamstackthemes.dev/theme/hugo-theme-learn/ 実はこのAWS Workshopsのコンテンツの一つに、このようなハンズオンサイトの作り方のハンズオンがあります！折角なので、試してみたいと思います。 https://hosting-hugo-content.workshop.aws/ ※ハンズオンの主目的は、Hugoの</description>
     </item>
     

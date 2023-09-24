@@ -4,16 +4,16 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
   
-  <title>AWS FAN!</title>
-  <meta property="og:title" content="AWS FAN!" />
-  <meta name="twitter:title" content="AWS FAN!" />
+  <title>Hugoでハンズオンサイト(AWS)</title>
+  <meta property="og:title" content="Hugoでハンズオンサイト(AWS)" />
+  <meta name="twitter:title" content="Hugoでハンズオンサイト(AWS)" />
   
 
   
 
   <meta name="author" content="Takumi Tomita"/>
   <meta property="og:site_name" content="Takumi Tomita&#39;s Blog" />
-  <meta property="og:url" content="https://t-tkm.github.io/blog/posts/2022/aws_fan/" />
+  <meta property="og:url" content="https://t-tkm.github.io/blog/posts/2022/03/aws_hugo/" />
 
   
   <meta name="twitter:card" content="summary" />
@@ -58,13 +58,13 @@
 
 <article class="p-article">
   <header>
-    <h1>AWS FAN!</h1>
+    <h1>Hugoでハンズオンサイト(AWS)</h1>
     <div>
       
         <div class="c-time">
           Posted on
-<time datetime="2023-01-05T00:00:00&#43;09:00">
-  Jan 5, 2023
+<time datetime="2022-03-13T00:00:00&#43;09:00">
+  Mar 13, 2022
 </time>
 
         </div>
@@ -72,139 +72,204 @@
       
       <a href="https://t-tkm.github.io/blog/tags/aws" class="c-tag">AWS</a>
       
-      <a href="https://t-tkm.github.io/blog/tags/iot" class="c-tag">IoT</a>
+      <a href="https://t-tkm.github.io/blog/tags/amplify" class="c-tag">Amplify</a>
       
-      <a href="https://t-tkm.github.io/blog/tags/ecs" class="c-tag">ECS</a>
-      
-      <a href="https://t-tkm.github.io/blog/tags/freertos" class="c-tag">FreeRTOS</a>
+      <a href="https://t-tkm.github.io/blog/tags/hugo" class="c-tag">Hugo</a>
       
     </div>
   </header>
   
   <section id="js-article" class="p-article__body">
     <h1 id="はじめに">はじめに</h1>
-<p>明けましておめでとうございます。2023年もスタートし、一発目の記事になります。私は普段、AWSを中心としたクラウド活用のソリューション設計を専門に仕事している一方、個人としてもAWSユーザとして、様々なクラウドサービスを楽しませていただいています。</p>
-<p>本格的に触り始めたのは2018年頃からとだいぶ遅いスタートではありますが、少し振り返ってみようと思います。</p>
-<p>※本コンテンツは2022年の年末、とあるAWSコミュニティーの「お祭りイベント」で公演させて頂いたものになります。
-<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img20.png">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img20.png"
+<p>唐突ですが、AWS Workshopsというサイトをご存知でしょうか？</p>
+<p>AWS Workshopsは、AWSが公式に提供しているハンズオンコンテンツで、AWS各種サービスについて、実際に手を動かしてみたい場合に大変重宝するサイトです。</p>
+<p><a href="https://workshops.aws/">https://workshops.aws/</a></p>
+<p>さてこのサイト、とてもお洒落な作りになっていますが、どのように作られているのでしょうか？</p>
+<p>答えは、Hugoと言われるGo製の静的サイトジェネレータと、Learnと呼ばれるテーマ(Theme)を使って作られているようです。</p>
+<ul>
+<li><a href="https://gohugo.io/">https://gohugo.io/</a></li>
+<li><a href="https://jamstackthemes.dev/theme/hugo-theme-learn/">https://jamstackthemes.dev/theme/hugo-theme-learn/</a></li>
+</ul>
+<p>実はこのAWS Workshopsのコンテンツの一つに、このようなハンズオンサイトの作り方のハンズオンがあります！折角なので、試してみたいと思います。</p>
+<p><a href="https://hosting-hugo-content.workshop.aws/">https://hosting-hugo-content.workshop.aws/</a></p>
+<figure><a href="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img1.png?raw=true">
+    <img src="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img1.png?raw=true"
          alt="img1"/> </a>
 </figure>
-</p>
-<h1 id="スマートホーム2018年2019年頃">スマートホーム(2018年〜2019年頃)</h1>
-<p><figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img1.png">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img1.png"
-         alt="img1"/> </a>
-</figure>
 
-<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img2.png">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img2.png"
-         alt="img2"/> </a>
-</figure>
-</p>
-<p>会社の小集団活動も活用し、趣味のラズパイやArduinoといったマイコンいじりであれこれプロトタイピングを楽しんでいました。ただ、当時このシステムを作ったきっかけは、Vueを使ったフロントエンドの開発の勉強が目的でした。</p>
-<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img3.png">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img3.png"
-         alt="img3"/> </a>
-</figure>
-
-<p>モニター分離の体重計は、<a href="https://www.amazon.co.jp/dp/B00A1ZU2XY">こちら</a>の商品を活用させて頂きましたが、現在Amazonでは「この商品は現在お取り扱いできません。」となっていますね。また、赤外線の信号パターンは自分で解読しましたが、当時先輩からは「メーカーに背景を伝えた上で仕様を聞いてみたら？」というアドバイスも頂きました。なんとなく稼働していたのでそれで良しと済ませましたが、今ならすぐに問合せしてみるかなと思います。</p>
-<h1 id="オンラインゲーム2020年頃">オンラインゲーム(2020年頃)</h1>
-<p><figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img4.png">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img4.png"
-         alt="img4"/> </a>
-</figure>
-
-<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img5.png">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img5.png"
-         alt="img5"/> </a>
-</figure>
-</p>
-<p>詳細は「<a href="https://t-tkm.github.io/blog/posts/2021/03/minecraft_server_aws_ecs/">我が家のマイクラサーバー(AWS編)</a>」へ。</p>
-<h1 id="音声アシスタント2021年頃">音声アシスタント(2021年頃)</h1>
-<p><figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img6.png">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img6.png"
-         alt="img6"/> </a>
-</figure>
-
-<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img7.png">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img7.png"
-         alt="img7"/> </a>
-</figure>
-</p>
-<p>詳細は「<a href="https://t-tkm.github.io/blog/posts/2021/03/aws_alexa_practice/">Alexaでかけ算ゲーム</a>」へ。</p>
-<h1 id="ai画像処理1wip2021年秋">AI・画像処理1(WIP!)(2021年秋)</h1>
-<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img9.png">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img9.png"
-         alt="img9"/> </a>
-</figure>
-
-<p>待望のプロトタイピング集「<a href="https://www.amazon.co.jp/dp/4798064289/">IoTデバイス×Webアプリでホームネットワーク AWS クラウドサービス開発テクニック</a>」、大変勉強になります！</p>
-<p><figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img10.png">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img10.png"
+<p>※ハンズオンの主目的は、Hugoの使い方でなく、AWS Amplifyを活用したホスティングサイト構築手法(CICD込み)ですw</p>
+<h1 id="構成図">構成図</h1>
+<p>本記事の構成になります。記事の編集、追加などは、Cloud9(EC2)からAmplify CLI経由で操作(amplify push)します。
+<figure><a href="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img10.png?raw=true">
+    <img src="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img10.png?raw=true"
          alt="img10"/> </a>
 </figure>
-
-<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img11.gif">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img11.gif"
+</p>
+<p><a href="https://hosting-hugo-content.workshop.aws/">AWS Workshops</a>のハンズオンでは、6章「CONTENT CI/CD PIPELINE」でCodeCommitを経由したCICDが学べます。
+<figure><a href="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img11.png?raw=true">
+    <img src="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img11.png?raw=true"
          alt="img11"/> </a>
 </figure>
 </p>
-<p>こちらのプロトタイプも、AWSでの分析よりは、エッジでのAI分析(PyTorchとYOLOv3による物体検出)がメイン。ラズパイのCPUでは画像処理がおぼつかなく(1FPS程度)、Googleが設計・開発した<a href="https://coral.ai/products/accelerator/">Coral USB Accelerator(Edge TPU coprocessor)</a>で5倍速するなど遊んでおりました(机上にUSBドングルが写っておりますが、これがCoral USB Accelerator)。</p>
-<p>ただ、もともとやりたかった「子供達のデバイス利用時間(スクリーンの前にいる時間)計測」のユースケースでは、リアルタイム物体検出は不要で、定期的に写真を取得し分析すれば良いだけで済むものです。要件整理不十分、実装に先走り「あれ、そもそもリアルタイム物体検出不要だったな」と後から思い返した次第ですw</p>
-<p>(ちなみに、USB Acceleratorを使わずラズパイ3のCPUで頑張ったケースは↓。解析がもたついております。)
-<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img19.gif">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img19.gif"
-         alt="img19"/> </a>
-</figure>
-</p>
-<h1 id="リアルタイムoswip2022年春">リアルタイムOS(WIP!)(2022年春)</h1>
-<p><figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img12.png">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img12.png"
+<p>また、AmplifyのHosting environmentsは、GitHubなどとの連携も可能ですので、こういう構成も可能かと思います。
+<figure><a href="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img12.png?raw=true">
+    <img src="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img12.png?raw=true"
          alt="img12"/> </a>
 </figure>
+</p>
+<h1 id="hugoセットアップ">Hugoセットアップ</h1>
+<p>詳細はハンズオンを見てもらうとして、Cloud9を使っていきます。初めにHugoをインストールします。Goで作られたシングルバイナリなので、ダウンロード後に解凍し、パスの通ったディレクトリへ実行ファイルを置くだけで利用できます。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ wget https://github.com/gohugoio/hugo/releases/download/v0.71.0/hugo_extended_0.71.0_Linux-64bit.tar.gz -O hugo_extended_0.71.0_Linux-64bit.tar.gz
+$ HUGO_TAR<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span><span style="color:#66d9ef">$(</span>find . -name <span style="color:#e6db74">&#34;*Linux-64bit.tar.gz&#34;</span><span style="color:#66d9ef">)</span><span style="color:#e6db74">&#34;</span>
+$ tar -xzf $HUGO_TAR
+$ chmod +x hugo
+$ mkdir bin
+$ mv hugo bin/
+$ cd ~/environment/
 
-<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img13.png">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img13.png"
-         alt="img13"/> </a>
+<span style="color:#75715e"># Hugoがインストールできているかの確認</span>
+$ hugo version
+Hugo Static Site Generator v0.71.0-06150C87/extended linux/amd64 BuildDate: 2020-05-18T16:15:29Z
+</code></pre></div><h1 id="サンプルサイトの確認">サンプルサイトの確認</h1>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># 事前に、Hugoで作ったサンプルサイトをダウンロードします</span>
+$ git clone -b v2.0 --single-branch https://github.com/t-tkm/aws-amplify-hugo-hosting.git <span style="color:#f92672">&amp;&amp;</span> cd aws-amplify-hugo-hosting
+
+<span style="color:#75715e"># ブランチは空</span>
+$ git branch
+* <span style="color:#f92672">(</span>no branch<span style="color:#f92672">)</span>
+
+<span style="color:#75715e"># 適当にブランチ名をつけておく。</span>
+$ git switch -c hugo
+
+<span style="color:#75715e"># themesの中身は空なので、新たに取得する</span>
+$ git submodule update --init
+</code></pre></div><p>Hugoでサーバーを起動して、サイトを確認します。Hugo Serverはデフォルトで1313ポート番号を使いますが、Cloud9のPreviewを使うため、ポート番号として8080を指定してサーバを起動します。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ hugo server -p <span style="color:#ae81ff">8080</span>
+</code></pre></div><figure><a href="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img2.png?raw=true">
+    <img src="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img2.png?raw=true"
+         alt="img2"/> </a>
+</figure>
+
+<p>ちゃんと表示されました。</p>
+<figure><a href="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img3.png?raw=true">
+    <img src="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img3.png?raw=true"
+         alt="img3"/> </a>
+</figure>
+
+<h1 id="amplifyセットアップ">Amplifyセットアップ</h1>
+<p>サンプルサイトはローカルで動いているため、外部から参照できません。従って、公開サイトとしてホスティングすることになります。そこでAWS Amplifyが活躍します。</p>
+<p>Amplify CLIをインストールします。Cloud9はデフォルトでNode.jsがインストール済みなので、npmでパッケージインストールするだけです。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ npm install -g @aws-amplify/cli@4.21.1
+
+<span style="color:#75715e"># インストールできているかの確認</span>
+$ amplify -v
+Scanning <span style="color:#66d9ef">for</span> plugins...
+Plugin scan successful
+4.21.1
+</code></pre></div><p>以上でAmplify CLIを使う準備が整いました。</p>
+<h1 id="amplifyでサイトを公開">Amplifyでサイトを公開</h1>
+<p>Amplifyを初期化します。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># Initialize AWS Amplify</span>
+$ amplify init
+</code></pre></div><p>設定パラメータは下記になります。</p>
+<figure><a href="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img5.png?raw=true">
+    <img src="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img5.png?raw=true"
+         alt="img5"/> </a>
+</figure>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ amplify add hosting
+</code></pre></div><p>こちらも、設定パラメータを確認しておきます。</p>
+<figure><a href="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img6.png?raw=true">
+    <img src="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img6.png?raw=true"
+         alt="img6"/> </a>
+</figure>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ amplify status
+Current Environment: main
+| Category | Resource name   | Operation | Provider plugin   |
+| -------- | --------------- | --------- | ----------------- |
+| Hosting  | S3AndCloudFront | Create    | awscloudformation |
+</code></pre></div><p>以上により、プロジェクトファイルの各種設定がAmplify CLIで設定されました。
+<figure><a href="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img7.png?raw=true">
+    <img src="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img7.png?raw=true"
+         alt="img7"/> </a>
 </figure>
 </p>
-<p>こちらの書籍「<a href="https://www.amazon.co.jp/gp/product/4774199192/">内藤春雄(著)「Arduinoで楽しむ鉄道模型 ~簡単なプログラムで信号機や踏切遮断機を動かす!</a>」をお手本にさせていただきました。</p>
-<p><figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img14.gif">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img14.gif"
-         alt="img14"/> </a>
+<p>それでは、上記設定内容に基づき、AWSリソースを実際に生成します。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ amplify publish
+✔ Successfully pulled backend environment main from the cloud.
+
+Current Environment: main
+
+| Category | Resource name   | Operation | Provider plugin   |
+| -------- | --------------- | --------- | ----------------- |
+| Hosting  | S3AndCloudFront | Create    | awscloudformation |
+? Are you sure you want to <span style="color:#66d9ef">continue</span>? Yes
+
+<span style="color:#f92672">(</span>snip<span style="color:#f92672">)</span>
+
+✔ All resources are updated in the cloud
+
+Hosting endpoint: https://<span style="color:#e6db74">&lt;&lt;ランダム文字列&gt;&gt;.cloudfront.net
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">                   | EN  
+</span><span style="color:#e6db74">-------------------+-----
+</span><span style="color:#e6db74">  Pages            | 19  
+</span><span style="color:#e6db74">  Paginator pages  |  0  
+</span><span style="color:#e6db74">  Non-page files   |  1  
+</span><span style="color:#e6db74">  Static files     | 76  
+</span><span style="color:#e6db74">  Processed images |  0  
+</span><span style="color:#e6db74">  Aliases          |  0  
+</span><span style="color:#e6db74">  Sitemaps         |  1  
+</span><span style="color:#e6db74">  Cleaned          |  0  
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">Total in 183 ms
+</span><span style="color:#e6db74">frontend build command exited with code 0
+</span><span style="color:#e6db74">Publish started for S3AndCloudFront
+</span><span style="color:#e6db74">✔ Uploaded files successfully.
+</span><span style="color:#e6db74">Your app is published successfully.
+</span><span style="color:#e6db74">https://&lt;&lt;ランダム&gt;&gt;.cloudfront.net
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">$ amplify status
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">Current Environment: main
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">| Category | Resource name   | Operation | Provider plugin   |
+</span><span style="color:#e6db74">| -------- | --------------- | --------- | ----------------- |
+</span><span style="color:#e6db74">| Hosting  | S3AndCloudFront | No Change | awscloudformation |
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">Hosting endpoint: https://&lt;&lt;ランダム文字列</span>&gt;&gt;.cloudfront.net
+</code></pre></div><p>amplify publishコマンドの裏では、CloudFormationスタックが実行されAWSリソースが生成されます。</p>
+<figure><a href="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img4.png?raw=true">
+    <img src="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img4.png?raw=true"
+         alt="img4"/> </a>
 </figure>
 
-<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img15.png">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img15.png"
-         alt="img15"/> </a>
+<h1 id="公開サイトcloudfrontの確認">公開サイト(CloudFront)の確認</h1>
+<p>無事、公開を確認できました^^ ※本当に、とても簡単でした！
+<figure><a href="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/gif.gif?raw=true">
+    <img src="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/gif.gif?raw=true"
+         alt="gif"/> </a>
 </figure>
 </p>
-<p>通常のNゲージは、線路に電気を流し、コントローラで電圧(0〜12V)を調整し車両のモーターを動かす「アナログ方式」です(<a href="https://www.kato-start.com/blank-1">Nゲージのしくみ</a>)。これではクラウドから車両を制御といって、やれる事は制限されるのですが、最近では「DCC(Digital Command Control)」と呼ばれる車両にマイコン(デコーダーという)を載せて、コントローラで制御する方式があります。車両のデコーダーは2千円程度で購入でき、コントローラも例えば<a href="https://desktopstation.net/wiki/doku.php/dsshield2">DSshield2</a>などでDIYできそうです。時間を見つけてチャレンジしてみたいですね！</p>
-<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img16.png">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img16.png"
-         alt="img16"/> </a>
+<h1 id="補足">補足</h1>
+<p>AWS Workshopsのガイドにも記載ありますが、US-EAST-1以外のリージョンだと、DNSが浸透するまで時間がかかり、その間はAccessDeniedになります。</p>
+<blockquote>
+<p>Note: If you deploy this lab in any region other than US-EAST-1 it can take up to a few hours for DNS to replicate which will cause an AccessDenied error to be displayed. This is just for the first time the S3 bucket is created. Any future updates will not have a delay.</p>
+</blockquote>
+<p><a href="https://aws.amazon.com/jp/premiumsupport/knowledge-center/s3-http-307-response/">https://aws.amazon.com/jp/premiumsupport/knowledge-center/s3-http-307-response/</a></p>
+<p>素直に待つのが良いと思いますが「待ちきれない！」という方は、Amplifyの設定ファイルを少しいじって、次のようなやり方で試してみてもいいかもしれません。
+(私は待てなかったので、このやり方で確認しましたw)</p>
+<p><figure><a href="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img8.png?raw=true">
+    <img src="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img8.png?raw=true"
+         alt="img8"/> </a>
 </figure>
 
-<p>その前に、FreeRTOS/OTAを理解を深める必要がありますが、AWS公式ドキュメントも充実しており、大変助かります。</p>
-<ul>
-<li><a href="https://docs.aws.amazon.com/ja_jp/freertos/latest/userguide/freertos-ota-dev.html">FreeRTOS 無線通信経由更新</a></li>
-<li><a href="https://interface.cqpub.co.jp/magazine/202104/">リアルタイムOS新時代に突入！クラウド接続もスタンドアロンも！Amazon×マイコン FreeRTOS入門</a></li>
-</ul>
-<h1 id="再ai画像処理wip2022年秋">(再)AI・画像処理(WIP!)(2022年秋)</h1>
-<p><figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img17.png">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img17.png"
-         alt="img17"/> </a>
-</figure>
-
-<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img18.png">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2022/aws_fan/img18.png"
-         alt="img18"/> </a>
+<figure><a href="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img9.png?raw=true">
+    <img src="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img9.png?raw=true"
+         alt="img9"/> </a>
 </figure>
 </p>
-<p>現在のマイブームは天体観測。この世界はとても奥が深く、とても興味深いものです。自動化をクラウド(AWS)活用してと考えてみたものの、ちょっと的外れかと思い直しました。。。天体画像を処理するソフトウェア(OSS)もありますが、高度な画像処理は、Photoshopや、天体専用の商用ソフトが主流であり、OSSなどどの程度活用可能か、技術的に課題ありです。また、生データ(素材)の良さを保ちつつ、いかに画像処理を行うか、この辺は職人芸(アート)の世界でもあり、AI・ソフトウェアによるお任せニーズは低い気がします。活用ユースケースとしては、レントゲン写真から病気を抽出するといった医療分野などが適切な気がします。ただ、技術的には、本質は似ている点もありそうです^^</p>
-<h1 id="さいごに">さいごに</h1>
-<p>以上、私個人の趣味(マイコンいじり)と、AWSサービスとの関わりを振り返ってみました。もちろん、ここに挙げたサンプルは一部で、他にも魅力的なサービスは多々あります。クラウドの良さは、簡単にサービス・情報にアクセスでき、お試し(プロトタイピング)しやすい点にあります。これからも、いつでも、どこでも、簡単にアクセスできる利点を活かし、どんどん遊んでみたいと思います！</p>
 
   </section>
   <footer>
@@ -215,12 +280,12 @@
       <div class="c-pagination__ctrl">
         <div class="c-pagination__newer">
           
-          <a href="https://t-tkm.github.io/blog/posts/2023/essay_cognitive_psychology/">Newer</a>
+          <a href="https://t-tkm.github.io/blog/posts/2022/03/aws_app2container_ecs_eks/">Newer</a>
           
         </div>
         <div class="c-pagination__older">
           
-          <a href="https://t-tkm.github.io/blog/posts/2022/aws_fmea/">Older</a>
+          <a href="https://t-tkm.github.io/blog/posts/2022/03/aws_app2container/">Older</a>
           
         </div>
       </div>
@@ -232,44 +297,44 @@
   <ul id="slider" class="p-related__list">
     
     <li class="p-related__item js-related__item">
-      <a href="/blog/posts/2022/aws_app2container_ecs_eks/"
-        >
-        <span>AWS App2Container(ECS/EKSデプロイ編)</span>
-      </a>
-    </li>
-    
-    <li class="p-related__item js-related__item">
-      <a href="/blog/posts/2022/aws_app2container_opt/"
+      <a href="/blog/posts/2022/03/aws_app2container_opt/"
         >
         <span>AWS App2Container(イメージ最適化編)</span>
       </a>
     </li>
     
     <li class="p-related__item js-related__item">
-      <a href="/blog/posts/2022/aws_app2container/"
+      <a href="/blog/posts/2022/03/aws_app2container/"
         >
         <span>AWS App2Container(お試し編)</span>
       </a>
     </li>
     
     <li class="p-related__item js-related__item">
-      <a href="/blog/posts/2021/03/minecraft_server_aws_ecs/"
+      <a href="/blog/posts/2021/12/aws_books/"
         >
-        <span>我が家のマイクラサーバー(AWS編)</span>
+        <span>クラウド技術書紹介(AWS/Azure/2021年編)</span>
       </a>
     </li>
     
     <li class="p-related__item js-related__item">
-      <a href="/blog/posts/2022/aws_fmea/"
+      <a href="/blog/posts/2021/12/aws_powerbi/"
         >
-        <span>AWSホワイトペーパを題材にFMEAを見る</span>
+        <span>AWS RDS(PostgreSQL)とPower BIを接続してみた</span>
       </a>
     </li>
     
     <li class="p-related__item js-related__item">
-      <a href="/blog/posts/2022/aws_secure_bastion_1/"
+      <a href="/blog/posts/2021/12/aws_cli_2/"
         >
-        <span>踏台VPCの作成(Internet Gateway無し)(AWS)</span>
+        <span>AWS費用監視ツール(後編:Lambda活用)</span>
+      </a>
+    </li>
+    
+    <li class="p-related__item js-related__item">
+      <a href="/blog/posts/2021/12/aws_cli_1/"
+        >
+        <span>AWS費用監視ツール(前編:AWS マネジメントコンソール&amp;AWS CLI)</span>
       </a>
     </li>
     

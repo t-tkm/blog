@@ -4,16 +4,16 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
   
-  <title>Hugoでハンズオンサイト(AWS)</title>
-  <meta property="og:title" content="Hugoでハンズオンサイト(AWS)" />
-  <meta name="twitter:title" content="Hugoでハンズオンサイト(AWS)" />
+  <title>AWS App2Container(ECS/EKSデプロイ編)</title>
+  <meta property="og:title" content="AWS App2Container(ECS/EKSデプロイ編)" />
+  <meta name="twitter:title" content="AWS App2Container(ECS/EKSデプロイ編)" />
   
 
   
 
   <meta name="author" content="Takumi Tomita"/>
   <meta property="og:site_name" content="Takumi Tomita&#39;s Blog" />
-  <meta property="og:url" content="https://t-tkm.github.io/blog/posts/2022/aws_hugo/" />
+  <meta property="og:url" content="https://t-tkm.github.io/blog/posts/2022/03/aws_app2container_ecs_eks/" />
 
   
   <meta name="twitter:card" content="summary" />
@@ -58,13 +58,13 @@
 
 <article class="p-article">
   <header>
-    <h1>Hugoでハンズオンサイト(AWS)</h1>
+    <h1>AWS App2Container(ECS/EKSデプロイ編)</h1>
     <div>
       
         <div class="c-time">
           Posted on
-<time datetime="2022-03-13T00:00:00&#43;09:00">
-  Mar 13, 2022
+<time datetime="2022-03-16T00:00:00&#43;09:00">
+  Mar 16, 2022
 </time>
 
         </div>
@@ -72,204 +72,249 @@
       
       <a href="https://t-tkm.github.io/blog/tags/aws" class="c-tag">AWS</a>
       
-      <a href="https://t-tkm.github.io/blog/tags/amplify" class="c-tag">Amplify</a>
+      <a href="https://t-tkm.github.io/blog/tags/container" class="c-tag">Container</a>
       
-      <a href="https://t-tkm.github.io/blog/tags/hugo" class="c-tag">Hugo</a>
+      <a href="https://t-tkm.github.io/blog/tags/ecs" class="c-tag">ECS</a>
+      
+      <a href="https://t-tkm.github.io/blog/tags/eks" class="c-tag">EKS</a>
+      
+      <a href="https://t-tkm.github.io/blog/tags/app2container" class="c-tag">App2Container</a>
       
     </div>
   </header>
   
   <section id="js-article" class="p-article__body">
-    <h1 id="はじめに">はじめに</h1>
-<p>唐突ですが、AWS Workshopsというサイトをご存知でしょうか？</p>
-<p>AWS Workshopsは、AWSが公式に提供しているハンズオンコンテンツで、AWS各種サービスについて、実際に手を動かしてみたい場合に大変重宝するサイトです。</p>
-<p><a href="https://workshops.aws/">https://workshops.aws/</a></p>
-<p>さてこのサイト、とてもお洒落な作りになっていますが、どのように作られているのでしょうか？</p>
-<p>答えは、Hugoと言われるGo製の静的サイトジェネレータと、Learnと呼ばれるテーマ(Theme)を使って作られているようです。</p>
-<ul>
-<li><a href="https://gohugo.io/">https://gohugo.io/</a></li>
-<li><a href="https://jamstackthemes.dev/theme/hugo-theme-learn/">https://jamstackthemes.dev/theme/hugo-theme-learn/</a></li>
-</ul>
-<p>実はこのAWS Workshopsのコンテンツの一つに、このようなハンズオンサイトの作り方のハンズオンがあります！折角なので、試してみたいと思います。</p>
-<p><a href="https://hosting-hugo-content.workshop.aws/">https://hosting-hugo-content.workshop.aws/</a></p>
-<figure><a href="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img1.png?raw=true">
-    <img src="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img1.png?raw=true"
-         alt="img1"/> </a>
-</figure>
-
-<p>※ハンズオンの主目的は、Hugoの使い方でなく、AWS Amplifyを活用したホスティングサイト構築手法(CICD込み)ですw</p>
-<h1 id="構成図">構成図</h1>
-<p>本記事の構成になります。記事の編集、追加などは、Cloud9(EC2)からAmplify CLI経由で操作(amplify push)します。
-<figure><a href="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img10.png?raw=true">
-    <img src="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img10.png?raw=true"
-         alt="img10"/> </a>
-</figure>
-</p>
-<p><a href="https://hosting-hugo-content.workshop.aws/">AWS Workshops</a>のハンズオンでは、6章「CONTENT CI/CD PIPELINE」でCodeCommitを経由したCICDが学べます。
-<figure><a href="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img11.png?raw=true">
-    <img src="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img11.png?raw=true"
-         alt="img11"/> </a>
-</figure>
-</p>
-<p>また、AmplifyのHosting environmentsは、GitHubなどとの連携も可能ですので、こういう構成も可能かと思います。
-<figure><a href="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img12.png?raw=true">
-    <img src="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img12.png?raw=true"
-         alt="img12"/> </a>
-</figure>
-</p>
-<h1 id="hugoセットアップ">Hugoセットアップ</h1>
-<p>詳細はハンズオンを見てもらうとして、Cloud9を使っていきます。初めにHugoをインストールします。Goで作られたシングルバイナリなので、ダウンロード後に解凍し、パスの通ったディレクトリへ実行ファイルを置くだけで利用できます。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ wget https://github.com/gohugoio/hugo/releases/download/v0.71.0/hugo_extended_0.71.0_Linux-64bit.tar.gz -O hugo_extended_0.71.0_Linux-64bit.tar.gz
-$ HUGO_TAR<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span><span style="color:#66d9ef">$(</span>find . -name <span style="color:#e6db74">&#34;*Linux-64bit.tar.gz&#34;</span><span style="color:#66d9ef">)</span><span style="color:#e6db74">&#34;</span>
-$ tar -xzf $HUGO_TAR
-$ chmod +x hugo
-$ mkdir bin
-$ mv hugo bin/
-$ cd ~/environment/
-
-<span style="color:#75715e"># Hugoがインストールできているかの確認</span>
-$ hugo version
-Hugo Static Site Generator v0.71.0-06150C87/extended linux/amd64 BuildDate: 2020-05-18T16:15:29Z
-</code></pre></div><h1 id="サンプルサイトの確認">サンプルサイトの確認</h1>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># 事前に、Hugoで作ったサンプルサイトをダウンロードします</span>
-$ git clone -b v2.0 --single-branch https://github.com/t-tkm/aws-amplify-hugo-hosting.git <span style="color:#f92672">&amp;&amp;</span> cd aws-amplify-hugo-hosting
-
-<span style="color:#75715e"># ブランチは空</span>
-$ git branch
-* <span style="color:#f92672">(</span>no branch<span style="color:#f92672">)</span>
-
-<span style="color:#75715e"># 適当にブランチ名をつけておく。</span>
-$ git switch -c hugo
-
-<span style="color:#75715e"># themesの中身は空なので、新たに取得する</span>
-$ git submodule update --init
-</code></pre></div><p>Hugoでサーバーを起動して、サイトを確認します。Hugo Serverはデフォルトで1313ポート番号を使いますが、Cloud9のPreviewを使うため、ポート番号として8080を指定してサーバを起動します。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ hugo server -p <span style="color:#ae81ff">8080</span>
-</code></pre></div><figure><a href="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img2.png?raw=true">
-    <img src="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img2.png?raw=true"
-         alt="img2"/> </a>
-</figure>
-
-<p>ちゃんと表示されました。</p>
-<figure><a href="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img3.png?raw=true">
-    <img src="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img3.png?raw=true"
-         alt="img3"/> </a>
-</figure>
-
-<h1 id="amplifyセットアップ">Amplifyセットアップ</h1>
-<p>サンプルサイトはローカルで動いているため、外部から参照できません。従って、公開サイトとしてホスティングすることになります。そこでAWS Amplifyが活躍します。</p>
-<p>Amplify CLIをインストールします。Cloud9はデフォルトでNode.jsがインストール済みなので、npmでパッケージインストールするだけです。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ npm install -g @aws-amplify/cli@4.21.1
-
-<span style="color:#75715e"># インストールできているかの確認</span>
-$ amplify -v
-Scanning <span style="color:#66d9ef">for</span> plugins...
-Plugin scan successful
-4.21.1
-</code></pre></div><p>以上でAmplify CLIを使う準備が整いました。</p>
-<h1 id="amplifyでサイトを公開">Amplifyでサイトを公開</h1>
-<p>Amplifyを初期化します。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># Initialize AWS Amplify</span>
-$ amplify init
-</code></pre></div><p>設定パラメータは下記になります。</p>
-<figure><a href="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img5.png?raw=true">
-    <img src="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img5.png?raw=true"
-         alt="img5"/> </a>
-</figure>
-
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ amplify add hosting
-</code></pre></div><p>こちらも、設定パラメータを確認しておきます。</p>
-<figure><a href="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img6.png?raw=true">
-    <img src="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img6.png?raw=true"
-         alt="img6"/> </a>
-</figure>
-
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ amplify status
-Current Environment: main
-| Category | Resource name   | Operation | Provider plugin   |
-| -------- | --------------- | --------- | ----------------- |
-| Hosting  | S3AndCloudFront | Create    | awscloudformation |
-</code></pre></div><p>以上により、プロジェクトファイルの各種設定がAmplify CLIで設定されました。
-<figure><a href="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img7.png?raw=true">
-    <img src="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img7.png?raw=true"
-         alt="img7"/> </a>
-</figure>
-</p>
-<p>それでは、上記設定内容に基づき、AWSリソースを実際に生成します。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ amplify publish
-✔ Successfully pulled backend environment main from the cloud.
-
-Current Environment: main
-
-| Category | Resource name   | Operation | Provider plugin   |
-| -------- | --------------- | --------- | ----------------- |
-| Hosting  | S3AndCloudFront | Create    | awscloudformation |
-? Are you sure you want to <span style="color:#66d9ef">continue</span>? Yes
-
-<span style="color:#f92672">(</span>snip<span style="color:#f92672">)</span>
-
-✔ All resources are updated in the cloud
-
-Hosting endpoint: https://<span style="color:#e6db74">&lt;&lt;ランダム文字列&gt;&gt;.cloudfront.net
-</span><span style="color:#e6db74">
-</span><span style="color:#e6db74">                   | EN  
-</span><span style="color:#e6db74">-------------------+-----
-</span><span style="color:#e6db74">  Pages            | 19  
-</span><span style="color:#e6db74">  Paginator pages  |  0  
-</span><span style="color:#e6db74">  Non-page files   |  1  
-</span><span style="color:#e6db74">  Static files     | 76  
-</span><span style="color:#e6db74">  Processed images |  0  
-</span><span style="color:#e6db74">  Aliases          |  0  
-</span><span style="color:#e6db74">  Sitemaps         |  1  
-</span><span style="color:#e6db74">  Cleaned          |  0  
-</span><span style="color:#e6db74">
-</span><span style="color:#e6db74">Total in 183 ms
-</span><span style="color:#e6db74">frontend build command exited with code 0
-</span><span style="color:#e6db74">Publish started for S3AndCloudFront
-</span><span style="color:#e6db74">✔ Uploaded files successfully.
-</span><span style="color:#e6db74">Your app is published successfully.
-</span><span style="color:#e6db74">https://&lt;&lt;ランダム&gt;&gt;.cloudfront.net
-</span><span style="color:#e6db74">
-</span><span style="color:#e6db74">$ amplify status
-</span><span style="color:#e6db74">
-</span><span style="color:#e6db74">Current Environment: main
-</span><span style="color:#e6db74">
-</span><span style="color:#e6db74">| Category | Resource name   | Operation | Provider plugin   |
-</span><span style="color:#e6db74">| -------- | --------------- | --------- | ----------------- |
-</span><span style="color:#e6db74">| Hosting  | S3AndCloudFront | No Change | awscloudformation |
-</span><span style="color:#e6db74">
-</span><span style="color:#e6db74">Hosting endpoint: https://&lt;&lt;ランダム文字列</span>&gt;&gt;.cloudfront.net
-</code></pre></div><p>amplify publishコマンドの裏では、CloudFormationスタックが実行されAWSリソースが生成されます。</p>
-<figure><a href="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img4.png?raw=true">
-    <img src="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img4.png?raw=true"
-         alt="img4"/> </a>
-</figure>
-
-<h1 id="公開サイトcloudfrontの確認">公開サイト(CloudFront)の確認</h1>
-<p>無事、公開を確認できました^^ ※本当に、とても簡単でした！
-<figure><a href="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/gif.gif?raw=true">
-    <img src="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/gif.gif?raw=true"
-         alt="gif"/> </a>
-</figure>
-</p>
-<h1 id="補足">補足</h1>
-<p>AWS Workshopsのガイドにも記載ありますが、US-EAST-1以外のリージョンだと、DNSが浸透するまで時間がかかり、その間はAccessDeniedになります。</p>
-<blockquote>
-<p>Note: If you deploy this lab in any region other than US-EAST-1 it can take up to a few hours for DNS to replicate which will cause an AccessDenied error to be displayed. This is just for the first time the S3 bucket is created. Any future updates will not have a delay.</p>
-</blockquote>
-<p><a href="https://aws.amazon.com/jp/premiumsupport/knowledge-center/s3-http-307-response/">https://aws.amazon.com/jp/premiumsupport/knowledge-center/s3-http-307-response/</a></p>
-<p>素直に待つのが良いと思いますが「待ちきれない！」という方は、Amplifyの設定ファイルを少しいじって、次のようなやり方で試してみてもいいかもしれません。
-(私は待てなかったので、このやり方で確認しましたw)</p>
-<p><figure><a href="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img8.png?raw=true">
-    <img src="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img8.png?raw=true"
+    <h1 id="1-はじめに">1. はじめに</h1>
+<p>ここでは、前回の記事「AWS App2Container(お試し編)」では触れられなかったデプロイについて試してみます。
+実際は、次の3ステップでデプロイできて衝撃的でした！</p>
+<ol>
+<li>deployment.jsonを編集し、「ECS」か「EKS」を選択(AppRunnerも選択可)。</li>
+<li>app2containerコマンド(オプションgenerate app-deployment)でマニフェスト作成(一部S3に格納される)</li>
+<li>CloudFormationでデプロイ</li>
+</ol>
+<p>そして、ステップ2の「app2containerコマンド」の引数オプションとして「&ndash;deploy」を指定すると、ステップ3すら不要です^^</p>
+<figure><a href="https://github.com/t-tkm/blog_images/blob/aws_app2container_ecs_eks/2022/aws_app2container_ecs_eks/img8.png?raw=true">
+    <img src="https://github.com/t-tkm/blog_images/blob/aws_app2container_ecs_eks/2022/aws_app2container_ecs_eks/img8.png?raw=true"
          alt="img8"/> </a>
 </figure>
 
-<figure><a href="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img9.png?raw=true">
-    <img src="https://github.com/t-tkm/blog_images/blob/aws_hugo/imgs/img9.png?raw=true"
-         alt="img9"/> </a>
+<p>それでは試してみましょう。</p>
+<h1 id="2-マニフェスト作成">2. マニフェスト作成</h1>
+<figure><a href="https://github.com/t-tkm/blog_images/blob/aws_app2container_ecs_eks/2022/aws_app2container_ecs_eks/img1.png?raw=true">
+    <img src="https://github.com/t-tkm/blog_images/blob/aws_app2container_ecs_eks/2022/aws_app2container_ecs_eks/img1.png?raw=true"
+         alt="img1"/> </a>
 </figure>
-</p>
+
+<h2 id="2-1-s3へ格納される成果物ecs">2-1. S3へ格納される成果物(ECS)</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ tree a2c-java-tomcat-3c173836/ecs 
+a2c-java-tomcat-3c173836/ecs
+└── subtemplates
+    ├── ecs-cluster.yml
+    ├── ecs-gmsa-automation-doc.yml
+    ├── ecs-gmsa-execute.yml
+    ├── ecs-gmsa-iam-roles.yml
+    ├── ecs-gmsa-lambda-functions.yml
+    ├── ecs-gmsa.yml
+    ├── ecs-lb-webapp.yml
+    ├── ecs-master.yml
+    ├── ecs-private-app.yml
+    ├── ecs-private-load-balancer.yml
+    ├── ecs-public-load-balancer.yml
+    ├── ecs-route53.yml
+    └── ecs-vpc.yml
+</code></pre></div><h2 id="2-2-s3へ格納される成果物eks">2-2. S3へ格納される成果物(EKS)</h2>
+<details>
+<summary>(snip)展開</summary>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ tree a2c-java-tomcat-3c173836/eks 
+a2c-java-tomcat-3c173836/eks
+├── functions
+│   └── packages
+│       ├── CleanupLambdas
+│       │   └── lambda.zip
+│       ├── CleanupLoadBalancers
+│       │   └── lambda.zip
+│       ├── CleanupSecurityGroupDependencies
+│       │   └── lambda.zip
+│       ├── DeleteBucketContents
+│       │   └── lambda.zip
+│       ├── EksClusterResource
+│       │   └── awsqs-eks-cluster.zip
+│       ├── FargateProfile
+│       │   └── lambda.zip
+│       ├── GetCallerArn
+│       │   └── lambda.zip
+│       ├── HelmReleaseResource
+│       │   └── awsqs-kubernetes-helm.zip
+│       ├── KubeGet
+│       │   └── lambda.zip
+│       ├── KubeManifest
+│       │   └── lambda.zip
+│       ├── ResourceReader
+│       │   └── lambda.zip
+│       ├── awscliLayer
+│       │   └── lambda.zip
+│       ├── boto3Layer
+│       │   └── lambda.zip
+│       ├── crhelperLayer
+│       │   └── lambda.zip
+│       ├── kubectlLayer
+│       │   └── lambda.zip
+│       ├── kubernetesResources
+│       │   ├── awsqs_kubernetes_apply.zip
+│       │   ├── awsqs_kubernetes_apply_vpc.zip
+│       │   ├── awsqs_kubernetes_get.zip
+│       │   └── awsqs_kubernetes_get_vpc.zip
+│       ├── registerCustomResource
+│       │   └── lambda.zip
+│       └── registerType
+│           └── lambda.zip
+├── scripts
+│   ├── CustomResourceDefinition.yml
+│   ├── Deploy-CredSpec.ps1
+│   ├── Patch-Coredns.ps1
+│   ├── Setup-Webhook.ps1
+│   ├── create-signed-cert.ps1
+│   ├── credspec-cluster-role-template.yaml
+│   ├── gmsa-credspec-template.json
+│   ├── gmsa-webhook-template.yaml
+│   ├── patch-coredns-template.yaml
+│   ├── patch-webhook-template.ps1
+│   ├── windows-gmsa-setup.sh
+│   └── windows-setup.sh
+├── submodules
+│   ├── quickstart-amazon-eks-nodegroup
+│   │   ├── LICENSE.TXT
+│   │   └── templates
+│   │       └── amazon-eks-nodegroup.template.yaml
+│   └── quickstart-aws-vpc
+│       ├── ci
+│       │   ├── aws-vpc-3az-complete.json
+│       │   ├── aws-vpc-3az-public.json
+│       │   ├── aws-vpc-3az.json
+│       │   ├── aws-vpc-4az-complete.json
+│       │   ├── aws-vpc-4az-public.json
+│       │   ├── aws-vpc-4az.json
+│       │   ├── aws-vpc-complete.json
+│       │   ├── aws-vpc-dedicated.json
+│       │   ├── aws-vpc-defaults.json
+│       │   ├── aws-vpc-public.json
+│       │   ├── aws-vpc-sa-east-1.json
+│       │   └── taskcat.yml
+│       ├── docs
+│       │   └── utils
+│       │       ├── generate_parms.py
+│       │       └── requirements.txt
+│       └── templates
+│           ├── aws-vpc.template
+│           └── aws-vpc.template.yaml
+└── templates
+    ├── amazon-eks-advanced-configuration.template.yaml
+    ├── amazon-eks-alb-ingress.template.yaml
+    ├── amazon-eks-application-workload.yaml
+    ├── amazon-eks-cluster-autoscaler.template.yaml
+    ├── amazon-eks-controlplane.template.yaml
+    ├── amazon-eks-efs.template.yaml
+    ├── amazon-eks-fargate-profile.template.yaml
+    ├── amazon-eks-functions.template.yaml
+    ├── amazon-eks-gmsa-coredns.yaml
+    ├── amazon-eks-gmsa-crd.yaml
+    ├── amazon-eks-gmsa-credspec.yaml
+    ├── amazon-eks-gmsa-deployments.yaml
+    ├── amazon-eks-gmsa-webhook.yaml
+    ├── amazon-eks-grafana.template.yaml
+    ├── amazon-eks-iam.template.yaml
+    ├── amazon-eks-per-account-resources.template.yaml
+    ├── amazon-eks-per-region-resources.template.yaml
+    ├── amazon-eks-prometheus.template.yaml
+    ├── amazon-eks-test.template.yaml
+    ├── amazon-eks-windows-support-workload.template.yaml
+    ├── amazon-eks.yaml
+    ├── ecs-gmsa-automation-doc.yml
+    ├── ecs-gmsa-execute.yml
+    ├── ecs-gmsa-iam-roles.yml
+    ├── ecs-gmsa-lambda-functions.yml
+    ├── ecs-gmsa.yml
+    ├── ecs-route53.yml
+    └── eks-quickstart-region-upgrade.yaml
+</code></pre></div></details>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ tree a2c-java-tomcat-3c173836/eks 
+a2c-java-tomcat-3c173836/eks
+<span style="color:#f92672">(</span>snip<span style="color:#f92672">)</span>
+└── templates
+    ├── amazon-eks-advanced-configuration.template.yaml
+    ├── amazon-eks-alb-ingress.template.yaml
+    ├── amazon-eks-application-workload.yaml
+    ├── amazon-eks-cluster-autoscaler.template.yaml
+    ├── amazon-eks-controlplane.template.yaml
+    ├── amazon-eks-efs.template.yaml
+    ├── amazon-eks-fargate-profile.template.yaml
+    ├── amazon-eks-functions.template.yaml
+    ├── amazon-eks-gmsa-coredns.yaml
+    ├── amazon-eks-gmsa-crd.yaml
+    ├── amazon-eks-gmsa-credspec.yaml
+    ├── amazon-eks-gmsa-deployments.yaml
+    ├── amazon-eks-gmsa-webhook.yaml
+    ├── amazon-eks-grafana.template.yaml
+    ├── amazon-eks-iam.template.yaml
+    ├── amazon-eks-per-account-resources.template.yaml
+    ├── amazon-eks-per-region-resources.template.yaml
+    ├── amazon-eks-prometheus.template.yaml
+    ├── amazon-eks-test.template.yaml
+    ├── amazon-eks-windows-support-workload.template.yaml
+    ├── amazon-eks.yaml
+    ├── ecs-gmsa-automation-doc.yml
+    ├── ecs-gmsa-execute.yml
+    ├── ecs-gmsa-iam-roles.yml
+    ├── ecs-gmsa-lambda-functions.yml
+    ├── ecs-gmsa.yml
+    ├── ecs-route53.yml
+    └── eks-quickstart-region-upgrade.yaml
+</code></pre></div><h1 id="3-ecsデプロイ">3. ECSデプロイ</h1>
+<h2 id="3-1-cloud-formationでデプロイ実行">3-1. Cloud Formationでデプロイ実行</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">aws cloudformation deploy <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>	--template-file /root/app2container/java-tomcat-3c173836/EcsDeployment/ecs-master.yml <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>	--capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>	--stack-name a2c-java-tomcat-3c173836-ECS
+</code></pre></div><h2 id="3-2-cloud-formationスタック">3-2. Cloud Formationスタック</h2>
+<figure><a href="https://github.com/t-tkm/blog_images/blob/aws_app2container_ecs_eks/2022/aws_app2container_ecs_eks/img2.png?raw=true">
+    <img src="https://github.com/t-tkm/blog_images/blob/aws_app2container_ecs_eks/2022/aws_app2container_ecs_eks/img2.png?raw=true"
+         alt="img2"/> </a>
+</figure>
+
+<h2 id="3-3-確認">3-3. 確認</h2>
+<figure><a href="https://github.com/t-tkm/blog_images/blob/aws_app2container_ecs_eks/2022/aws_app2container_ecs_eks/img3.png?raw=true">
+    <img src="https://github.com/t-tkm/blog_images/blob/aws_app2container_ecs_eks/2022/aws_app2container_ecs_eks/img3.png?raw=true"
+         alt="img3"/> </a>
+</figure>
+
+<figure><a href="https://github.com/t-tkm/blog_images/blob/aws_app2container_ecs_eks/2022/aws_app2container_ecs_eks/img4.png?raw=true">
+    <img src="https://github.com/t-tkm/blog_images/blob/aws_app2container_ecs_eks/2022/aws_app2container_ecs_eks/img4.png?raw=true"
+         alt="img4"/> </a>
+</figure>
+
+<h1 id="4-eksデプロイ">4. EKSデプロイ</h1>
+<h2 id="4-1-cloud-formationでデプロイ実行">4-1. Cloud Formationでデプロイ実行</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">aws cloudformation deploy <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>	--template-file /root/app2container/java-tomcat-3c173836/EksDeployment/amazon-eks-entrypoint-new-vpc.yaml <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>	--capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>	--stack-name a2c-java-tomcat-3c173836-EKS
+</code></pre></div><h2 id="4-2-cloud-formationスタック">4-2. Cloud Formationスタック</h2>
+<figure><a href="https://github.com/t-tkm/blog_images/blob/aws_app2container_ecs_eks/2022/aws_app2container_ecs_eks/img5.png?raw=true">
+    <img src="https://github.com/t-tkm/blog_images/blob/aws_app2container_ecs_eks/2022/aws_app2container_ecs_eks/img5.png?raw=true"
+         alt="img5"/> </a>
+</figure>
+
+<h2 id="4-3-確認">4-3. 確認</h2>
+<figure><a href="https://github.com/t-tkm/blog_images/blob/aws_app2container_ecs_eks/2022/aws_app2container_ecs_eks/img6.png?raw=true">
+    <img src="https://github.com/t-tkm/blog_images/blob/aws_app2container_ecs_eks/2022/aws_app2container_ecs_eks/img6.png?raw=true"
+         alt="img6"/> </a>
+</figure>
+
+<figure><a href="https://github.com/t-tkm/blog_images/blob/aws_app2container_ecs_eks/2022/aws_app2container_ecs_eks/img7.png?raw=true">
+    <img src="https://github.com/t-tkm/blog_images/blob/aws_app2container_ecs_eks/2022/aws_app2container_ecs_eks/img7.png?raw=true"
+         alt="img7"/> </a>
+</figure>
+
 
   </section>
   <footer>
@@ -280,12 +325,12 @@ Hosting endpoint: https://<span style="color:#e6db74">&lt;&lt;ランダム文字
       <div class="c-pagination__ctrl">
         <div class="c-pagination__newer">
           
-          <a href="https://t-tkm.github.io/blog/posts/2022/aws_app2container_ecs_eks/">Newer</a>
+          <a href="https://t-tkm.github.io/blog/posts/2022/10/aws_secure_bastion_1/">Newer</a>
           
         </div>
         <div class="c-pagination__older">
           
-          <a href="https://t-tkm.github.io/blog/posts/2022/aws_app2container/">Older</a>
+          <a href="https://t-tkm.github.io/blog/posts/2022/03/aws_hugo/">Older</a>
           
         </div>
       </div>
@@ -297,16 +342,30 @@ Hosting endpoint: https://<span style="color:#e6db74">&lt;&lt;ランダム文字
   <ul id="slider" class="p-related__list">
     
     <li class="p-related__item js-related__item">
-      <a href="/blog/posts/2022/aws_app2container_opt/"
+      <a href="/blog/posts/2022/03/aws_app2container/"
+        >
+        <span>AWS App2Container(お試し編)</span>
+      </a>
+    </li>
+    
+    <li class="p-related__item js-related__item">
+      <a href="/blog/posts/2022/03/aws_app2container_opt/"
         >
         <span>AWS App2Container(イメージ最適化編)</span>
       </a>
     </li>
     
     <li class="p-related__item js-related__item">
-      <a href="/blog/posts/2022/aws_app2container/"
+      <a href="/blog/posts/2021/03/minecraft_server_aws_ecs/"
         >
-        <span>AWS App2Container(お試し編)</span>
+        <span>我が家のマイクラサーバー(AWS編)</span>
+      </a>
+    </li>
+    
+    <li class="p-related__item js-related__item">
+      <a href="/blog/posts/2022/03/aws_hugo/"
+        >
+        <span>Hugoでハンズオンサイト(AWS)</span>
       </a>
     </li>
     
@@ -321,20 +380,6 @@ Hosting endpoint: https://<span style="color:#e6db74">&lt;&lt;ランダム文字
       <a href="/blog/posts/2021/12/aws_powerbi/"
         >
         <span>AWS RDS(PostgreSQL)とPower BIを接続してみた</span>
-      </a>
-    </li>
-    
-    <li class="p-related__item js-related__item">
-      <a href="/blog/posts/2021/12/aws_cli_2/"
-        >
-        <span>AWS費用監視ツール(後編:Lambda活用)</span>
-      </a>
-    </li>
-    
-    <li class="p-related__item js-related__item">
-      <a href="/blog/posts/2021/12/aws_cli_1/"
-        >
-        <span>AWS費用監視ツール(前編:AWS マネジメントコンソール&amp;AWS CLI)</span>
       </a>
     </li>
     
