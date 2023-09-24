@@ -21,6 +21,11 @@ summaryLength = 320 # サマリーの長さを120単語にする
 [markup.goldmark.renderer]
       unsafe = true
 
+[taxonomies]
+  tag = "tags"
+  category = "categories"
+  archive = "archives"
+  
 [[menu.main]]
     name = "Blog"
     url = "/"

@@ -3,6 +3,7 @@ Categories = ["AWS"]
 Tags = ["AWS", "FMEA", "reliability", "resiliency"] 
 date = "2022-12-09T00:00:00+09:00" 
 title = "AWSホワイトペーパを題材にFMEAを見る" 
+archives = ["2022", "2022-12", "2022-12-09"]
 +++
 
 この記事は、[Japan APN Ambassador Advent Calendar 2022](https://qiita.com/advent-calendar/2022/japan-aws-ambassador)の9日目のエントリになります。

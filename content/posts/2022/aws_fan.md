@@ -3,6 +3,7 @@ Categories = ["AWS"]
 Tags = ["AWS", "IoT", "ECS", "FreeRTOS"]
 date = "2023-01-05T00:00:00+09:00"
 title = "AWS FAN!"
+archives = ["2023", "2023-01", "2023-01-05"]
 +++
 
 # はじめに

@@ -3,6 +3,7 @@ Categories = ["AWS"]
 Tags = ["AWS", "Terraform", "Bastion"] 
 date = "2022-10-16T00:00:00+09:00" 
 title = "踏台VPCの作成(Internet Gateway有り)(AWS)" 
+archives = ["2022", "2022-10", "2022-10-16"]
 +++
 
 # はじめに

@@ -3,6 +3,7 @@ Categories = ["AWS"]
 Tags = ["essay", "cognitive psychology", "Daniel Kahneman"]
 date = "2023-05-07T00:00:00+09:00"
 title = "ChatGPTによる認知バイアスエラー回避の可能性"
+archives = ["2023", "2023-05", "2023-05-07"]
 +++
 
 # はじめに

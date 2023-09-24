@@ -3,6 +3,7 @@ Categories = ["AWS"]
 Tags = ["AWS", "CUR", "Cost", "FinOps", "Athena"] 
 date = "2023-09-24T00:00:00+09:00" 
 title = "AWS Cost Usage Reportの可視化(2) -ヘッドレスBIツールCubeを試してみる" 
+archives = ["2023", "2023-09", "2023-09-24"]
 +++
 
 # はじめに

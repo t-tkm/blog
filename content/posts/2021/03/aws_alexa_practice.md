@@ -3,7 +3,7 @@ Categories = ["AWS"]
 Tags = ["AWS", "Alexa"]
 date = "2021-03-26T00:00:00+09:00"
 title = "Alexaでかけ算ゲーム"
-
+archives = ["2021", "2021-03", "2021-03-26"]
 +++
 
 # Alexaでかけ算ゲーム

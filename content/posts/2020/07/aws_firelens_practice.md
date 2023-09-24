@@ -3,7 +3,7 @@ Categories = ["AWS"]
 Tags = ["AWS", "Alexa"]
 date = "2020-07-26T00:00:00+09:00"
 title = "FireLensを使ってFargateコンテナのファイルログを転送してみた"
-
+archives = ["2020", "2020-07", "2020-07-26"]
 +++
 
 # はじめに

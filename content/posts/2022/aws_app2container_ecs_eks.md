@@ -3,6 +3,8 @@ Categories = ["AWS"]
 Tags = ["AWS", "Container", "ECS", "EKS", "App2Container"]
 date = "2022-03-16T00:00:00+09:00"
 title = "AWS App2Container(ECS/EKSデプロイ編)"
+archives = ["2022", "2022-03", "2022-03-16"]
+
 +++
 
 # 1. はじめに

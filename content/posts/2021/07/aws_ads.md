@@ -3,7 +3,7 @@ Categories = ["AWS"]
 Tags = ["AWS", "migration", "移行", "ADS"]
 date = "2021-07-30T00:00:00+09:00"
 title = "AWS移行 - ApplicationDiscoveryService(ADS)でのインベントリ情報収集"
-
+archives = ["2021", "2021-07", "2021-07-30"]
 +++
 
 # AWS移行 - ApplicationDiscoveryService(ADS)でのインベントリ情報収集

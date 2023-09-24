@@ -3,6 +3,7 @@ Categories = ["AWS"]
 Tags = ["AWS", "ツール", "aws-cli", "費用"]
 date = "2021-12-16T00:00:00+09:00"
 title = "AWS費用監視ツール(前編:AWS マネジメントコンソール&AWS CLI)"
+archives = ["2021", "2021-12", "2021-12-16"]
 
 +++
 

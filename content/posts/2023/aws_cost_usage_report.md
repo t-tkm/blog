@@ -3,6 +3,7 @@ Categories = ["AWS"]
 Tags = ["AWS", "CUR", "Cost", "FinOps", "Athena"] 
 date = "2023-06-18T00:00:00+09:00" 
 title = "AWS Cost Usage Reportの可視化" 
+archives = ["2023", "2023-06", "2023-06-18"]
 +++
 
 # はじめに
