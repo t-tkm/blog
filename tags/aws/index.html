@@ -59,6 +59,28 @@
 
 <article class="c-article p-list-article">
   <header>
+    <h2 class="c-title c-article__title"><a href="https://t-tkm.github.io/blog/posts/2023/12/aws_cost_usage_report3/">AWS Cost Usage Reportの可視化(3) -生成AI SQL (Cube &#43; LangChain)</a></h2>
+    <p class="c-article__meta">
+      Posted on
+<time datetime="2023-12-30T00:00:00&#43;09:00">
+  Dec 30, 2023
+</time>
+
+    </p>
+  </header>
+  <div class="c-article__summary">
+    はじめに 「AWS Cost Usage Reportの可視化(2) -ヘッドレスBIツールCubeを試してみる」の続編になります。 今年のre:Invent(2023)も盛り沢山！まだまだ全体は把握できておりませんが、やはり、生成系AIのトピックが多かった印象です。 その中で、私は「Amazon Q generative SQL in Amazon Redshift」が目にとまりました。 「AWS Black Belt Online Seminar re:Invent 2023アップデート速報」(スライド#40) 下記ツイートは、(1年ほど前)ChatGPTを使い始めた頃のものです。当時は、本番サービスとして提供されるとは夢にも思いませんでした！ このサービスは、ユーザが自然言語で問合せると推奨SQLクエリを生成してくれるというものですが、似たようなシステムのDIY可能で
+  </div>
+  
+  <a href="https://t-tkm.github.io/blog/posts/2023/12/aws_cost_usage_report3/" class="c-article__btn p-list-article__btn">Read more</a>
+  
+</article>
+
+
+
+
+<article class="c-article p-list-article">
+  <header>
     <h2 class="c-title c-article__title"><a href="https://t-tkm.github.io/blog/posts/2023/09/aws_cost_usage_report2/">AWS Cost Usage Reportの可視化(2) -ヘッドレスBIツールCubeを試してみる</a></h2>
     <p class="c-article__meta">
       Posted on
@@ -249,28 +271,6 @@
   </div>
   
   <a href="https://t-tkm.github.io/blog/posts/2022/03/aws_app2container/" class="c-article__btn p-list-article__btn">Read more</a>
-  
-</article>
-
-
-
-
-<article class="c-article p-list-article">
-  <header>
-    <h2 class="c-title c-article__title"><a href="https://t-tkm.github.io/blog/posts/2022/03/aws_app2container_opt/">AWS App2Container(イメージ最適化編)</a></h2>
-    <p class="c-article__meta">
-      Posted on
-<time datetime="2022-03-12T00:00:00&#43;09:00">
-  Mar 12, 2022
-</time>
-
-    </p>
-  </header>
-  <div class="c-article__summary">
-    はじめに 前回(「AWS App2Container(お試し編)」)で試した非サポートアプリの場合(ex. SpringBootアプリ)、サポートされるtomcatアプリと比較すると(802MB)、デフォルトで生成されたコンテナイメージは16.1GBとかなりのサイズとなっていました。 root@ip-10-0-1-112:~# docker image ls REPOSITORY TAG IMAGE ID CREATED SIZE java-generic-6ef9339e latest 8ef7ef3e7db0 38 minutes ago 16.1GB java-tomcat-5da060de latest cc2de1db6ef8 58 minutes ago 802MB そこで、ここでは、下記ガイドラインに従いサイズをスリム化してみようと思います。 Optimize AWS App2Container generated Docker images ポイントは、App2Containerは、分析結果であるanalysis.jsonをベースにイメージを生成するため、不要なファイルを含めないようにanalysis.jsonを編集することになります。 コンテナイメージ分析(di
-  </div>
-  
-  <a href="https://t-tkm.github.io/blog/posts/2022/03/aws_app2container_opt/" class="c-article__btn p-list-article__btn">Read more</a>
   
 </article>
 

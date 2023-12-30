@@ -4,16 +4,16 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
   
-  <title>Posts</title>
-  <meta property="og:title" content="Posts" />
-  <meta name="twitter:title" content="Posts" />
+  <title>AWS</title>
+  <meta property="og:title" content="AWS" />
+  <meta name="twitter:title" content="AWS" />
   
 
   
 
   <meta name="author" content="Takumi Tomita"/>
   <meta property="og:site_name" content="Takumi Tomita&#39;s Blog" />
-  <meta property="og:url" content="https://t-tkm.github.io/blog/posts/" />
+  <meta property="og:url" content="https://t-tkm.github.io/blog/categories/aws/" />
 
   
   <meta name="twitter:card" content="summary" />
@@ -52,213 +52,27 @@
 
   <main id="main" class="l-main">
 
-<h2 class="c-title p-tag-title">Posts</h2>
+<h2 class="c-title p-tag-title">AWS</h2>
 
 
 
 
 <article class="c-article p-list-article">
   <header>
-    <h2 class="c-title c-article__title"><a href="https://t-tkm.github.io/blog/posts/2022/03/aws_app2container/">AWS App2Container(お試し編)</a></h2>
+    <h2 class="c-title c-article__title"><a href="https://t-tkm.github.io/blog/posts/2020/07/aws_firelens_practice/">FireLensを使ってFargateコンテナのファイルログを転送してみた</a></h2>
     <p class="c-article__meta">
       Posted on
-<time datetime="2022-03-12T00:00:00&#43;09:00">
-  Mar 12, 2022
+<time datetime="2020-07-26T00:00:00&#43;09:00">
+  Jul 26, 2020
 </time>
 
     </p>
   </header>
   <div class="c-article__summary">
-    はじめに AWS App2Containerは、起動中のjavaアプリをコンテナイメージに変換し、ECSやEKSで稼働させるためのテンプレートを生成するツールになります。 Accelerating your Migration to AWS 下記、App2ContainerのUerGuideにある通り、サポートされるプラットフォームと、そうでない場合で挙動が変わるため、本記事ではその辺を試してみたいと思います(ここでは、ECSやEKSでの稼働検証は含まれません)。 For supported application frameworks, App2Container targets only the application files and dependencies that are needed for containerization, thereby minimizing the size of the resulting container image. This is known as application mode. If App2Container does not find a supported framework running on your application server, or if you have other dependent processes running on your server, App2Container takes a conservative approach to identifying dependencies. This is known as process mode. For process mode, all non-system files on the application server are included in the container image. 本記事のスコープは下記になります。 以降、次の流れで検証します。 App2
+    はじめに 通常はTwelve-Factor Appに「ログをイベントストリームとして扱う」とあるように、コンテナアプリケーションのログは標準出力を集約先とするのが設計原則です。しかし、もともと仮想マシンで動かしていたサーバをコンテナ化しようとする時など、 「まずはアプリケーションコンテナを極力改修せず(ログ出力先を、ファイルから標準出力に変更)になんとかならないか。。。」 というニーズもあるかと思います。ここでは、ファイル出力されたアプリケーションコンテナのログをFireLens(Fluentbit)を使ってCloudWatchへ転送する方法を紹介します。尚、FireLensを使わずとも、サイドカー(Fluentd)を自前で準備する方法とし
   </div>
   
-  <a href="https://t-tkm.github.io/blog/posts/2022/03/aws_app2container/" class="c-article__btn p-list-article__btn">Read more</a>
-  
-</article>
-
-
-
-
-<article class="c-article p-list-article">
-  <header>
-    <h2 class="c-title c-article__title"><a href="https://t-tkm.github.io/blog/posts/2022/03/aws_app2container_opt/">AWS App2Container(イメージ最適化編)</a></h2>
-    <p class="c-article__meta">
-      Posted on
-<time datetime="2022-03-12T00:00:00&#43;09:00">
-  Mar 12, 2022
-</time>
-
-    </p>
-  </header>
-  <div class="c-article__summary">
-    はじめに 前回(「AWS App2Container(お試し編)」)で試した非サポートアプリの場合(ex. SpringBootアプリ)、サポートされるtomcatアプリと比較すると(802MB)、デフォルトで生成されたコンテナイメージは16.1GBとかなりのサイズとなっていました。 root@ip-10-0-1-112:~# docker image ls REPOSITORY TAG IMAGE ID CREATED SIZE java-generic-6ef9339e latest 8ef7ef3e7db0 38 minutes ago 16.1GB java-tomcat-5da060de latest cc2de1db6ef8 58 minutes ago 802MB そこで、ここでは、下記ガイドラインに従いサイズをスリム化してみようと思います。 Optimize AWS App2Container generated Docker images ポイントは、App2Containerは、分析結果であるanalysis.jsonをベースにイメージを生成するため、不要なファイルを含めないようにanalysis.jsonを編集することになります。 コンテナイメージ分析(di
-  </div>
-  
-  <a href="https://t-tkm.github.io/blog/posts/2022/03/aws_app2container_opt/" class="c-article__btn p-list-article__btn">Read more</a>
-  
-</article>
-
-
-
-
-<article class="c-article p-list-article">
-  <header>
-    <h2 class="c-title c-article__title"><a href="https://t-tkm.github.io/blog/posts/2021/12/aws_books/">クラウド技術書紹介(AWS/Azure/2021年編)</a></h2>
-    <p class="c-article__meta">
-      Posted on
-<time datetime="2021-12-25T00:00:00&#43;09:00">
-  Dec 25, 2021
-</time>
-
-    </p>
-  </header>
-  <div class="c-article__summary">
-    クラウド技術書紹介(AWS/Azure/2021年編) Qiitaにて公開。こちら→
-  </div>
-  
-</article>
-
-
-
-
-<article class="c-article p-list-article">
-  <header>
-    <h2 class="c-title c-article__title"><a href="https://t-tkm.github.io/blog/posts/2021/12/aws_powerbi/">AWS RDS(PostgreSQL)とPower BIを接続してみた</a></h2>
-    <p class="c-article__meta">
-      Posted on
-<time datetime="2021-12-18T00:00:00&#43;09:00">
-  Dec 18, 2021
-</time>
-
-    </p>
-  </header>
-  <div class="c-article__summary">
-    AWS RDS(PostgreSQL)とPower BIを接続してみた Qiitaにて公開。こちら→
-  </div>
-  
-</article>
-
-
-
-
-<article class="c-article p-list-article">
-  <header>
-    <h2 class="c-title c-article__title"><a href="https://t-tkm.github.io/blog/posts/2021/12/aws_cli_2/">AWS費用監視ツール(後編:Lambda活用)</a></h2>
-    <p class="c-article__meta">
-      Posted on
-<time datetime="2021-12-17T00:00:00&#43;09:00">
-  Dec 17, 2021
-</time>
-
-    </p>
-  </header>
-  <div class="c-article__summary">
-    AWS費用監視ツール(後編:Lambda活用) Qiitaにて公開。こちら→
-  </div>
-  
-</article>
-
-
-
-
-<article class="c-article p-list-article">
-  <header>
-    <h2 class="c-title c-article__title"><a href="https://t-tkm.github.io/blog/posts/2021/12/aws_cli_1/">AWS費用監視ツール(前編:AWS マネジメントコンソール&amp;AWS CLI)</a></h2>
-    <p class="c-article__meta">
-      Posted on
-<time datetime="2021-12-16T00:00:00&#43;09:00">
-  Dec 16, 2021
-</time>
-
-    </p>
-  </header>
-  <div class="c-article__summary">
-    AWS費用監視ツール(前編:AWS マネジメントコンソール&amp;AWS CLI) Qiitaにて公開。こちら→
-  </div>
-  
-</article>
-
-
-
-
-<article class="c-article p-list-article">
-  <header>
-    <h2 class="c-title c-article__title"><a href="https://t-tkm.github.io/blog/posts/2021/07/aws_ads/">AWS移行 - ApplicationDiscoveryService(ADS)でのインベントリ情報収集</a></h2>
-    <p class="c-article__meta">
-      Posted on
-<time datetime="2021-07-30T00:00:00&#43;09:00">
-  Jul 30, 2021
-</time>
-
-    </p>
-  </header>
-  <div class="c-article__summary">
-    AWS移行 - ApplicationDiscoveryService(ADS)でのインベントリ情報収集 Application Discovery Service(ADS)の検証記事(Qiita)
-  </div>
-  
-</article>
-
-
-
-
-<article class="c-article p-list-article">
-  <header>
-    <h2 class="c-title c-article__title"><a href="https://t-tkm.github.io/blog/posts/2021/07/aws_drbd/">AWS移行 - Multi-AZのHA構成のためのDRBD性能検証</a></h2>
-    <p class="c-article__meta">
-      Posted on
-<time datetime="2021-07-30T00:00:00&#43;09:00">
-  Jul 30, 2021
-</time>
-
-    </p>
-  </header>
-  <div class="c-article__summary">
-    AWS移行 - Multi-AZのHA構成のためのDRBD性能検証 Multi-AZのHA構成のためのDRBD性能検証(Qiita)
-  </div>
-  
-</article>
-
-
-
-
-<article class="c-article p-list-article">
-  <header>
-    <h2 class="c-title c-article__title"><a href="https://t-tkm.github.io/blog/posts/2021/03/aws_alexa_practice/">Alexaでかけ算ゲーム</a></h2>
-    <p class="c-article__meta">
-      Posted on
-<time datetime="2021-03-26T00:00:00&#43;09:00">
-  Mar 26, 2021
-</time>
-
-    </p>
-  </header>
-  <div class="c-article__summary">
-    Alexaでかけ算ゲーム はじめに 今年の正月は、コロナ禍ということで帰省ができなかったため、以前より気になっていたAlexaに手を出してみました。あわよくば、今回の勉強を通して「Alexa認定」も取得できるかも？と思ったのですが、そこまで甘い世界ではありませんでした1。。。 Alexa全体像の理解 さて、実際始めようとすると、今まで公私共に全く触った事の無いサービスという事もあり、どこから手をつけてよいものかわかりません。。。そこでとっかかりとして、Alexa公式 動画シリーズ「Alexa道場」から始めることにしました。こちらの教材がとても丁寧で、ストーリを追って段階的に学習できお勧めです！一通り動画を視聴し終わると、なんとなく(開発含めた
-  </div>
-  
-  <a href="https://t-tkm.github.io/blog/posts/2021/03/aws_alexa_practice/" class="c-article__btn p-list-article__btn">Read more</a>
-  
-</article>
-
-
-
-
-<article class="c-article p-list-article">
-  <header>
-    <h2 class="c-title c-article__title"><a href="https://t-tkm.github.io/blog/posts/2021/03/minecraft_server_aws_ecs/">我が家のマイクラサーバー(AWS編)</a></h2>
-    <p class="c-article__meta">
-      Posted on
-<time datetime="2021-03-21T00:00:00&#43;09:00">
-  Mar 21, 2021
-</time>
-
-    </p>
-  </header>
-  <div class="c-article__summary">
-    はじめに マイクラサーバ(javaアプリ)をECS+Fargate+EFSで動かしてみた備忘録になります。趣味であるこのシステムの運用を通じて、今後周辺ノウハウを強化していきたいというのが(私、インフラエンジニア)目的ですw 我が家はマイクラのヘビーユーザで、息子3人(小学生)と母親が、同じ世界(マイクラではワールドと呼ぶ)にログインして、各々の建築を見せあったり、道具を揃えて洞窟を冒険したり楽しんでいます。私はそのマルチサーバをお守りしており、以前はVM上にサーバを構築して運用していました。しかし、1つのサーバで展開できるワールドは1つであり、色々複数のワールドを家族に提供するには、複数サーバを立てる必要があります。そこで、最近ではア
-  </div>
-  
-  <a href="https://t-tkm.github.io/blog/posts/2021/03/minecraft_server_aws_ecs/" class="c-article__btn p-list-article__btn">Read more</a>
+  <a href="https://t-tkm.github.io/blog/posts/2020/07/aws_firelens_practice/" class="c-article__btn p-list-article__btn">Read more</a>
   
 </article>
 
@@ -268,16 +82,14 @@
   <div class="c-pagination__ctrl">
     <div class="c-pagination__newer">
       
-      <a href="/blog/posts/">Newer</a>
+      <a href="/blog/categories/aws/page/2/">Newer</a>
       
     </div>
     <div class="c-pagination__older">
       
-      <a href="/blog/posts/page/3/">Older</a>
-      
     </div>
   </div>
-  <span class="c-pagination__count p-pagination__count">Page 2 of 3</span>
+  <span class="c-pagination__count p-pagination__count">Page 3 of 3</span>
 </nav>
 
 

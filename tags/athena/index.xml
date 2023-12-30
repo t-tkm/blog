@@ -7,7 +7,16 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>&amp;copy; 2022 Takumi Tomita Powered by Hugo &amp; Pickles.</copyright>
-    <lastBuildDate>Sun, 24 Sep 2023 00:00:00 +0900</lastBuildDate><atom:link href="https://t-tkm.github.io/blog/tags/athena/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 30 Dec 2023 00:00:00 +0900</lastBuildDate><atom:link href="https://t-tkm.github.io/blog/tags/athena/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>AWS Cost Usage Reportの可視化(3) -生成AI SQL (Cube &#43; LangChain)</title>
+      <link>https://t-tkm.github.io/blog/posts/2023/12/aws_cost_usage_report3/</link>
+      <pubDate>Sat, 30 Dec 2023 00:00:00 +0900</pubDate>
+      
+      <guid>https://t-tkm.github.io/blog/posts/2023/12/aws_cost_usage_report3/</guid>
+      <description>はじめに 「AWS Cost Usage Reportの可視化(2) -ヘッドレスBIツールCubeを試してみる」の続編になります。 今年のre:Invent(2023)も盛り沢山！まだまだ全体は把握できておりませんが、やはり、生成系AIのトピックが多かった印象です。 その中で、私は「Amazon Q generative SQL in Amazon Redshift」が目にとまりました。 「AWS Black Belt Online Seminar re:Invent 2023アップデート速報」(スライド#40) 下記ツイートは、(1年ほど前)ChatGPTを使い始めた頃のものです。当時は、本番サービスとして提供されるとは夢にも思いませんでした！ このサービスは、ユーザが自然言語で問合せると推奨SQLクエリを生成してくれるというものですが、似たようなシステムのDIY可能で</description>
+    </item>
+    
     <item>
       <title>AWS Cost Usage Reportの可視化(2) -ヘッドレスBIツールCubeを試してみる</title>
       <link>https://t-tkm.github.io/blog/posts/2023/09/aws_cost_usage_report2/</link>
