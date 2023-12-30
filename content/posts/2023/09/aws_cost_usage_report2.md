@@ -7,7 +7,7 @@ archives = ["2023", "2023-09", "2023-09-24"]
 +++
 
 # はじめに
-「[AWS Cost Usage Reportの可視化](https://t-tkm.github.io/blog/posts/2023/aws_cost_usage_report/)」の続編になります。
+「[AWS Cost Usage Reportの可視化](http://localhost:1313/blog/posts/2023/06/aws_cost_usage_report/)」の続編になります。
 
 前回記事では、AWS費用のレポートがS3に定期的に溜め、S3データをSQLで検索できるマネージドサービスAthenaを構築し、AthenaをデータソースとしてGrafanaやRedashといったBIツールで可視化基盤を構築しました。
 

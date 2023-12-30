@@ -7,7 +7,7 @@ archives = ["2023", "2023-12", "2023-12-30"]
 +++
 
 # はじめに
-「[AWS Cost Usage Reportの可視化(2) -ヘッドレスBIツールCubeを試してみる](https://t-tkm.github.io/blog/posts/2023/aws_cost_usage_report2/)」の続編になります。
+「[AWS Cost Usage Reportの可視化(2) -ヘッドレスBIツールCubeを試してみる](http://localhost:1313/blog/posts/2023/09/aws_cost_usage_report2/)」の続編になります。
 
 今年のre:Invent(2023)も盛り沢山！まだまだ全体は把握できておりませんが、やはり、生成系AIのトピックが多かった印象です。
 その中で、私は「Amazon Q generative SQL in Amazon Redshift」が目にとまりました。
