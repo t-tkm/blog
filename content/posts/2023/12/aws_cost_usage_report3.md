@@ -41,6 +41,8 @@ archives = ["2023", "2023-12", "2023-12-30"]
 # システム構築
 それでは、自宅システムに、このLangChainアプリを移植(DIY)してみます。
 
+(GitHub) https://github.com/t-tkm/aws_cru_langchain
+
 **1. Cube起動**
 
 詳細は、前回の記事「[AWS Cost Usage Reportの可視化(2) -ヘッドレスBIツールCubeを試してみる](https://t-tkm.github.io/blog/posts/2023/09/aws_cost_usage_report2/)」のStep1を参考にして下さい。
