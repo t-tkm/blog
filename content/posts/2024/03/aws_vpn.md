@@ -17,8 +17,8 @@ archives = ["2024", "2024-03", "2024-03-29"]
 前編は、純粋にAWS環境だけでVPNをシミュレートする方式で、後編で自宅とAWSをVPNルータ
 を用いる方法を説明します。
 
-- [お手軽にAWS Site-to-Site VPNを試してみよう(AWSシミュレーション環境)](TBD) ←本編
-- [お手軽にAWS Site-to-Site VPNを試してみよう(自宅VPN環境)](TBD)
+- [お手軽にAWS Site-to-Site VPNを試してみよう(AWSシミュレーション環境)](https://t-tkm.github.io/blog/posts/2024/03/aws_vpn/) ←本編
+- [お手軽にAWS Site-to-Site VPNを試してみよう(自宅VPN環境)](https://t-tkm.github.io/blog/posts/2024/03/aws_vpn2/)
 
 # NW構成
 AWS Site-to-Site VPNのネットワークトポロジーには、いくつかバリエーションがあります([AWS Transit Gateway + AWS Site-to-Site VPN](https://docs.aws.amazon.com/whitepapers/latest/aws-vpc-connectivity-options/aws-transit-gateway-vpn.html))。
