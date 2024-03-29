@@ -59,6 +59,28 @@
 
 <article class="c-article p-list-article">
   <header>
+    <h2 class="c-title c-article__title"><a href="https://t-tkm.github.io/blog/posts/2022/03/aws_app2container/">AWS App2Container(お試し編)</a></h2>
+    <p class="c-article__meta">
+      Posted on
+<time datetime="2022-03-12T00:00:00&#43;09:00">
+  Mar 12, 2022
+</time>
+
+    </p>
+  </header>
+  <div class="c-article__summary">
+    はじめに AWS App2Containerは、起動中のjavaアプリをコンテナイメージに変換し、ECSやEKSで稼働させるためのテンプレートを生成するツールになります。 Accelerating your Migration to AWS 下記、App2ContainerのUerGuideにある通り、サポートされるプラットフォームと、そうでない場合で挙動が変わるため、本記事ではその辺を試してみたいと思います(ここでは、ECSやEKSでの稼働検証は含まれません)。 For supported application frameworks, App2Container targets only the application files and dependencies that are needed for containerization, thereby minimizing the size of the resulting container image. This is known as application mode. If App2Container does not find a supported framework running on your application server, or if you have other dependent processes running on your server, App2Container takes a conservative approach to identifying dependencies. This is known as process mode. For process mode, all non-system files on the application server are included in the container image. 本記事のスコープは下記になります。 以降、次の流れで検証します。 App2
+  </div>
+  
+  <a href="https://t-tkm.github.io/blog/posts/2022/03/aws_app2container/" class="c-article__btn p-list-article__btn">Read more</a>
+  
+</article>
+
+
+
+
+<article class="c-article p-list-article">
+  <header>
     <h2 class="c-title c-article__title"><a href="https://t-tkm.github.io/blog/posts/2022/03/aws_app2container_opt/">AWS App2Container(イメージ最適化編)</a></h2>
     <p class="c-article__meta">
       Posted on
@@ -242,28 +264,6 @@
 
 
 
-
-<article class="c-article p-list-article">
-  <header>
-    <h2 class="c-title c-article__title"><a href="https://t-tkm.github.io/blog/posts/2020/07/aws_firelens_practice/">FireLensを使ってFargateコンテナのファイルログを転送してみた</a></h2>
-    <p class="c-article__meta">
-      Posted on
-<time datetime="2020-07-26T00:00:00&#43;09:00">
-  Jul 26, 2020
-</time>
-
-    </p>
-  </header>
-  <div class="c-article__summary">
-    はじめに 通常はTwelve-Factor Appに「ログをイベントストリームとして扱う」とあるように、コンテナアプリケーションのログは標準出力を集約先とするのが設計原則です。しかし、もともと仮想マシンで動かしていたサーバをコンテナ化しようとする時など、 「まずはアプリケーションコンテナを極力改修せず(ログ出力先を、ファイルから標準出力に変更)になんとかならないか。。。」 というニーズもあるかと思います。ここでは、ファイル出力されたアプリケーションコンテナのログをFireLens(Fluentbit)を使ってCloudWatchへ転送する方法を紹介します。尚、FireLensを使わずとも、サイドカー(Fluentd)を自前で準備する方法とし
-  </div>
-  
-  <a href="https://t-tkm.github.io/blog/posts/2020/07/aws_firelens_practice/" class="c-article__btn p-list-article__btn">Read more</a>
-  
-</article>
-
-
-
 <nav class="c-pagination p-pagination">
   <div class="c-pagination__ctrl">
     <div class="c-pagination__newer">
@@ -273,9 +273,11 @@
     </div>
     <div class="c-pagination__older">
       
+      <a href="/blog/tags/aws/page/3/">Older</a>
+      
     </div>
   </div>
-  <span class="c-pagination__count p-pagination__count">Page 2 of 2</span>
+  <span class="c-pagination__count p-pagination__count">Page 2 of 3</span>
 </nav>
 
 

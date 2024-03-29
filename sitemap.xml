@@ -3,6 +3,81 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://t-tkm.github.io/blog/archives/2024/</loc>
+    <lastmod>2024-03-29T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/archives/2024-03/</loc>
+    <lastmod>2024-03-29T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/archives/2024-03-29/</loc>
+    <lastmod>2024-03-29T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/archives/</loc>
+    <lastmod>2024-03-29T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/tags/aws/</loc>
+    <lastmod>2024-03-29T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/categories/aws/</loc>
+    <lastmod>2024-03-29T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/tags/aws-site-to-site-vpn/</loc>
+    <lastmod>2024-03-29T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/categories/</loc>
+    <lastmod>2024-03-29T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/tags/cdk/</loc>
+    <lastmod>2024-03-29T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/posts/</loc>
+    <lastmod>2024-03-29T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/tags/</loc>
+    <lastmod>2024-03-29T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/</loc>
+    <lastmod>2024-03-29T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/tags/transit-gateway/</loc>
+    <lastmod>2024-03-29T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/tags/vpn/</loc>
+    <lastmod>2024-03-29T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/posts/2024/03/aws_vpn/</loc>
+    <lastmod>2024-03-29T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://t-tkm.github.io/blog/archives/2023/</loc>
     <lastmod>2023-12-30T00:00:00+09:00</lastmod>
   </url>
@@ -18,32 +93,12 @@
   </url>
   
   <url>
-    <loc>https://t-tkm.github.io/blog/archives/</loc>
-    <lastmod>2023-12-30T00:00:00+09:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://t-tkm.github.io/blog/tags/athena/</loc>
     <lastmod>2023-12-30T00:00:00+09:00</lastmod>
   </url>
   
   <url>
-    <loc>https://t-tkm.github.io/blog/tags/aws/</loc>
-    <lastmod>2023-12-30T00:00:00+09:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://t-tkm.github.io/blog/categories/aws/</loc>
-    <lastmod>2023-12-30T00:00:00+09:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://t-tkm.github.io/blog/posts/2023/12/aws_cost_usage_report3/</loc>
-    <lastmod>2023-12-30T00:00:00+09:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://t-tkm.github.io/blog/categories/</loc>
     <lastmod>2023-12-30T00:00:00+09:00</lastmod>
   </url>
   
@@ -59,21 +114,6 @@
   
   <url>
     <loc>https://t-tkm.github.io/blog/tags/finops/</loc>
-    <lastmod>2023-12-30T00:00:00+09:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://t-tkm.github.io/blog/posts/</loc>
-    <lastmod>2023-12-30T00:00:00+09:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://t-tkm.github.io/blog/tags/</loc>
-    <lastmod>2023-12-30T00:00:00+09:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://t-tkm.github.io/blog/</loc>
     <lastmod>2023-12-30T00:00:00+09:00</lastmod>
   </url>
   

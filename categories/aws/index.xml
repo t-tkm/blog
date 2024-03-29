@@ -7,7 +7,16 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>&amp;copy; 2022 Takumi Tomita Powered by Hugo &amp; Pickles.</copyright>
-    <lastBuildDate>Sat, 30 Dec 2023 00:00:00 +0900</lastBuildDate><atom:link href="https://t-tkm.github.io/blog/categories/aws/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 29 Mar 2024 00:00:00 +0900</lastBuildDate><atom:link href="https://t-tkm.github.io/blog/categories/aws/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>お手軽にAWS Site-to-Site VPNを試してみよう(AWSシミュレーション環境)</title>
+      <link>https://t-tkm.github.io/blog/posts/2024/03/aws_vpn/</link>
+      <pubDate>Fri, 29 Mar 2024 00:00:00 +0900</pubDate>
+      
+      <guid>https://t-tkm.github.io/blog/posts/2024/03/aws_vpn/</guid>
+      <description>はじめに 自宅環境とAWS間を、お手軽にAWS Site-to-Site VPNで接続する方法を紹介したいと思います。 仕事がら、たまに自分の環境でVPNを張り、いろいろ実験したいことが稀にあります。 しかし、常時VPNを接続するのは費用も安く無いため(「付録」参照)、実験したい時にアドホックにVPNを 構築したいわけです。そこで、筆者がVPN構築に使っている方法を、(自身の備忘録も兼ねて) 紹介したいと思います。 コンテンツ 前編は、純粋にAWS環境だけでVPNをシミュレートする方式で、後編で自宅とAWSをVPNルータ を用いる方法を説明します。 お手軽にAWS Site-to-Site VPNを試してみよう(AWSシミュレーション環境) ←本編 お手軽にAWS Site-to-Site VPNを試してみよう(自宅VPN環境) N</description>
+    </item>
+    
     <item>
       <title>AWS Cost Usage Reportの可視化(3) -生成AI SQL (Cube &#43; LangChain)</title>
       <link>https://t-tkm.github.io/blog/posts/2023/12/aws_cost_usage_report3/</link>
