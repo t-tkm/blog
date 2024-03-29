@@ -17,5 +17,14 @@
       <description>はじめに 自宅環境とAWS間を、お手軽にAWS Site-to-Site VPNで接続する方法を紹介したいと思います。 仕事がら、たまに自分の環境でVPNを張り、いろいろ実験したいことが稀にあります。 しかし、常時VPNを接続するのは費用も安く無いため(「付録」参照)、実験したい時にアドホックにVPNを 構築したいわけです。そこで、筆者がVPN構築に使っている方法を、(自身の備忘録も兼ねて) 紹介したいと思います。 コンテンツ 前編は、純粋にAWS環境だけでVPNをシミュレートする方式で、後編で自宅とAWSをVPNルータ を用いる方法を説明します。 お手軽にAWS Site-to-Site VPNを試してみよう(AWSシミュレーション環境) ←本編 お手軽にAWS Site-to-Site VPNを試してみよう(自宅VPN環境) N</description>
     </item>
     
+    <item>
+      <title>お手軽にAWS Site-to-Site VPNを試してみよう(自宅VPN環境)</title>
+      <link>https://t-tkm.github.io/blog/posts/2024/03/aws_vpn2/</link>
+      <pubDate>Fri, 29 Mar 2024 00:00:00 +0900</pubDate>
+      
+      <guid>https://t-tkm.github.io/blog/posts/2024/03/aws_vpn2/</guid>
+      <description>はじめに 前編で構築したVPN環境に、自宅VPNルータを追加してみようと思います。 お手軽にAWS Site-to-Site VPNを試してみよう(AWSシミュレーション環境) お手軽にAWS Site-to-Site VPNを試してみよう(自宅VPN環境) ←本編 筆者の環境では、VPNルータとしてTP-Link Omada ギガビット マルチWAN VPNルーター ER605 を使っています(こちらは2022年6月12日に8,800円で購入しました)。 自宅VPN環境 構築 UTM - ER605間の接続は次のようになります。 Link Upを確認します。 ER605のファームウェアバージョンが「ER605(UN)_V1_1.2.0 Build 20220114」以上であれば、IKEv2を使うことができます。 CGWを作成します作成 VPN接続を作成します(</description>
+    </item>
+    
   </channel>
 </rss>
