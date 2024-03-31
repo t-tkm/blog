@@ -17,8 +17,8 @@ archives = ["2024", "2024-03", "2024-03-29"]
 前編は、純粋にAWS環境だけでVPNをシミュレートする方式で、後編で自宅とAWSをVPNルータ
 を用いる方法を説明します。
 
-- [お手軽にAWS Site-to-Site VPNを試してみよう(AWSシミュレーション環境)](TBD) ←本編
-- [お手軽にAWS Site-to-Site VPNを試してみよう(自宅VPN環境)](TBD)
+- [お手軽にAWS Site-to-Site VPNを試してみよう(AWSシミュレーション環境)](https://t-tkm.github.io/blog/posts/2024/03/aws_vpn/) ←本編
+- [お手軽にAWS Site-to-Site VPNを試してみよう(自宅VPN環境)](https://t-tkm.github.io/blog/posts/2024/03/aws_vpn2/)
 
 # NW構成
 AWS Site-to-Site VPNのネットワークトポロジーには、いくつかバリエーションがあります([AWS Transit Gateway + AWS Site-to-Site VPN](https://docs.aws.amazon.com/whitepapers/latest/aws-vpc-connectivity-options/aws-transit-gateway-vpn.html))。
@@ -116,7 +116,7 @@ index b875068..7290e77 100644
      "source-map-support": "^0.5.21"
 ```
 
-# 実験(通信速度測定)
+# 実験(遅延/帯域)
 2つのテストサーバ(Amazon Linux2)にログインし、iperf3をインストールします。
 - 受信側: OnPremisInstance(10.0.0.241)
 - 送信側: CloudInstance(10.10.0.41)
@@ -155,6 +155,20 @@ sh-4.2$ ip a
        valid_lft 2831sec preferred_lft 2831sec
 (snip)
 
+# 遅延確認
+sh-4.2$ ping -c 10.0.0.241
+PING 10.0.0.241 (10.0.0.241) 56(84) bytes of data.
+64 bytes from 10.0.0.241: icmp_seq=1 ttl=253 time=2.54 ms
+64 bytes from 10.0.0.241: icmp_seq=2 ttl=253 time=2.27 ms
+64 bytes from 10.0.0.241: icmp_seq=3 ttl=253 time=2.33 ms
+64 bytes from 10.0.0.241: icmp_seq=4 ttl=253 time=2.22 ms
+64 bytes from 10.0.0.241: icmp_seq=5 ttl=253 time=2.46 ms
+
+--- 10.0.0.241 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 4006ms
+rtt min/avg/max/mdev = 2.241/2.368/2.545/0.125 ms
+
+# 帯域確認
 sh-4.2$ iperf3 -c 10.0.0.241
 Connecting to host 10.0.0.241, port 5201
 [  4] local 10.10.0.41 port 53644 connected to 10.0.0.241 port 5201
@@ -177,10 +191,84 @@ Connecting to host 10.0.0.241, port 5201
 iperf Done.
 ```
 流石にAWS内ネットワークだけあり、十分な速度がでています。
+
+# 遅延/帯域制御
+オンプレとAWS間のネットワーク性能(遅延/帯域)について、より現実的なシミュレーション
+を行う場合は、Linuxのtcコマンド(Traffic Control)を活用できます。筆者の環境では、
+自宅は横浜にあり、以前の測定では遅延が10ms〜15ms、帯域は20Mbps程度でした。
+
+従って、下記仮想VPNルータに対し、tcコマンドにて遅延15ms、帯域は20Mbps程度の
+制限を設定します。
+{{< figure alt="img1" src="https://github.com/t-tkm/blog_images/raw/main/2024/aws_vpn/img25.png" link="https://github.com/t-tkm/blog_images/raw/main/2024/aws_vpn/img25.png">}}
+
+```zsh
+# tcコマンドインストール
+sh-4.2$ sudo yum -y install iproute-tc
+
+# NICのTCによる制限状態確認(default)
+sh-4.2$ sudo tc qdisc show dev eth0
+qdisc mq 0: root
+qdisc pfifo_fast 0: parent :2 bands 3 priomap 1 2 2 2 1 2 0 0 1 1 1 1 1 1 1 1
+qdisc pfifo_fast 0: parent :1 bands 3 priomap 1 2 2 2 1 2 0 0 1 1 1 1 1 1 1 1
+
+# 下記2つのコマンドで、遅延と帯域制限を設定
+# 遅延設定(片道7msの遅延挿入)
+sudo tc qdisc add dev eth0 root handle 1:0 netem delay 7ms
+# 帯域設定(20Mbps制限)
+sudo tc qdisc add dev eth0 parent 1:1 handle 10:0 tbf rate 20mbit burst 50kb limit 500kb
+```
+
+片道7ms(往復14ms)、20Mbpsの制限が設定できました。
+```zsh
+# NICのTCによる制限状態確認
+sh-4.2$ sudo tc qdisc show dev eth0
+qdisc netem 1: root refcnt 3 limit 1000 delay 7ms
+qdisc tbf 10: parent 1:1 rate 20Mbit burst 50Kb lat 184ms
+```
+# 再実験(遅延/帯域)
+先の実験同様、送信側へログインし、測定します。
+```zsh
+sh-4.2$ ping 10.0.0.241
+PING 10.0.0.241 (10.0.0.241) 56(84) bytes of data.
+64 bytes from 10.0.0.241: icmp_seq=1 ttl=253 time=16.5 ms
+64 bytes from 10.0.0.241: icmp_seq=2 ttl=253 time=16.4 ms
+64 bytes from 10.0.0.241: icmp_seq=3 ttl=253 time=16.4 ms
+64 bytes from 10.0.0.241: icmp_seq=4 ttl=253 time=16.4 ms
+64 bytes from 10.0.0.241: icmp_seq=5 ttl=253 time=16.4 ms
+64 bytes from 10.0.0.241: icmp_seq=6 ttl=253 time=16.4 ms
+64 bytes from 10.0.0.241: icmp_seq=7 ttl=253 time=16.4 ms
+^C
+--- 10.0.0.241 ping statistics ---
+7 packets transmitted, 7 received, 0% packet loss, time 6011ms
+rtt min/avg/max/mdev = 16.432/16.478/16.543/0.033 ms
+
+sh-4.2$ iperf3 -c 10.0.0.241
+Connecting to host 10.0.0.241, port 5201
+[  4] local 10.10.0.178 port 52894 connected to 10.0.0.241 port 5201
+[ ID] Interval           Transfer     Bandwidth       Retr  Cwnd
+[  4]   0.00-1.00   sec  2.83 MBytes  23.7 Mbits/sec    1    343 KBytes
+[  4]   1.00-2.00   sec  2.44 MBytes  20.5 Mbits/sec    0    459 KBytes
+[  4]   2.00-3.00   sec  2.32 MBytes  19.5 Mbits/sec    0    559 KBytes
+[  4]   3.00-4.00   sec  2.08 MBytes  17.4 Mbits/sec   33    433 KBytes
+[  4]   4.00-5.00   sec  2.69 MBytes  22.6 Mbits/sec    0    491 KBytes
+[  4]   5.00-6.00   sec  2.02 MBytes  16.9 Mbits/sec    0    532 KBytes
+[  4]   6.00-7.00   sec  2.02 MBytes  16.9 Mbits/sec    0    559 KBytes
+[  4]   7.00-8.00   sec  2.44 MBytes  20.5 Mbits/sec    4    401 KBytes
+[  4]   8.00-9.00   sec  2.02 MBytes  16.9 Mbits/sec    0    435 KBytes
+[  4]   9.00-10.00  sec  2.02 MBytes  16.9 Mbits/sec    0    462 KBytes
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bandwidth       Retr
+[  4]   0.00-10.00  sec  22.9 MBytes  19.2 Mbits/sec   38             sender
+[  4]   0.00-10.00  sec  21.8 MBytes  18.3 Mbits/sec                  receiver
+
+iperf Done.
+```
+性能面でも現実的なシミュレーションができました。
+
 それでは、次は実際のインターネット回線を介したVPN接続を
 設定したいと思います。
 
-後編へ→
+[後編へ→](https://t-tkm.github.io/blog/posts/2024/03/aws_vpn2/)
 
 # 付録
 VPN料金は、おおよそ1,200円(8USD)/日程度でした。
