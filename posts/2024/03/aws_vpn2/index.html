@@ -104,7 +104,12 @@
 </figure>
 
 <h1 id="構築">構築</h1>
-<p>UTM - ER605間の接続は次のようになります。
+<p>基本的に、こちらの記事に従って構築させていただきました。</p>
+<blockquote>
+<p><a href="https://level69.net/archives/30177">8800円の格安VPNルータで家とAWS間をサイト間VPN（IPSec）で接続する</a></p>
+</blockquote>
+<p>※「VPN接続」「Transit GW」周りが少しだけ異なりますので、適宜確認お願いします。</p>
+<p><u>UTM - ER605間接続</u>
 <figure><a href="https://github.com/t-tkm/blog_images/raw/main/2024/aws_vpn/img3.png">
     <img src="https://github.com/t-tkm/blog_images/raw/main/2024/aws_vpn/img3.png"
          alt="img1"/> </a>
@@ -121,12 +126,14 @@
          alt="img1"/> </a>
 </figure>
 </p>
+<p><u>E605ファームウェアVUP</u></p>
 <p>ER605のファームウェアバージョンが「ER605(UN)_V1_1.2.0 Build 20220114」以上であれば、IKEv2を使うことができます。
 <figure><a href="https://github.com/t-tkm/blog_images/raw/main/2024/aws_vpn/img6.png">
     <img src="https://github.com/t-tkm/blog_images/raw/main/2024/aws_vpn/img6.png"
          alt="img1"/> </a>
 </figure>
 </p>
+<p><u>VPN2設定</u></p>
 <p>CGWを作成します作成
 <figure><a href="https://github.com/t-tkm/blog_images/raw/main/2024/aws_vpn/img7.png">
     <img src="https://github.com/t-tkm/blog_images/raw/main/2024/aws_vpn/img7.png"
@@ -157,6 +164,7 @@
          alt="img1"/> </a>
 </figure>
 </p>
+<p><u>Transit GW設定</u></p>
 <p>Transit GWのルートテーブルに、静的ルートを作成します
 <figure><a href="https://github.com/t-tkm/blog_images/raw/main/2024/aws_vpn/img14.png">
     <img src="https://github.com/t-tkm/blog_images/raw/main/2024/aws_vpn/img14.png"
@@ -175,7 +183,7 @@
 </figure>
 </p>
 <p>以上で、自宅-AWS間のVPNが設定されました。</p>
-<h1 id="実験通信速度測定">実験(通信速度測定)</h1>
+<h1 id="実験遅延帯域">実験(遅延/帯域)</h1>
 <figure><a href="https://github.com/t-tkm/blog_images/raw/main/2024/aws_vpn/img23.png">
     <img src="https://github.com/t-tkm/blog_images/raw/main/2024/aws_vpn/img23.png"
          alt="img1"/> </a>
@@ -204,6 +212,18 @@ Server listening on <span style="color:#ae81ff">5201</span> <span style="color:#
        valid_lft 2831sec preferred_lft 2831sec
 <span style="color:#f92672">(</span>snip<span style="color:#f92672">)</span>
 
+sh-4.2$ ping -c <span style="color:#ae81ff">5</span> 192.168.10.172
+PING 192.168.10.172 <span style="color:#f92672">(</span>192.168.10.172<span style="color:#f92672">)</span> 56<span style="color:#f92672">(</span>84<span style="color:#f92672">)</span> bytes of data.
+<span style="color:#ae81ff">64</span> bytes from 192.168.10.172: icmp_seq<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> ttl<span style="color:#f92672">=</span><span style="color:#ae81ff">62</span> time<span style="color:#f92672">=</span>7.70 ms
+<span style="color:#ae81ff">64</span> bytes from 192.168.10.172: icmp_seq<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span> ttl<span style="color:#f92672">=</span><span style="color:#ae81ff">62</span> time<span style="color:#f92672">=</span>10.5 ms
+<span style="color:#ae81ff">64</span> bytes from 192.168.10.172: icmp_seq<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span> ttl<span style="color:#f92672">=</span><span style="color:#ae81ff">62</span> time<span style="color:#f92672">=</span>97.2 ms
+<span style="color:#ae81ff">64</span> bytes from 192.168.10.172: icmp_seq<span style="color:#f92672">=</span><span style="color:#ae81ff">4</span> ttl<span style="color:#f92672">=</span><span style="color:#ae81ff">62</span> time<span style="color:#f92672">=</span>7.21 ms
+<span style="color:#ae81ff">64</span> bytes from 192.168.10.172: icmp_seq<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span> ttl<span style="color:#f92672">=</span><span style="color:#ae81ff">62</span> time<span style="color:#f92672">=</span>40.7 ms
+
+--- 192.168.10.172 ping statistics ---
+<span style="color:#ae81ff">5</span> packets transmitted, <span style="color:#ae81ff">5</span> received, 0% packet loss, time 4006ms
+rtt min/avg/max/mdev <span style="color:#f92672">=</span> 7.210/32.699/97.250/34.625 ms
+
 sh-4.2$ iperf3 -c 192.168.10.172
 Connecting to host 192.168.10.172, port <span style="color:#ae81ff">5201</span>
 <span style="color:#f92672">[</span>  4<span style="color:#f92672">]</span> local 10.10.0.41 port <span style="color:#ae81ff">57872</span> connected to 192.168.10.172 port <span style="color:#ae81ff">5201</span>
@@ -227,10 +247,13 @@ iperf Done.
 
 </code></pre></div><p>AWSと自宅(横浜)間の通信速度の結果は上記となりました。</p>
 <h1 id="cleanup">Cleanup</h1>
-<p>手動で追加した「Site-to-Site VPN接続」をAWSコンソールから削除します。</p>
+<p>手動で追加した「カスタマーゲートウェア(CGW)」と「Site-to-Site VPN接続(VPN2)」をAWSコンソールから削除します。</p>
+<p>その後、CDKリソースを削除します。</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">takumi@iMac % cdk destroy ComputeStack
 takumi@iMac % cdk destroy VpnSimStack 
-</code></pre></div>
+</code></pre></div><h1 id="まとめ">まとめ</h1>
+<p>今回は、GitHubの<a href="https://github.com/aws-samples">AWS Samplesリポジトリ</a>にある<a href="https://github.com/aws-samples/aws-cdk-simulated-vpn">aws-cdk-simulated-vpn</a>プロジェクトを活用して、AWS Cloud Development Kit (CDK) を用いた簡単なAWSシミュレーション環境（VPN）の構築方法を紹介しました。また、性能面でより現実的なシミュレーションを行うために、Linuxのtcコマンドを用いたネットワーク遅延やパケットロスのシミュレーションについても解説しました。最後に、実際の自宅環境におけるVPNルータ（TP-Link ER605）を使用した環境構築の例も紹介しました。</p>
+
   </section>
   <footer>
     
