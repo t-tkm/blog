@@ -190,7 +190,7 @@ index b875068..7290e77 <span style="color:#ae81ff">100644</span>
 </span>     <span style="color:#e6db74">&#34;cdk-nag&#34;</span>: <span style="color:#e6db74">&#34;^2.22.37&#34;</span>,
      <span style="color:#e6db74">&#34;constructs&#34;</span>: <span style="color:#e6db74">&#34;^10.0.0&#34;</span>,
      <span style="color:#e6db74">&#34;source-map-support&#34;</span>: <span style="color:#e6db74">&#34;^0.5.21&#34;</span>
-</code></pre></div><h1 id="実験通信速度測定">実験(通信速度測定)</h1>
+</code></pre></div><h1 id="実験遅延帯域">実験(遅延/帯域)</h1>
 <p>2つのテストサーバ(Amazon Linux2)にログインし、iperf3をインストールします。</p>
 <ul>
 <li>受信側: OnPremisInstance(10.0.0.241)</li>
@@ -230,6 +230,20 @@ Server listening on <span style="color:#ae81ff">5201</span>
        valid_lft 2831sec preferred_lft 2831sec
 <span style="color:#f92672">(</span>snip<span style="color:#f92672">)</span>
 
+<span style="color:#75715e"># 遅延確認</span>
+sh-4.2$ ping -c 10.0.0.241
+PING 10.0.0.241 <span style="color:#f92672">(</span>10.0.0.241<span style="color:#f92672">)</span> 56<span style="color:#f92672">(</span>84<span style="color:#f92672">)</span> bytes of data.
+<span style="color:#ae81ff">64</span> bytes from 10.0.0.241: icmp_seq<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> ttl<span style="color:#f92672">=</span><span style="color:#ae81ff">253</span> time<span style="color:#f92672">=</span>2.54 ms
+<span style="color:#ae81ff">64</span> bytes from 10.0.0.241: icmp_seq<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span> ttl<span style="color:#f92672">=</span><span style="color:#ae81ff">253</span> time<span style="color:#f92672">=</span>2.27 ms
+<span style="color:#ae81ff">64</span> bytes from 10.0.0.241: icmp_seq<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span> ttl<span style="color:#f92672">=</span><span style="color:#ae81ff">253</span> time<span style="color:#f92672">=</span>2.33 ms
+<span style="color:#ae81ff">64</span> bytes from 10.0.0.241: icmp_seq<span style="color:#f92672">=</span><span style="color:#ae81ff">4</span> ttl<span style="color:#f92672">=</span><span style="color:#ae81ff">253</span> time<span style="color:#f92672">=</span>2.22 ms
+<span style="color:#ae81ff">64</span> bytes from 10.0.0.241: icmp_seq<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span> ttl<span style="color:#f92672">=</span><span style="color:#ae81ff">253</span> time<span style="color:#f92672">=</span>2.46 ms
+
+--- 10.0.0.241 ping statistics ---
+<span style="color:#ae81ff">5</span> packets transmitted, <span style="color:#ae81ff">5</span> received, 0% packet loss, time 4006ms
+rtt min/avg/max/mdev <span style="color:#f92672">=</span> 2.241/2.368/2.545/0.125 ms
+
+<span style="color:#75715e"># 帯域確認</span>
 sh-4.2$ iperf3 -c 10.0.0.241
 Connecting to host 10.0.0.241, port <span style="color:#ae81ff">5201</span>
 <span style="color:#f92672">[</span>  4<span style="color:#f92672">]</span> local 10.10.0.41 port <span style="color:#ae81ff">53644</span> connected to 10.0.0.241 port <span style="color:#ae81ff">5201</span>
@@ -250,10 +264,77 @@ Connecting to host 10.0.0.241, port <span style="color:#ae81ff">5201</span>
 <span style="color:#f92672">[</span>  4<span style="color:#f92672">]</span>   0.00-10.00  sec  1.09 GBytes   <span style="color:#ae81ff">938</span> Mbits/sec                  receiver
 
 iperf Done.
-</code></pre></div><p>流石にAWS内ネットワークだけあり、十分な速度がでています。
-それでは、次は実際のインターネット回線を介したVPN接続を
+</code></pre></div><p>流石にAWS内ネットワークだけあり、十分な速度がでています。</p>
+<h1 id="遅延帯域制御">遅延/帯域制御</h1>
+<p>オンプレとAWS間のネットワーク性能(遅延/帯域)について、より現実的なシミュレーション
+を行う場合は、Linuxのtcコマンド(Traffic Control)を活用できます。筆者の環境では、
+自宅は横浜にあり、以前の測定では遅延が10ms〜15ms、帯域は20Mbps程度でした。</p>
+<p>従って、下記仮想VPNルータに対し、tcコマンドにて遅延15ms、帯域は20Mbps程度の
+制限を設定します。
+<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2024/aws_vpn/img25.png">
+    <img src="https://github.com/t-tkm/blog_images/raw/main/2024/aws_vpn/img25.png"
+         alt="img1"/> </a>
+</figure>
+</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-zsh" data-lang="zsh"><span style="color:#75715e"># tcコマンドインストール</span>
+sh-4.2$ sudo yum -y install iproute-tc
+
+<span style="color:#75715e"># NICのTCによる制限状態確認(default)</span>
+sh-4.2$ sudo tc qdisc show dev eth0
+qdisc mq 0: root
+qdisc pfifo_fast 0: parent :2 bands <span style="color:#ae81ff">3</span> priomap <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">2</span> <span style="color:#ae81ff">2</span> <span style="color:#ae81ff">2</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">2</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">1</span>
+qdisc pfifo_fast 0: parent :1 bands <span style="color:#ae81ff">3</span> priomap <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">2</span> <span style="color:#ae81ff">2</span> <span style="color:#ae81ff">2</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">2</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">1</span>
+
+<span style="color:#75715e"># 下記2つのコマンドで、遅延と帯域制限を設定</span>
+<span style="color:#75715e"># 遅延設定(片道7msの遅延挿入)</span>
+sudo tc qdisc add dev eth0 root handle 1:0 netem delay 7ms
+<span style="color:#75715e"># 帯域設定(20Mbps制限)</span>
+sudo tc qdisc add dev eth0 parent 1:1 handle 10:0 tbf rate 20mbit burst 50kb limit 500kb
+</code></pre></div><p>片道7ms(往復14ms)、20Mbpsの制限が設定できました。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-zsh" data-lang="zsh"><span style="color:#75715e"># NICのTCによる制限状態確認</span>
+sh-4.2$ sudo tc qdisc show dev eth0
+qdisc netem 1: root refcnt <span style="color:#ae81ff">3</span> limit <span style="color:#ae81ff">1000</span> delay 7ms
+qdisc tbf 10: parent 1:1 rate 20Mbit burst 50Kb lat 184ms
+</code></pre></div><h1 id="再実験遅延帯域">再実験(遅延/帯域)</h1>
+<p>先の実験同様、送信側へログインし、測定します。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-zsh" data-lang="zsh">sh-4.2$ ping 10.0.0.241
+PING 10.0.0.241 <span style="color:#f92672">(</span>10.0.0.241<span style="color:#f92672">)</span> 56<span style="color:#f92672">(</span>84<span style="color:#f92672">)</span> bytes of data.
+<span style="color:#ae81ff">64</span> bytes from 10.0.0.241: icmp_seq<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> ttl<span style="color:#f92672">=</span><span style="color:#ae81ff">253</span> time<span style="color:#f92672">=</span>16.5 ms
+<span style="color:#ae81ff">64</span> bytes from 10.0.0.241: icmp_seq<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span> ttl<span style="color:#f92672">=</span><span style="color:#ae81ff">253</span> time<span style="color:#f92672">=</span>16.4 ms
+<span style="color:#ae81ff">64</span> bytes from 10.0.0.241: icmp_seq<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span> ttl<span style="color:#f92672">=</span><span style="color:#ae81ff">253</span> time<span style="color:#f92672">=</span>16.4 ms
+<span style="color:#ae81ff">64</span> bytes from 10.0.0.241: icmp_seq<span style="color:#f92672">=</span><span style="color:#ae81ff">4</span> ttl<span style="color:#f92672">=</span><span style="color:#ae81ff">253</span> time<span style="color:#f92672">=</span>16.4 ms
+<span style="color:#ae81ff">64</span> bytes from 10.0.0.241: icmp_seq<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span> ttl<span style="color:#f92672">=</span><span style="color:#ae81ff">253</span> time<span style="color:#f92672">=</span>16.4 ms
+<span style="color:#ae81ff">64</span> bytes from 10.0.0.241: icmp_seq<span style="color:#f92672">=</span><span style="color:#ae81ff">6</span> ttl<span style="color:#f92672">=</span><span style="color:#ae81ff">253</span> time<span style="color:#f92672">=</span>16.4 ms
+<span style="color:#ae81ff">64</span> bytes from 10.0.0.241: icmp_seq<span style="color:#f92672">=</span><span style="color:#ae81ff">7</span> ttl<span style="color:#f92672">=</span><span style="color:#ae81ff">253</span> time<span style="color:#f92672">=</span>16.4 ms
+^C
+--- 10.0.0.241 ping statistics ---
+<span style="color:#ae81ff">7</span> packets transmitted, <span style="color:#ae81ff">7</span> received, 0% packet loss, time 6011ms
+rtt min/avg/max/mdev <span style="color:#f92672">=</span> 16.432/16.478/16.543/0.033 ms
+
+sh-4.2$ iperf3 -c 10.0.0.241
+Connecting to host 10.0.0.241, port <span style="color:#ae81ff">5201</span>
+<span style="color:#f92672">[</span>  4<span style="color:#f92672">]</span> local 10.10.0.178 port <span style="color:#ae81ff">52894</span> connected to 10.0.0.241 port <span style="color:#ae81ff">5201</span>
+<span style="color:#f92672">[</span> ID<span style="color:#f92672">]</span> Interval           Transfer     Bandwidth       Retr  Cwnd
+<span style="color:#f92672">[</span>  4<span style="color:#f92672">]</span>   0.00-1.00   sec  2.83 MBytes  23.7 Mbits/sec    <span style="color:#ae81ff">1</span>    <span style="color:#ae81ff">343</span> KBytes
+<span style="color:#f92672">[</span>  4<span style="color:#f92672">]</span>   1.00-2.00   sec  2.44 MBytes  20.5 Mbits/sec    <span style="color:#ae81ff">0</span>    <span style="color:#ae81ff">459</span> KBytes
+<span style="color:#f92672">[</span>  4<span style="color:#f92672">]</span>   2.00-3.00   sec  2.32 MBytes  19.5 Mbits/sec    <span style="color:#ae81ff">0</span>    <span style="color:#ae81ff">559</span> KBytes
+<span style="color:#f92672">[</span>  4<span style="color:#f92672">]</span>   3.00-4.00   sec  2.08 MBytes  17.4 Mbits/sec   <span style="color:#ae81ff">33</span>    <span style="color:#ae81ff">433</span> KBytes
+<span style="color:#f92672">[</span>  4<span style="color:#f92672">]</span>   4.00-5.00   sec  2.69 MBytes  22.6 Mbits/sec    <span style="color:#ae81ff">0</span>    <span style="color:#ae81ff">491</span> KBytes
+<span style="color:#f92672">[</span>  4<span style="color:#f92672">]</span>   5.00-6.00   sec  2.02 MBytes  16.9 Mbits/sec    <span style="color:#ae81ff">0</span>    <span style="color:#ae81ff">532</span> KBytes
+<span style="color:#f92672">[</span>  4<span style="color:#f92672">]</span>   6.00-7.00   sec  2.02 MBytes  16.9 Mbits/sec    <span style="color:#ae81ff">0</span>    <span style="color:#ae81ff">559</span> KBytes
+<span style="color:#f92672">[</span>  4<span style="color:#f92672">]</span>   7.00-8.00   sec  2.44 MBytes  20.5 Mbits/sec    <span style="color:#ae81ff">4</span>    <span style="color:#ae81ff">401</span> KBytes
+<span style="color:#f92672">[</span>  4<span style="color:#f92672">]</span>   8.00-9.00   sec  2.02 MBytes  16.9 Mbits/sec    <span style="color:#ae81ff">0</span>    <span style="color:#ae81ff">435</span> KBytes
+<span style="color:#f92672">[</span>  4<span style="color:#f92672">]</span>   9.00-10.00  sec  2.02 MBytes  16.9 Mbits/sec    <span style="color:#ae81ff">0</span>    <span style="color:#ae81ff">462</span> KBytes
+- - - - - - - - - - - - - - - - - - - - - - - - -
+<span style="color:#f92672">[</span> ID<span style="color:#f92672">]</span> Interval           Transfer     Bandwidth       Retr
+<span style="color:#f92672">[</span>  4<span style="color:#f92672">]</span>   0.00-10.00  sec  22.9 MBytes  19.2 Mbits/sec   <span style="color:#ae81ff">38</span>             sender
+<span style="color:#f92672">[</span>  4<span style="color:#f92672">]</span>   0.00-10.00  sec  21.8 MBytes  18.3 Mbits/sec                  receiver
+
+iperf Done.
+</code></pre></div><p>性能面でも現実的なシミュレーションができました。</p>
+<p>それでは、次は実際のインターネット回線を介したVPN接続を
 設定したいと思います。</p>
-<p>後編へ→</p>
+<p><a href="https://t-tkm.github.io/blog/posts/2024/03/aws_vpn2/">後編へ→</a></p>
 <h1 id="付録">付録</h1>
 <p>VPN料金は、おおよそ1,200円(8USD)/日程度でした。
 <figure><a href="https://github.com/t-tkm/blog_images/raw/main/2024/aws_vpn/img24.png">
