@@ -1,7 +1,7 @@
 +++ 
 Categories = ["AWS"] 
 Tags = ["AWS", "ECS", "Party Rock", "Dify", "Generative AI"] 
-date = "2024-09-28T00:00:00+09:00" 
+date = "2024-09-29T21:34:00+09:00" 
 title = "異なるLLMによる回答を見比べてみる" 
 archives = ["2024", "2024-09", "2024-09-28"]
 +++
