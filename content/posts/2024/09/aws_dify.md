@@ -72,6 +72,15 @@ ChatGPTは、英語の学習データで訓練されているため、英語で�
 
 {{< figure alt="img1" src="https://github.com/t-tkm/blog_images/raw/main/2024/aws_dify/img1.png" link="https://github.com/t-tkm/blog_images/raw/main/2024/aws_dify/img1.png">}}
 
+### Calude 3 Haikuの回答
+優等生！
+{{< figure alt="img1" src="https://github.com/t-tkm/blog_images/raw/main/2024/aws_dify/img6.png" link="https://github.com/t-tkm/blog_images/raw/main/2024/aws_dify/img6.png">}}
+
+### Titan Text Liteの回答
+おぉ！ある意味、人間らしい？！
+{{< figure alt="img1" src="https://github.com/t-tkm/blog_images/raw/main/2024/aws_dify/img7.png" link="https://github.com/t-tkm/blog_images/raw/main/2024/aws_dify/img7.png">}}
+
+### 全モデル回答サンプル(DL版)
 Word形式でExportする機能があります([PartyRock-dump.docx](https://github.com/t-tkm/blog_images/raw/main/2024/aws_dify/PartyRock-dump.docx))。
 {{< figure alt="img1" width="300" src="https://github.com/t-tkm/blog_images/raw/main/2024/aws_dify/img4.png" link="https://github.com/t-tkm/blog_images/raw/main/2024/aws_dify/img4.png">}}
 
