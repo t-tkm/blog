@@ -94,12 +94,13 @@ Word形式でExportする機能があります([PartyRock-dump.docx](https://git
 ローカル環境では、Docker(+Docker Compose)さえあれば、コマンド一発でサービス起動できます。
 
 詳しくは、[このページ](https://docs.dify.ai/getting-started/install-self-hosted/docker-compose)を
-確認してください。このページで、DifyをDocker Composeでインストールする手順が説明されています。システムのハードウェア要件を
-確認した後、Difyリポジトリをクローンし、環境変数を設定してDockerコンテナを起動する方法が記載
-されています。また、アップグレード手順やウェブインターフェースへのアクセス方法、環境構成の
+確認してください。このページで、DifyをDocker Composeでインストールする手順が説明されています。
+システムのハードウェア要件を確認した後、Difyリポジトリをクローンし、
+環境変数を設定してDockerコンテナを起動する方法が記載されています。
+また、アップグレード手順やウェブインターフェースへのアクセス方法、環境構成の
 カスタマイズについても説明があります。
 
-ifyが無事起動できたら、アプリケーションを構築します。例えば、YouTubeの解説動画
+無事Difyが起動できたら、アプリケーションを構築します。例えば、YouTubeの解説動画
 
 [【Dify劇的スピードアップ】Dify並列処理完全解説](https://youtu.be/4A00eqrTPJ4)
 
@@ -635,7 +636,7 @@ P(A|B) ≈ 0.414
 青タクシーの数が少ないため、目撃者の証言があっても、
 青タクシーである確率は50%を下回っています。*
 
-ログ、トレースも取得でき、とても便利です。
+Difyは、ログ、トレースも取得できて便利です。
 {{< figure alt="img1" src="https://github.com/t-tkm/blog_images/raw/main/2024/aws_dify/img5.png" link="https://github.com/t-tkm/blog_images/raw/main/2024/aws_dify/img5.png">}}
 
 # Dify on AWSについての参考情報
@@ -648,18 +649,17 @@ DifyはSaaSサービスとして提供されていますが([Dify Cloud](https:/
 Dockerで環境をカスタマイズします(環境変数のカスタマイズやアップグレード方法も記載あり)。
 
 しかし、これでは費用もそこそこかかりますし(為替にもよりますが、1,000〜1,500円/日程度と想定)、
-コンテナベースでマイクロサービス化されていることを考えると、マネージドサービス上で稼働させた
-ですよね。
+コンテナベースでマイクロサービス化されていることを考えると、マネージドサービス上で稼働させたく
+なります。
 
 {{< figure alt="img1" src="https://raw.githubusercontent.com/langgenius/dify/refs/heads/main/docker/docker-compose.png" link="https://raw.githubusercontent.com/langgenius/dify/refs/heads/main/docker/docker-compose.png">}}
 
 ※図は、[Dify公式プロジェクト](https://github.com/langgenius/dify.git)の「docker/docker-compose.png」より
 
-この検討は、すでに優秀なエキスパートの方々により進められております。ECSを活用する方式、
-EKSを活用する方式、それぞれ参考にしてください。
+ECSを活用する方式、EKSを活用する方式、それぞれ参考になりそうなプロジェクトがGitHubにありました。
+※感謝です！
 
 ## ECSを活用する方式
-
 ### 参考プロジェクト
  - [[GitHub]Dify on AWS with CDK; aws-samples/dify-self-hosted-on-aws](https://github.com/aws-samples/dify-self-hosted-on-aws)
 
