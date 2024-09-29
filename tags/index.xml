@@ -7,13 +7,49 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>&amp;copy; 2022 Takumi Tomita Powered by Hugo &amp; Pickles.</copyright>
-    <lastBuildDate>Fri, 29 Mar 2024 00:00:00 +0900</lastBuildDate><atom:link href="https://t-tkm.github.io/blog/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 28 Sep 2024 00:00:00 +0900</lastBuildDate><atom:link href="https://t-tkm.github.io/blog/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>AWS</title>
       <link>https://t-tkm.github.io/blog/tags/aws/</link>
-      <pubDate>Fri, 29 Mar 2024 00:00:00 +0900</pubDate>
+      <pubDate>Sat, 28 Sep 2024 00:00:00 +0900</pubDate>
       
       <guid>https://t-tkm.github.io/blog/tags/aws/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Dify</title>
+      <link>https://t-tkm.github.io/blog/tags/dify/</link>
+      <pubDate>Sat, 28 Sep 2024 00:00:00 +0900</pubDate>
+      
+      <guid>https://t-tkm.github.io/blog/tags/dify/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>ECS</title>
+      <link>https://t-tkm.github.io/blog/tags/ecs/</link>
+      <pubDate>Sat, 28 Sep 2024 00:00:00 +0900</pubDate>
+      
+      <guid>https://t-tkm.github.io/blog/tags/ecs/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Generative AI</title>
+      <link>https://t-tkm.github.io/blog/tags/generative-ai/</link>
+      <pubDate>Sat, 28 Sep 2024 00:00:00 +0900</pubDate>
+      
+      <guid>https://t-tkm.github.io/blog/tags/generative-ai/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Party Rock</title>
+      <link>https://t-tkm.github.io/blog/tags/party-rock/</link>
+      <pubDate>Sat, 28 Sep 2024 00:00:00 +0900</pubDate>
+      
+      <guid>https://t-tkm.github.io/blog/tags/party-rock/</guid>
       <description></description>
     </item>
     
@@ -113,15 +149,6 @@
       <pubDate>Sun, 07 May 2023 00:00:00 +0900</pubDate>
       
       <guid>https://t-tkm.github.io/blog/tags/essay/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>ECS</title>
-      <link>https://t-tkm.github.io/blog/tags/ecs/</link>
-      <pubDate>Thu, 05 Jan 2023 00:00:00 +0900</pubDate>
-      
-      <guid>https://t-tkm.github.io/blog/tags/ecs/</guid>
       <description></description>
     </item>
     
