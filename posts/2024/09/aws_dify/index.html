@@ -157,11 +157,12 @@
 <h2 id="dify設定ローカル環境">Dify設定(ローカル環境)</h2>
 <p>ローカル環境では、Docker(+Docker Compose)さえあれば、コマンド一発でサービス起動できます。</p>
 <p>詳しくは、<a href="https://docs.dify.ai/getting-started/install-self-hosted/docker-compose">このページ</a>を
-確認してください。このページで、DifyをDocker Composeでインストールする手順が説明されています。システムのハードウェア要件を
-確認した後、Difyリポジトリをクローンし、環境変数を設定してDockerコンテナを起動する方法が記載
-されています。また、アップグレード手順やウェブインターフェースへのアクセス方法、環境構成の
+確認してください。このページで、DifyをDocker Composeでインストールする手順が説明されています。
+システムのハードウェア要件を確認した後、Difyリポジトリをクローンし、
+環境変数を設定してDockerコンテナを起動する方法が記載されています。
+また、アップグレード手順やウェブインターフェースへのアクセス方法、環境構成の
 カスタマイズについても説明があります。</p>
-<p>ifyが無事起動できたら、アプリケーションを構築します。例えば、YouTubeの解説動画</p>
+<p>無事Difyが起動できたら、アプリケーションを構築します。例えば、YouTubeの解説動画</p>
 <p><a href="https://youtu.be/4A00eqrTPJ4">【Dify劇的スピードアップ】Dify並列処理完全解説</a></p>
 <p>を参考に、アプリ(ワークフロー)を作成してみます。
 <figure><a href="https://github.com/t-tkm/blog_images/raw/main/2024/aws_dify/img3.png">
@@ -685,7 +686,7 @@ P(A|B) ≈ 0.414
 と新しい証拠（目撃証言）を組み合わせて、より正確な事後確率を計算しています。
 青タクシーの数が少ないため、目撃者の証言があっても、
 青タクシーである確率は50%を下回っています。</em></p>
-<p>ログ、トレースも取得でき、とても便利です。
+<p>Difyは、ログ、トレースも取得できて便利です。
 <figure><a href="https://github.com/t-tkm/blog_images/raw/main/2024/aws_dify/img5.png">
     <img src="https://github.com/t-tkm/blog_images/raw/main/2024/aws_dify/img5.png"
          alt="img1"/> </a>
@@ -699,16 +700,16 @@ Dify PremiumをEC2インスタンスへデプロイする方法の記載があ�
 です。Amazon Machine Image(AMI)を使い、EC2インスタンスのパブリックIPでセットアップを行い、
 Dockerで環境をカスタマイズします(環境変数のカスタマイズやアップグレード方法も記載あり)。</p>
 <p>しかし、これでは費用もそこそこかかりますし(為替にもよりますが、1,000〜1,500円/日程度と想定)、
-コンテナベースでマイクロサービス化されていることを考えると、マネージドサービス上で稼働させた
-ですよね。</p>
+コンテナベースでマイクロサービス化されていることを考えると、マネージドサービス上で稼働させたく
+なります。</p>
 <figure><a href="https://raw.githubusercontent.com/langgenius/dify/refs/heads/main/docker/docker-compose.png">
     <img src="https://raw.githubusercontent.com/langgenius/dify/refs/heads/main/docker/docker-compose.png"
          alt="img1"/> </a>
 </figure>
 
 <p>※図は、<a href="https://github.com/langgenius/dify.git">Dify公式プロジェクト</a>の「docker/docker-compose.png」より</p>
-<p>この検討は、すでに優秀なエキスパートの方々により進められております。ECSを活用する方式、
-EKSを活用する方式、それぞれ参考にしてください。</p>
+<p>ECSを活用する方式、EKSを活用する方式、それぞれ参考になりそうなプロジェクトがGitHubにありました。
+※感謝です！</p>
 <h2 id="ecsを活用する方式">ECSを活用する方式</h2>
 <h3 id="参考プロジェクト">参考プロジェクト</h3>
 <ul>
