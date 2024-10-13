@@ -673,47 +673,216 @@ Dockerで環境をカスタマイズします(環境変数のカスタマイズ�
 ECSを活用する方式、EKSを活用する方式、それぞれ参考になりそうなプロジェクトがGitHubにありました。
 ※感謝です！
 
-## ECSを活用する方式
-### 参考プロジェクト
- - [[GitHub]Dify on AWS with CDK; aws-samples/dify-self-hosted-on-aws](https://github.com/aws-samples/dify-self-hosted-on-aws)
+## AWSへのデプロイ
+コンテナを活用するAWSへのデプロイ方法について、2つのプロジェクトを紹介します。今後はこれらのプロジェクトを参考に自前Dify
+を運用していきたいと思います。
 
-### プロジェクト概要
-
-主な特徴：
-- VPC: 新規作成または既存のVPCを使用
-- ECS Cluster: コンテナ実行環境
-- データベース: PostgreSQL
-- キャッシュ: Redis
-- ストレージ: S3バケット
-- ロードバランサー: ALB（Application Load Balancer）
-- サービス:
-   - APIサービス
-   - Webサービス
-   - Workerサービス
-- オプションでカスタムドメイン設定
-
-主な設定オプション:
-- 許可するCIDR範囲
-- VPCの設定（新規作成or既存使用、NAT Gateway/Instanceの選択）
-- カスタムドメイン
-- Redisのマルチ AZ 設定
-- Difyイメージのタグ指定
-- サンドボックス環境の設定
-
-## EKSを活用する方式
-### 参考プロジェクト
-- [[GitHub]Dify Enterprise on AWS; langgenius/aws-cdk-for-dify](https://github.com/langgenius/aws-cdk-for-dify.git)
-
-### プロジェクト概要
-- EKSクラスターとその関連リソースを構築
-- その他、VPC、EC2、IAM、S3などを使用
-- データベース(PostgreSQL)、Redis、S3、OpenSearch(Option)などのリソースプロバイダー
-- EKSクラスターに対し、VPC CNI、CoreDNS、KubeProxy、AWS Load Balancer Controller、
-    EBS CSI Driverなどのアドオンが追加
--  IAMロールとポリシーが設定され、必要な権限を付与
+1. [[GitHub]Dify on AWS with CDK](https://github.com/aws-samples/dify-self-hosted-on-aws) (ECSを活用)
+2. [[GitHub]Dify Enterprise on AWS](https://github.com/langgenius/aws-cdk-for-dify.git) (EKSを活用)
 
 # まとめ
 本記事では、AWS Party RockとDifyというノーコードAIアプリ開発プラットフォームを紹介し、
 複数のLLMモデルを比較検証しました。その結果、GPT-4o、Claude 3.5 Sonnet、Gemini 1.5 Flashの
 3モデルは、同一の問題に対して正確な回答を導出しました。
 今後、生成AI技術はさらに進化し、ビジネスにおける応用が期待されます。
+
+# 付録
+筆者の場合、週末など限定された時間帯で遊ぶケースが多く、節約のためにweekdayはリソース費用を安く抑えたい
+状況です。そこでケチケチ作戦として、
+[[GitHub]Dify on AWS with CDK](https://github.com/aws-samples/dify-self-hosted-on-aws)
+を少しカスタマイズし、cdkコマンドでnat gatewayとECSタスクを停止できるようにしました。
+
+[[GitHub]Dify on AWS with CDK(Frugal)](https://github.com/t-tkm/dify-on-aws.git)
+
+```
+# 起動
+NAT_GATEWAY_COUNT=1 DESIRED_TASK_COUNT=1 cdk deploy
+
+# 一時停止(ECSタスクを停止、NAT Gatewayを削除)
+NAT_GATEWAY_COUNT=0 DESIRED_TASK_COUNT=0 cdk deploy
+```
+
+cdk destroyして作り直しという手もありますが、その場合はDifyアプリの設定内容なども再設定が必要で、
+すこし手間が必要です。この方法(コンテナを停止)であれば、Difyアプリの設定も継続して利用でき快適です。
+
+{{< figure alt="img1" src="https://github.com/t-tkm/blog_images/raw/main/2024/aws_dify/img8.png" link="https://github.com/t-tkm/blog_images/raw/main/2024/aws_dify/img8.png">}}
+
+EC2の$0.06は、恐らくNAT Gatewayの設置料金ですね↓
+- NAT Gatewayの料金
+  {{< figure alt="img1" src="https://github.com/t-tkm/blog_images/raw/main/2024/aws_dify/img10.png" link="https://aws.amazon.com/jp/vpc/pricing/">}}
+
+オリジナル版からカスタマイズしたのは以下になります。
+```diff
+diff --git a/bin/cdk.ts b/bin/cdk.ts
+index cc66104..ed419b9 100644
+--- a/bin/cdk.ts
++++ b/bin/cdk.ts
+@@ -6,7 +6,7 @@ import { DifyOnAwsStack } from '../lib/dify-on-aws-stack';
+ const app = new cdk.App();
+ new DifyOnAwsStack(app, 'DifyOnAwsStack', {
+   env: {
+-    region: 'us-west-2',
++    region: 'ap-northeast-1',
+     // You need to explicitly set AWS account ID when you look up an existing VPC.
+     // account: '123456789012'
+   },
+diff --git a/lib/constructs/dify-services/api.ts b/lib/constructs/dify-services/api.ts
+index 76820c5..8fed477 100644
+--- a/lib/constructs/dify-services/api.ts
++++ b/lib/constructs/dify-services/api.ts
+@@ -21,6 +21,7 @@ export interface ApiServiceProps {
+   imageTag: string;
+   sandboxImageTag: string;
+   allowAnySyscalls: boolean;
++  desiredTaskCount?: number;
+
+省略
+```
+<details>
+<summary>全て表示</summary>
+
+```diff
+diff --git a/bin/cdk.ts b/bin/cdk.ts
+index cc66104..ed419b9 100644
+--- a/bin/cdk.ts
++++ b/bin/cdk.ts
+@@ -6,7 +6,7 @@ import { DifyOnAwsStack } from '../lib/dify-on-aws-stack';
+ const app = new cdk.App();
+ new DifyOnAwsStack(app, 'DifyOnAwsStack', {
+   env: {
+-    region: 'us-west-2',
++    region: 'ap-northeast-1',
+     // You need to explicitly set AWS account ID when you look up an existing VPC.
+     // account: '123456789012'
+   },
+diff --git a/lib/constructs/dify-services/api.ts b/lib/constructs/dify-services/api.ts
+index 76820c5..8fed477 100644
+--- a/lib/constructs/dify-services/api.ts
++++ b/lib/constructs/dify-services/api.ts
+@@ -21,6 +21,7 @@ export interface ApiServiceProps {
+   imageTag: string;
+   sandboxImageTag: string;
+   allowAnySyscalls: boolean;
++  desiredTaskCount?: number;
+ 
+   /**
+    * If true, enable debug outputs
+@@ -187,6 +188,7 @@ export class ApiService extends Construct {
+     const service = new ecs.FargateService(this, 'FargateService', {
+       cluster,
+       taskDefinition,
++      desiredCount: props.desiredTaskCount ?? 1,
+       capacityProviderStrategies: [
+         {
+           capacityProvider: 'FARGATE',
+diff --git a/lib/constructs/dify-services/web.ts b/lib/constructs/dify-services/web.ts
+index aa0c119..306783d 100644
+--- a/lib/constructs/dify-services/web.ts
++++ b/lib/constructs/dify-services/web.ts
+@@ -9,6 +9,7 @@ export interface WebServiceProps {
+   alb: Alb;
+ 
+   imageTag: string;
++  desiredTaskCount?: number;
+ 
+   /**
+    * If true, enable debug outputs
+@@ -67,6 +68,7 @@ export class WebService extends Construct {
+     const service = new ecs.FargateService(this, 'FargateService', {
+       cluster,
+       taskDefinition,
++      desiredCount: props.desiredTaskCount ?? 1,
+       capacityProviderStrategies: [
+         {
+           capacityProvider: 'FARGATE',
+diff --git a/lib/constructs/dify-services/worker.ts b/lib/constructs/dify-services/worker.ts
+index 72c8826..0bd78a6 100644
+--- a/lib/constructs/dify-services/worker.ts
++++ b/lib/constructs/dify-services/worker.ts
+@@ -16,6 +16,7 @@ export interface WorkerServiceProps {
+   encryptionSecret: ISecret;
+ 
+   imageTag: string;
++  desiredTaskCount?: number;
+ 
+   /**
+    * If true, enable debug outputs
+@@ -93,6 +94,7 @@ export class WorkerService extends Construct {
+     const service = new ecs.FargateService(this, 'FargateService', {
+       cluster,
+       taskDefinition,
++      desiredCount: props.desiredTaskCount ?? 1,
+       capacityProviderStrategies: [
+         {
+           capacityProvider: 'FARGATE',
+diff --git a/lib/dify-on-aws-stack.ts b/lib/dify-on-aws-stack.ts
+index 3eb476f..c3cd064 100644
+--- a/lib/dify-on-aws-stack.ts
++++ b/lib/dify-on-aws-stack.ts
+@@ -88,6 +88,18 @@ interface DifyOnAwsStackProps extends cdk.StackProps {
+    * @default false
+    */
+   allowAnySyscalls?: boolean;
++
++  /**
++   * NAT Gatewayの数
++   * @default 1
++   */
++  natGatewayCount?: number;
++
++  /**
++   * タスクのDesiredCount
++   * @default 1
++   */
++  desiredTaskCount?: number;
+ }
+ 
+ export class DifyOnAwsStack extends cdk.Stack {
+@@ -98,6 +110,8 @@ export class DifyOnAwsStack extends cdk.Stack {
+       difyImageTag: imageTag = 'latest',
+       difySandboxImageTag: sandboxImageTag = 'latest',
+       allowAnySyscalls = false,
++      natGatewayCount = process.env.NAT_GATEWAY_COUNT ? Number(process.env.NAT_GATEWAY_COUNT) : 1,
++      desiredTaskCount = process.env.DESIRED_TASK_COUNT ? Number(process.env.DESIRED_TASK_COUNT) : 1,
+     } = props;
+ 
+     let vpc: IVpc;
+@@ -105,12 +119,12 @@ export class DifyOnAwsStack extends cdk.Stack {
+       vpc = Vpc.fromLookup(this, 'Vpc', { vpcId: props.vpcId });
+     } else {
+       vpc = new Vpc(this, 'Vpc', {
++        natGateways: natGatewayCount,
+         ...(props.cheapVpc
+           ? {
+               natGatewayProvider: NatProvider.instanceV2({
+                 instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.NANO),
+               }),
+-              natGateways: 1,
+             }
+           : {}),
+         maxAzs: 2,
+@@ -170,12 +184,14 @@ export class DifyOnAwsStack extends cdk.Stack {
+       imageTag,
+       sandboxImageTag,
+       allowAnySyscalls,
++      desiredTaskCount,
+     });
+ 
+     new WebService(this, 'WebService', {
+       cluster,
+       alb,
+       imageTag,
++      desiredTaskCount,
+     });
+ 
+     new WorkerService(this, 'WorkerService', {
+@@ -185,6 +201,7 @@ export class DifyOnAwsStack extends cdk.Stack {
+       storageBucket,
+       encryptionSecret: api.encryptionSecret,
+       imageTag,
++      desiredTaskCount,
+     });
+ 
+     new cdk.CfnOutput(this, 'DifyUrl', {
+```
+</details>
