@@ -480,6 +480,11 @@ workflow:
 </details>
 
 ## 実験の様子
+今回は外部LLMとして、OpenAI、Anthoropic、Google Cloudのサービスを利用しました。各サービスの手順に従い、
+外部LLMを使うためのAPIキーを設定すます。
+{{< figure alt="img1" src="https://github.com/t-tkm/blog_images/raw/main/2024/aws_dify/img9.png" link="https://github.com/t-tkm/blog_images/raw/main/2024/aws_dify/img9.png">}}
+
+デモは以下の通りです。
 {{< figure alt="img1" src="https://github.com/t-tkm/blog_images/raw/main/2024/aws_dify/img2.gif" link="https://github.com/t-tkm/blog_images/raw/main/2024/aws_dify/img2.gif">}}
 
 ## 生成AIによる回答
