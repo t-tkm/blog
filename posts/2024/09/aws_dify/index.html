@@ -542,11 +542,19 @@ Dify環境でインポートしてご利用ください。</p>
     <span style="color:#f92672">zoom</span>: <span style="color:#ae81ff">0.7383379612578201</span>
 </code></pre></div></details>
 <h2 id="実験の様子">実験の様子</h2>
+<p>今回は外部LLMとして、OpenAI、Anthoropic、Google Cloudのサービスを利用しました。各サービスの手順に従い、
+外部LLMを使うためのAPIキーを設定すます。
+<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2024/aws_dify/img9.png">
+    <img src="https://github.com/t-tkm/blog_images/raw/main/2024/aws_dify/img9.png"
+         alt="img1"/> </a>
+</figure>
+</p>
+<p>デモは以下の通りです。
 <figure><a href="https://github.com/t-tkm/blog_images/raw/main/2024/aws_dify/img2.gif">
     <img src="https://github.com/t-tkm/blog_images/raw/main/2024/aws_dify/img2.gif"
          alt="img1"/> </a>
 </figure>
-
+</p>
 <h2 id="生成aiによる回答">生成AIによる回答</h2>
 <pre><code># GPT-4o
 この問題はベイズ定理を使って解くことができます。ベイズ定理を使うことで、
@@ -725,58 +733,215 @@ Dockerで環境をカスタマイズします(環境変数のカスタマイズ�
 <p>※図は、<a href="https://github.com/langgenius/dify.git">Dify公式プロジェクト</a>の「docker/docker-compose.png」より</p>
 <p>ECSを活用する方式、EKSを活用する方式、それぞれ参考になりそうなプロジェクトがGitHubにありました。
 ※感謝です！</p>
-<h2 id="ecsを活用する方式">ECSを活用する方式</h2>
-<h3 id="参考プロジェクト">参考プロジェクト</h3>
-<ul>
-<li><a href="https://github.com/aws-samples/dify-self-hosted-on-aws">[GitHub]Dify on AWS with CDK; aws-samples/dify-self-hosted-on-aws</a></li>
-</ul>
-<h3 id="プロジェクト概要">プロジェクト概要</h3>
-<p>主な特徴：</p>
-<ul>
-<li>VPC: 新規作成または既存のVPCを使用</li>
-<li>ECS Cluster: コンテナ実行環境</li>
-<li>データベース: PostgreSQL</li>
-<li>キャッシュ: Redis</li>
-<li>ストレージ: S3バケット</li>
-<li>ロードバランサー: ALB（Application Load Balancer）</li>
-<li>サービス:
-<ul>
-<li>APIサービス</li>
-<li>Webサービス</li>
-<li>Workerサービス</li>
-</ul>
-</li>
-<li>オプションでカスタムドメイン設定</li>
-</ul>
-<p>主な設定オプション:</p>
-<ul>
-<li>許可するCIDR範囲</li>
-<li>VPCの設定（新規作成or既存使用、NAT Gateway/Instanceの選択）</li>
-<li>カスタムドメイン</li>
-<li>Redisのマルチ AZ 設定</li>
-<li>Difyイメージのタグ指定</li>
-<li>サンドボックス環境の設定</li>
-</ul>
-<h2 id="eksを活用する方式">EKSを活用する方式</h2>
-<h3 id="参考プロジェクト-1">参考プロジェクト</h3>
-<ul>
-<li><a href="https://github.com/langgenius/aws-cdk-for-dify.git">[GitHub]Dify Enterprise on AWS; langgenius/aws-cdk-for-dify</a></li>
-</ul>
-<h3 id="プロジェクト概要-1">プロジェクト概要</h3>
-<ul>
-<li>EKSクラスターとその関連リソースを構築</li>
-<li>その他、VPC、EC2、IAM、S3などを使用</li>
-<li>データベース(PostgreSQL)、Redis、S3、OpenSearch(Option)などのリソースプロバイダー</li>
-<li>EKSクラスターに対し、VPC CNI、CoreDNS、KubeProxy、AWS Load Balancer Controller、
-EBS CSI Driverなどのアドオンが追加</li>
-<li>IAMロールとポリシーが設定され、必要な権限を付与</li>
-</ul>
+<h2 id="awsへのデプロイ">AWSへのデプロイ</h2>
+<p>コンテナを活用するAWSへのデプロイ方法について、2つのプロジェクトを紹介します。今後はこれらのプロジェクトを参考に自前Dify
+を運用していきたいと思います。</p>
+<ol>
+<li><a href="https://github.com/aws-samples/dify-self-hosted-on-aws">[GitHub]Dify on AWS with CDK</a> (ECSを活用)</li>
+<li><a href="https://github.com/langgenius/aws-cdk-for-dify.git">[GitHub]Dify Enterprise on AWS</a> (EKSを活用)</li>
+</ol>
 <h1 id="まとめ">まとめ</h1>
 <p>本記事では、AWS Party RockとDifyというノーコードAIアプリ開発プラットフォームを紹介し、
 複数のLLMモデルを比較検証しました。その結果、GPT-4o、Claude 3.5 Sonnet、Gemini 1.5 Flashの
 3モデルは、同一の問題に対して正確な回答を導出しました。
 今後、生成AI技術はさらに進化し、ビジネスにおける応用が期待されます。</p>
+<h1 id="付録">付録</h1>
+<p>筆者の場合、週末など限定された時間帯で遊ぶケースが多く、節約のためにweekdayはリソース費用を安く抑えたい
+状況です。そこでケチケチ作戦として、
+<a href="https://github.com/aws-samples/dify-self-hosted-on-aws">[GitHub]Dify on AWS with CDK</a>
+を少しカスタマイズし、cdkコマンドでnat gatewayとECSタスクを停止できるようにしました。</p>
+<p><a href="https://github.com/t-tkm/dify-on-aws.git">[GitHub]Dify on AWS with CDK(Frugal)</a></p>
+<pre><code># 起動
+NAT_GATEWAY_COUNT=1 DESIRED_TASK_COUNT=1 cdk deploy
 
+# 一時停止(ECSタスクを停止、NAT Gatewayを削除)
+NAT_GATEWAY_COUNT=0 DESIRED_TASK_COUNT=0 cdk deploy
+</code></pre><p>cdk destroyして作り直しという手もありますが、その場合はDifyアプリの設定内容なども再設定が必要で、
+すこし手間が必要です。この方法(コンテナを停止)であれば、Difyアプリの設定も継続して利用でき快適です。</p>
+<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2024/aws_dify/img8.png">
+    <img src="https://github.com/t-tkm/blog_images/raw/main/2024/aws_dify/img8.png"
+         alt="img1"/> </a>
+</figure>
+
+<p>EC2の$0.06は、恐らくNAT Gatewayの設置料金ですね↓</p>
+<ul>
+<li>NAT Gatewayの料金
+<figure><a href="https://aws.amazon.com/jp/vpc/pricing/">
+    <img src="https://github.com/t-tkm/blog_images/raw/main/2024/aws_dify/img10.png"
+         alt="img1"/> </a>
+</figure>
+</li>
+</ul>
+<p>オリジナル版からカスタマイズしたのは以下になります。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-diff" data-lang="diff">diff --git a/bin/cdk.ts b/bin/cdk.ts
+index cc66104..ed419b9 100644
+<span style="color:#f92672">--- a/bin/cdk.ts
+</span><span style="color:#f92672"></span><span style="color:#a6e22e">+++ b/bin/cdk.ts
+</span><span style="color:#a6e22e"></span><span style="color:#75715e">@@ -6,7 +6,7 @@ import { DifyOnAwsStack } from &#39;../lib/dify-on-aws-stack&#39;;
+</span><span style="color:#75715e"></span> const app = new cdk.App();
+ new DifyOnAwsStack(app, &#39;DifyOnAwsStack&#39;, {
+   env: {
+<span style="color:#f92672">-    region: &#39;us-west-2&#39;,
+</span><span style="color:#f92672"></span><span style="color:#a6e22e">+    region: &#39;ap-northeast-1&#39;,
+</span><span style="color:#a6e22e"></span>     // You need to explicitly set AWS account ID when you look up an existing VPC.
+     // account: &#39;123456789012&#39;
+   },
+diff --git a/lib/constructs/dify-services/api.ts b/lib/constructs/dify-services/api.ts
+index 76820c5..8fed477 100644
+<span style="color:#f92672">--- a/lib/constructs/dify-services/api.ts
+</span><span style="color:#f92672"></span><span style="color:#a6e22e">+++ b/lib/constructs/dify-services/api.ts
+</span><span style="color:#a6e22e"></span><span style="color:#75715e">@@ -21,6 +21,7 @@ export interface ApiServiceProps {
+</span><span style="color:#75715e"></span>   imageTag: string;
+   sandboxImageTag: string;
+   allowAnySyscalls: boolean;
+<span style="color:#a6e22e">+  desiredTaskCount?: number;
+</span><span style="color:#a6e22e"></span>
+省略
+</code></pre></div><details>
+<summary>全て表示</summary>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-diff" data-lang="diff">diff --git a/bin/cdk.ts b/bin/cdk.ts
+index cc66104..ed419b9 100644
+<span style="color:#f92672">--- a/bin/cdk.ts
+</span><span style="color:#f92672"></span><span style="color:#a6e22e">+++ b/bin/cdk.ts
+</span><span style="color:#a6e22e"></span><span style="color:#75715e">@@ -6,7 +6,7 @@ import { DifyOnAwsStack } from &#39;../lib/dify-on-aws-stack&#39;;
+</span><span style="color:#75715e"></span> const app = new cdk.App();
+ new DifyOnAwsStack(app, &#39;DifyOnAwsStack&#39;, {
+   env: {
+<span style="color:#f92672">-    region: &#39;us-west-2&#39;,
+</span><span style="color:#f92672"></span><span style="color:#a6e22e">+    region: &#39;ap-northeast-1&#39;,
+</span><span style="color:#a6e22e"></span>     // You need to explicitly set AWS account ID when you look up an existing VPC.
+     // account: &#39;123456789012&#39;
+   },
+diff --git a/lib/constructs/dify-services/api.ts b/lib/constructs/dify-services/api.ts
+index 76820c5..8fed477 100644
+<span style="color:#f92672">--- a/lib/constructs/dify-services/api.ts
+</span><span style="color:#f92672"></span><span style="color:#a6e22e">+++ b/lib/constructs/dify-services/api.ts
+</span><span style="color:#a6e22e"></span><span style="color:#75715e">@@ -21,6 +21,7 @@ export interface ApiServiceProps {
+</span><span style="color:#75715e"></span>   imageTag: string;
+   sandboxImageTag: string;
+   allowAnySyscalls: boolean;
+<span style="color:#a6e22e">+  desiredTaskCount?: number;
+</span><span style="color:#a6e22e"></span> 
+   /**
+    * If true, enable debug outputs
+<span style="color:#75715e">@@ -187,6 +188,7 @@ export class ApiService extends Construct {
+</span><span style="color:#75715e"></span>     const service = new ecs.FargateService(this, &#39;FargateService&#39;, {
+       cluster,
+       taskDefinition,
+<span style="color:#a6e22e">+      desiredCount: props.desiredTaskCount ?? 1,
+</span><span style="color:#a6e22e"></span>       capacityProviderStrategies: [
+         {
+           capacityProvider: &#39;FARGATE&#39;,
+diff --git a/lib/constructs/dify-services/web.ts b/lib/constructs/dify-services/web.ts
+index aa0c119..306783d 100644
+<span style="color:#f92672">--- a/lib/constructs/dify-services/web.ts
+</span><span style="color:#f92672"></span><span style="color:#a6e22e">+++ b/lib/constructs/dify-services/web.ts
+</span><span style="color:#a6e22e"></span><span style="color:#75715e">@@ -9,6 +9,7 @@ export interface WebServiceProps {
+</span><span style="color:#75715e"></span>   alb: Alb;
+ 
+   imageTag: string;
+<span style="color:#a6e22e">+  desiredTaskCount?: number;
+</span><span style="color:#a6e22e"></span> 
+   /**
+    * If true, enable debug outputs
+<span style="color:#75715e">@@ -67,6 +68,7 @@ export class WebService extends Construct {
+</span><span style="color:#75715e"></span>     const service = new ecs.FargateService(this, &#39;FargateService&#39;, {
+       cluster,
+       taskDefinition,
+<span style="color:#a6e22e">+      desiredCount: props.desiredTaskCount ?? 1,
+</span><span style="color:#a6e22e"></span>       capacityProviderStrategies: [
+         {
+           capacityProvider: &#39;FARGATE&#39;,
+diff --git a/lib/constructs/dify-services/worker.ts b/lib/constructs/dify-services/worker.ts
+index 72c8826..0bd78a6 100644
+<span style="color:#f92672">--- a/lib/constructs/dify-services/worker.ts
+</span><span style="color:#f92672"></span><span style="color:#a6e22e">+++ b/lib/constructs/dify-services/worker.ts
+</span><span style="color:#a6e22e"></span><span style="color:#75715e">@@ -16,6 +16,7 @@ export interface WorkerServiceProps {
+</span><span style="color:#75715e"></span>   encryptionSecret: ISecret;
+ 
+   imageTag: string;
+<span style="color:#a6e22e">+  desiredTaskCount?: number;
+</span><span style="color:#a6e22e"></span> 
+   /**
+    * If true, enable debug outputs
+<span style="color:#75715e">@@ -93,6 +94,7 @@ export class WorkerService extends Construct {
+</span><span style="color:#75715e"></span>     const service = new ecs.FargateService(this, &#39;FargateService&#39;, {
+       cluster,
+       taskDefinition,
+<span style="color:#a6e22e">+      desiredCount: props.desiredTaskCount ?? 1,
+</span><span style="color:#a6e22e"></span>       capacityProviderStrategies: [
+         {
+           capacityProvider: &#39;FARGATE&#39;,
+diff --git a/lib/dify-on-aws-stack.ts b/lib/dify-on-aws-stack.ts
+index 3eb476f..c3cd064 100644
+<span style="color:#f92672">--- a/lib/dify-on-aws-stack.ts
+</span><span style="color:#f92672"></span><span style="color:#a6e22e">+++ b/lib/dify-on-aws-stack.ts
+</span><span style="color:#a6e22e"></span><span style="color:#75715e">@@ -88,6 +88,18 @@ interface DifyOnAwsStackProps extends cdk.StackProps {
+</span><span style="color:#75715e"></span>    * @default false
+    */
+   allowAnySyscalls?: boolean;
+<span style="color:#a6e22e">+
+</span><span style="color:#a6e22e">+  /**
+</span><span style="color:#a6e22e">+   * NAT Gatewayの数
+</span><span style="color:#a6e22e">+   * @default 1
+</span><span style="color:#a6e22e">+   */
+</span><span style="color:#a6e22e">+  natGatewayCount?: number;
+</span><span style="color:#a6e22e">+
+</span><span style="color:#a6e22e">+  /**
+</span><span style="color:#a6e22e">+   * タスクのDesiredCount
+</span><span style="color:#a6e22e">+   * @default 1
+</span><span style="color:#a6e22e">+   */
+</span><span style="color:#a6e22e">+  desiredTaskCount?: number;
+</span><span style="color:#a6e22e"></span> }
+ 
+ export class DifyOnAwsStack extends cdk.Stack {
+<span style="color:#75715e">@@ -98,6 +110,8 @@ export class DifyOnAwsStack extends cdk.Stack {
+</span><span style="color:#75715e"></span>       difyImageTag: imageTag = &#39;latest&#39;,
+       difySandboxImageTag: sandboxImageTag = &#39;latest&#39;,
+       allowAnySyscalls = false,
+<span style="color:#a6e22e">+      natGatewayCount = process.env.NAT_GATEWAY_COUNT ? Number(process.env.NAT_GATEWAY_COUNT) : 1,
+</span><span style="color:#a6e22e">+      desiredTaskCount = process.env.DESIRED_TASK_COUNT ? Number(process.env.DESIRED_TASK_COUNT) : 1,
+</span><span style="color:#a6e22e"></span>     } = props;
+ 
+     let vpc: IVpc;
+<span style="color:#75715e">@@ -105,12 +119,12 @@ export class DifyOnAwsStack extends cdk.Stack {
+</span><span style="color:#75715e"></span>       vpc = Vpc.fromLookup(this, &#39;Vpc&#39;, { vpcId: props.vpcId });
+     } else {
+       vpc = new Vpc(this, &#39;Vpc&#39;, {
+<span style="color:#a6e22e">+        natGateways: natGatewayCount,
+</span><span style="color:#a6e22e"></span>         ...(props.cheapVpc
+           ? {
+               natGatewayProvider: NatProvider.instanceV2({
+                 instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.NANO),
+               }),
+<span style="color:#f92672">-              natGateways: 1,
+</span><span style="color:#f92672"></span>             }
+           : {}),
+         maxAzs: 2,
+<span style="color:#75715e">@@ -170,12 +184,14 @@ export class DifyOnAwsStack extends cdk.Stack {
+</span><span style="color:#75715e"></span>       imageTag,
+       sandboxImageTag,
+       allowAnySyscalls,
+<span style="color:#a6e22e">+      desiredTaskCount,
+</span><span style="color:#a6e22e"></span>     });
+ 
+     new WebService(this, &#39;WebService&#39;, {
+       cluster,
+       alb,
+       imageTag,
+<span style="color:#a6e22e">+      desiredTaskCount,
+</span><span style="color:#a6e22e"></span>     });
+ 
+     new WorkerService(this, &#39;WorkerService&#39;, {
+<span style="color:#75715e">@@ -185,6 +201,7 @@ export class DifyOnAwsStack extends cdk.Stack {
+</span><span style="color:#75715e"></span>       storageBucket,
+       encryptionSecret: api.encryptionSecret,
+       imageTag,
+<span style="color:#a6e22e">+      desiredTaskCount,
+</span><span style="color:#a6e22e"></span>     });
+ 
+     new cdk.CfnOutput(this, &#39;DifyUrl&#39;, {
+</code></pre></div></details>
   </section>
   <footer>
     
@@ -837,9 +1002,9 @@ EBS CSI Driverなどのアドオンが追加</li>
     </li>
     
     <li class="p-related__item js-related__item">
-      <a href="/blog/posts/2024/03/aws_vpn/"
+      <a href="/blog/posts/2024/03/aws_vpn2/"
         >
-        <span>お手軽にAWS Site-to-Site VPNを試してみよう(AWSシミュレーション環境)</span>
+        <span>お手軽にAWS Site-to-Site VPNを試してみよう(自宅VPN環境)</span>
       </a>
     </li>
     
