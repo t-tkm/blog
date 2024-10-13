@@ -711,7 +711,11 @@ EC2の$0.06は、恐らくNAT Gatewayの設置料金ですね↓
 - NAT Gatewayの料金
   {{< figure alt="img1" src="https://github.com/t-tkm/blog_images/raw/main/2024/aws_dify/img10.png" link="https://aws.amazon.com/jp/vpc/pricing/">}}
 
-オリジナル版からカスタマイズしたのは以下になります。
+セキュリティについては、Difyアプリで認証を行うようにしていますが、必要に応じ、アクセス元IPアドレスを制限することで
+セキュリティを高めておきます。
+{{< figure alt="img1" src="https://github.com/t-tkm/blog_images/raw/main/2024/aws_dify/img11.png" link="https://github.com/t-tkm/blog_images/raw/main/2024/aws_dify/img11.png">}}
+
+最後に、オリジナル版からカスタマイズしたのは以下になります。
 ```diff
 diff --git a/bin/cdk.ts b/bin/cdk.ts
 index cc66104..ed419b9 100644
