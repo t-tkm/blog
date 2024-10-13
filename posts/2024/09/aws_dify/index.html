@@ -772,7 +772,14 @@ NAT_GATEWAY_COUNT=0 DESIRED_TASK_COUNT=0 cdk deploy
 </figure>
 </li>
 </ul>
-<p>オリジナル版からカスタマイズしたのは以下になります。</p>
+<p>セキュリティについては、Difyアプリで認証を行うようにしていますが、必要に応じ、アクセス元IPアドレスを制限することで
+セキュリティを高めておきます。
+<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2024/aws_dify/img11.png">
+    <img src="https://github.com/t-tkm/blog_images/raw/main/2024/aws_dify/img11.png"
+         alt="img1"/> </a>
+</figure>
+</p>
+<p>最後に、オリジナル版からカスタマイズしたのは以下になります。</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-diff" data-lang="diff">diff --git a/bin/cdk.ts b/bin/cdk.ts
 index cc66104..ed419b9 100644
 <span style="color:#f92672">--- a/bin/cdk.ts
@@ -981,16 +988,16 @@ index 3eb476f..c3cd064 100644
     </li>
     
     <li class="p-related__item js-related__item">
-      <a href="/blog/posts/2022/03/aws_app2container/"
+      <a href="/blog/posts/2022/03/aws_app2container_opt/"
         >
-        <span>AWS App2Container(お試し編)</span>
+        <span>AWS App2Container(イメージ最適化編)</span>
       </a>
     </li>
     
     <li class="p-related__item js-related__item">
-      <a href="/blog/posts/2022/03/aws_app2container_opt/"
+      <a href="/blog/posts/2022/03/aws_app2container/"
         >
-        <span>AWS App2Container(イメージ最適化編)</span>
+        <span>AWS App2Container(お試し編)</span>
       </a>
     </li>
     
