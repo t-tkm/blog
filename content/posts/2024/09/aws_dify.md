@@ -2,28 +2,34 @@
 Categories = ["AWS"] 
 Tags = ["AWS", "ECS", "Party Rock", "Dify", "Generative AI"] 
 date = "2024-09-29T21:34:00+09:00" 
-title = "異なるLLMによる回答を見比べてみる" 
+title = "ベイズの定理を活用する！Party RockとDifyで複数のLLMを比較検証" 
 archives = ["2024", "2024-09", "2024-09-28"]
 +++
 
-# はじめに
-以前(今から1年半ほど前)、こちらの記事に「[ChatGPTによる認知バイアスエラー回避の可能性](https://t-tkm.github.io/blog/posts/2023/05/essay_cognitive_psychology/)」で、合理的な判断を
-助けるために生成AIを活用していこう、ただし、生成AIは計算が苦手のようで、正しい回答を得るため
-には生成AIへの問合せ(プロンプト)に工夫が必要そうだと述べました。
+# 概要
+本記事では、近年注目を集めるLLMの性能を比較検証し、生成AIの活用可能性を探ります。
+特に、ベイズの定理のような統計的な問題に対するLLMの回答精度に焦点を当て、実用的な側面から
+考察します。
+
+以前(今から1年半ほど前)、こちらの記事に「[ChatGPTによる認知バイアスエラー回避の可能性](https://t-tkm.github.io/blog/posts/2023/05/essay_cognitive_psychology/)」で、
+合理的な判断を助けるために生成AIを活用しよう、ただし、生成AIは計算が苦手なようで、正しい回答を得るため
+には生成AIへの問合せ(プロンプト)に工夫が必要だと述べました。
 
 ```
-一方、現時点では、 「問合せ(文)の仕方」やタイミングにより、正しい答えが得られないケースもある
-ことを確認できました。従って、chatGPT利用には適切な 「問い」を投げかける事と、
+一方、現時点では、 「問合せ(文)の仕方」やタイミングによって、正しい答えが得られないケースもある
+ことを確認できました。従って、ChatGPT利用には適切な 「問い」を投げかける事と、
 回答の妥当性を正しく評価する事が大事だという点も合わせて確認できました。
 ```
 
 ```
 ChatGPTは、英語の学習データで訓練されているため、英語で質問するのが良いとも言われています。
 ```
-今は、LLMモデルも洗練され、得手不得手含め複数から選択できるなど、この手の懸念はとても小さく
-なってるのではと考えられ、もはや遠い昔の事のようです。
 
-そこで、およそ1年半ぶりに、同じ問いかけを、複数のLLMで実験してみようと思います。
+更に今では、LLMモデルもバリエーションが豊富になり、かつ洗練されており、適材適所で利用者が使うモデルを
+好きなように選択できるなど、これらの懸念が大幅に軽減されています。
+
+ここでは、およそ1年半ぶりに、複数のLLMで同じ問いかけを行い、回答精度の改善を
+体験してみたいと思います。
 
 ```
 【問い】
@@ -46,33 +52,33 @@ ChatGPTは、英語の学習データで訓練されているため、英語で�
 
 以降の進め方: 
 - 本記事では、複数のLLMモデルによる回答を比較検証し、生成AIの進化と実用性を検証します
-- 実験には、AWS Party RockとDifyという2つのノーコードAIアプリ開発プラットフォームを使用します
+- AWS Party RockとDifyという2つのノーコードAIアプリ開発プラットフォームを用います
 - DifyをAWS上にクラウドネイティブな形で構築する、参考プロジェクトを紹介します
 
 # Party Rockでの実験
 [AWS Party Rock](https://partyrock.aws/)は、Amazon Bedrockを基盤とした生成AIアプリケーション
-開発プラットフォームです([Amazon Bedrock プラットフォーム PartyRock を発表](https://aws.amazon.com/about-aws/whats-new/2023/11/partyrock-amazon-bedrock-playground/))。
+開発プラットフォームです([Amazon Bedrock プラットフォーム Party Rock を発表](https://aws.amazon.com/about-aws/whats-new/2023/11/partyrock-amazon-bedrock-playground/))。
 
 プログラミングの知識がなくても、自然言語で指示を入力するだけでアプリを作成できる
 ユーザーフレンドリーな設計が特徴で、ウィジェットを組み合わせてアプリを構築し、
 画像生成やテキスト生成など多様な機能を活用できます(Party Rockに限らず、昨今、本当にノーコード
 ツールが洗練され、充実してきていますね。)
 
-無料で利用可能で、AWSアカウントやクレジットカードの登録が不要というのも、使用の敷居を大きく
+無料で利用可能で、AWSアカウントやクレジットカードの登録が不要というのも、使用のハードルを大きく
 下げています。
 
 作成したアプリはURLを通じて簡単に共有でき、他のユーザーも利用可能で、Amazon Bedrockを基盤に、
-多様な生成AIモデルから選択して使用できます。もちろん、データプライバシーにも配慮されており、
+多様な生成AIモデルから選択して使用できます。もちろん、データプライバシーにも配慮され、
 ユーザーはデータのオプトアウトが可能とのこと。
 
 まずは、このサービスを使ってみましょう。
 
 ## 「生成AIモデル 比べるくん」
- [[AWSブログ]誰でも簡単に生成 AI を活用！ AWS Japan メンバーが作った PartyRock アプリ集]( https://aws.amazon.com/jp/blogs/news/collection-of-partyrock-apps-made-by-aws-japan-members/)
+ [[AWSブログ]誰でも簡単に生成 AI を活用！ AWS Japan メンバーが作った Party Rock アプリ集]( https://aws.amazon.com/jp/blogs/news/collection-of-partyrock-apps-made-by-aws-japan-members/)
 
 {{< figure alt="img1" src="https://github.com/t-tkm/blog_images/raw/main/2024/aws_dify/img1.png" link="https://github.com/t-tkm/blog_images/raw/main/2024/aws_dify/img1.png">}}
 
-### Calude 3 Haikuの回答
+## Claude 3 Haikuの回答
 優等生！
 {{< figure alt="img1" src="https://github.com/t-tkm/blog_images/raw/main/2024/aws_dify/img6.png" link="https://github.com/t-tkm/blog_images/raw/main/2024/aws_dify/img6.png">}}
 
@@ -86,7 +92,7 @@ Word形式でExportする機能があります([PartyRock-dump.docx](https://git
 
 ※Wordで確認できない方のために、PDF形式に変換して格納しておきます([PartyRock-dump.pdf](https://github.com/t-tkm/blog_images/raw/main/2024/aws_dify/PartyRock-dump.pdf))。
 
-次に、ChatGPTやGeminiといったLLMでも試してみたいのですが、PartyRockはAmazon Bedrockを
+次に、ChatGPTやGeminiといったLLMでも試してみたいのですが、Party RockはAmazon Bedrockを
 基盤としているためか、現在(2024年9月)は、これらChatGPTやGeminiは直接使えないようです。
 
 そこで、代替ツール(サービス)を検討してみます。
@@ -94,7 +100,7 @@ Word形式でExportする機能があります([PartyRock-dump.docx](https://git
 # Difyでの実験
 [Dify](https://dify.ai/jp)は、ノーコードでAIアプリケーションを開発できるオープンソースのプラット
 フォームです。DifyはAIアプリ開発の民主化を目指し、多くの人々がAI技術を活用できる環境を
-提供し、直感的なUIを提供することを目的としています。また、PartyRock同様、プログラミングの
+提供し、直感的なUIを提供することを目的としています。また、Party Rock同様、プログラミングの
 知識がなくても簡単に
 アプリ開発ができます。**OpenAIやHugging Faceなどの多様なLLM(AIモデル)をサポートし、
 ユーザーは目的に応じて最適なモデルを選択できます。** 
@@ -109,15 +115,21 @@ Word形式でExportする機能があります([PartyRock-dump.docx](https://git
 また、アップグレード手順やウェブインターフェースへのアクセス方法、環境構成の
 カスタマイズについても説明があります。
 
-無事Difyが起動できたら、アプリケーションを構築します。例えば、YouTubeの解説動画
+無事Difyが起動できたら、アプリケーションを構築します。今回は、こちらのYutube解説動画
+を参考にさせていただきました。
 
-[【Dify劇的スピードアップ】Dify並列処理完全解説](https://youtu.be/4A00eqrTPJ4)
+[【Dify劇的スピードアップ】Dify並列処理完全解説](https://youtu.be/4A00eqrTPJ4) (※)
 
-を参考に、アプリ(ワークフロー)を作成してみます。
+※こちらの解説動画では、Dify 0.8に追加された並列処理機能について詳しく解説されています。
+並列処理により処理速度が大幅に向上したおかげもあって、特にLLMの比較では大きな効果を発揮して
+いると思います。
+
+作成したアプリ(ワークフロー)はこのようになります。
 {{< figure alt="img1" src="https://github.com/t-tkm/blog_images/raw/main/2024/aws_dify/img3.png" link="https://github.com/t-tkm/blog_images/raw/main/2024/aws_dify/img3.png">}}
 
-構築したDSLファイルをエクスポートしておきます(「Multi-LLM-parallel.yml」)。興味ある方は、
-Dify環境でインポートしてご利用ください。
+構築したDSLファイルをエクスポートしておきます
+([Multi-LLM-parallel.yml](https://github.com/t-tkm/blog_images/raw/main/2024/aws_dify/Multi-LLM-parallel.yml))。
+興味ある方は、Dify環境でインポートしてご利用ください。
 
 ```yml
 app:
@@ -686,7 +698,7 @@ ECSを活用する方式、EKSを活用する方式、それぞれ参考にな�
 3モデルは、同一の問題に対して正確な回答を導出しました。
 今後、生成AI技術はさらに進化し、ビジネスにおける応用が期待されます。
 
-# 付録
+# 付録1. 
 筆者の場合、週末など限定された時間帯で遊ぶケースが多く、節約のためにweekdayはリソース費用を安く抑えたい
 状況です。そこでケチケチ作戦として、
 [[GitHub]Dify on AWS with CDK](https://github.com/aws-samples/dify-self-hosted-on-aws)
@@ -710,10 +722,6 @@ cdk destroyして作り直しという手もありますが、その場合はDif
 EC2の$0.06は、恐らくNAT Gatewayの設置料金ですね↓
 - NAT Gatewayの料金
   {{< figure alt="img1" src="https://github.com/t-tkm/blog_images/raw/main/2024/aws_dify/img10.png" link="https://aws.amazon.com/jp/vpc/pricing/">}}
-
-セキュリティについては、Difyアプリで認証を行うようにしていますが、必要に応じ、アクセス元IPアドレスを制限することで
-セキュリティを高めておきます。
-{{< figure alt="img1" src="https://github.com/t-tkm/blog_images/raw/main/2024/aws_dify/img11.png" link="https://github.com/t-tkm/blog_images/raw/main/2024/aws_dify/img11.png">}}
 
 最後に、オリジナル版からカスタマイズしたのは以下になります。
 ```diff
@@ -890,3 +898,9 @@ index 3eb476f..c3cd064 100644
      new cdk.CfnOutput(this, 'DifyUrl', {
 ```
 </details>
+
+# 付録2. 
+セキュリティについては、Difyアプリで認証を行うようにしていますが、必要に応じ、アクセス元IPアドレスを制限することで
+セキュリティを高めることができます。
+{{< figure alt="img1" src="https://github.com/t-tkm/blog_images/raw/main/2024/aws_dify/img11.png" link="https://github.com/t-tkm/blog_images/raw/main/2024/aws_dify/img11.png">}}
+
