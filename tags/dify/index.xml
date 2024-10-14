@@ -9,12 +9,12 @@
     <copyright>&amp;copy; 2022 Takumi Tomita Powered by Hugo &amp; Pickles.</copyright>
     <lastBuildDate>Sun, 29 Sep 2024 21:34:00 +0900</lastBuildDate><atom:link href="https://t-tkm.github.io/blog/tags/dify/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>異なるLLMによる回答を見比べてみる</title>
+      <title>ベイズの定理を活用する！Party RockとDifyで複数のLLMを比較検証</title>
       <link>https://t-tkm.github.io/blog/posts/2024/09/aws_dify/</link>
       <pubDate>Sun, 29 Sep 2024 21:34:00 +0900</pubDate>
       
       <guid>https://t-tkm.github.io/blog/posts/2024/09/aws_dify/</guid>
-      <description>はじめに 以前(今から1年半ほど前)、こちらの記事に「ChatGPTによる認知バイアスエラー回避の可能性」で、合理的な判断を 助けるために生成AIを活用していこう、ただし、生成AIは計算が苦手のようで、正しい回答を得るため には生成AIへの問合せ(プロンプト)に工夫が必要そうだと述べました。 一方、現時点では、 「問合せ(文)の仕方」やタイミングにより、正しい答えが得られないケースもある ことを確認できました。従って、chatGPT利用には適切な 「問い」を投げかける事と、 回答の妥当性を正しく評価する事が大事だという点も合わせて確認できました。 ChatGPTは、英語の学習データで訓練されているため、英語で質問するのが良いとも言われています。 今は、</description>
+      <description>概要 本記事では、近年注目を集めるLLMの性能を比較検証し、生成AIの活用可能性を探ります。 特に、ベイズの定理のような統計的な問題に対するLLMの回答精度に焦点を当て、実用的な側面から 考察します。 以前(今から1年半ほど前)、こちらの記事に「ChatGPTによる認知バイアスエラー回避の可能性」で、 合理的な判断を助けるために生成AIを活用しよう、ただし、生成AIは計算が苦手なようで、正しい回答を得るため には生成AIへの問合せ(プロンプト)に工夫が必要だと述べました。 一方、現時点では、 「問合せ(文)の仕方」やタイミングによって、正しい答えが得られないケースもある ことを確認できました。従って、ChatGPT利用には適切な 「問い」を投げかける事</description>
     </item>
     
   </channel>
