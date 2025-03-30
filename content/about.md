@@ -13,8 +13,9 @@ date = "2023-09-24T00:00:00+09:00"
 - 福岡県立筑紫丘高等学校卒(1996)
 - 福岡県出身(1977生まれ)
 
-
 # 最近の活動
+- 2024.12 アイティメディア株式会社記事: [クラウド移行を阻む見えない壁」日立のキーパーソンが語るモダナイゼーションの実態と現実解](https://www.itmedia.co.jp/enterprise/articles/2412/12/news002.html)
+    - Digital Evolution Headline; 同記事[日立のスペシャリストが分析「クラウド移行を阻む見えない壁」日立のキーパーソンが語るモダナイゼーションの実態と現実解](https://deh.hitachi.co.jp/_ct/17743685)
 - 2023.8 マイナビ・アンドエンジニア記事: [AWSって結局、何ができるの？日立製作所のAWSエンジニアに1から解説してもらった！【後編】](https://and-engineer.com/articles/ZP7PSBQAACMAyjIT)
 - 2023.8 マイナビ・アンドエンジニア記事: [日立製作所で活躍する「AWS Ambassadors」と「Japan AWS Jr. Champions」に聞いた！選出歴は仕事に役立ってる？【前編】](https://and-engineer.com/articles/ZP7BIhQAACcAye7y)
 - 2023.8 ZDNET記事: [自分の言葉でクラウドを語れる人を育てたい--日立のクラウド人財育成記](https://japan.zdnet.com/article/35207515/)

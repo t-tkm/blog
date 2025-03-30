@@ -16,7 +16,7 @@ summaryLength = 320 # サマリーの長さを120単語にする
 # Disqus shortname
   author = "Takumi Tomita"
   avatar = "https://www.gravatar.com/avatar/01f65fbc400bf554d948aec41084a9fa"
-  bio = "横浜でSWエンジニアやってます。2021-2024 AWS Ambassadorに選出いただきました。"
+  bio = "(株)日立製作所 マネージド＆プラットフォームサービス事業部 チーフクラウドアーキテクト。2021-2024 AWS Ambassadorに選出いただきました。"
 
 [markup.goldmark.renderer]
       unsafe = true
