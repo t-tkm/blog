@@ -7,7 +7,16 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>&amp;copy; 2022 Takumi Tomita Powered by Hugo &amp; Pickles.</copyright>
-    <lastBuildDate>Sun, 29 Sep 2024 21:34:00 +0900</lastBuildDate><atom:link href="https://t-tkm.github.io/blog/tags/ecs/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 28 Mar 2025 21:34:00 +0900</lastBuildDate><atom:link href="https://t-tkm.github.io/blog/tags/ecs/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>AP-DB分離パターンにおけるレイテンシー影響確認</title>
+      <link>https://t-tkm.github.io/blog/posts/2025/03/aws_sesar2_vpn/</link>
+      <pubDate>Fri, 28 Mar 2025 21:34:00 +0900</pubDate>
+      
+      <guid>https://t-tkm.github.io/blog/posts/2025/03/aws_sesar2_vpn/</guid>
+      <description>1. 概要 オンプレミスで稼働しているレガシーアプリケーション（※）をクラウドに移行する方法として、 「Replatform to Containers」というアプローチがあります。 ※本記事では、かつて主流だった Seasar2 ベースのアプリケーションをレガシーアプリケーションの 例として取り上げています。 この手法では、アプリケーションコードの修正を最小限にとどめてコンテナ化し、AWS Fargate などの マネージドサービス上で実行することで、仮想マシン（VM）の保守運用から解放されるという利点があります。 ただし、データベース（DB）も同時にクラウドへ移行できれば理想的ですが、以下のような理由から オンプレミスに残すケースも少なくありません。 段階的な移行フェーズである データ特性</description>
+    </item>
+    
     <item>
       <title>ベイズの定理を活用する！Party RockとDifyで複数のLLMを比較検証</title>
       <link>https://t-tkm.github.io/blog/posts/2024/09/aws_dify/</link>
