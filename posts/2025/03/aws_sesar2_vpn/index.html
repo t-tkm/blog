@@ -85,24 +85,17 @@
   
   <section id="js-article" class="p-article__body">
     <h1 id="1-概要">1. 概要</h1>
-<p>オンプレミスで稼働しているレガシーアプリケーション（※）をクラウドに移行する方法として、
-「Replatform to Containers」というアプローチがあります。</p>
-<p>※本記事では、かつて主流だった Seasar2 ベースのアプリケーションをレガシーアプリケーションの
-例として取り上げています。</p>
-<p>この手法では、アプリケーションコードの修正を最小限にとどめてコンテナ化し、AWS Fargate などの
-マネージドサービス上で実行することで、仮想マシン（VM）の保守運用から解放されるという利点があります。</p>
-<p>ただし、データベース（DB）も同時にクラウドへ移行できれば理想的ですが、以下のような理由から
-オンプレミスに残すケースも少なくありません。</p>
+<p>オンプレミスで稼働しているレガシーアプリケーション（※）をクラウドに移行する方法として、「Replatform to Containers」というアプローチがあります。</p>
+<p>※本記事では、かつて主流だったSeasar2ベースのアプリケーションをレガシーアプリケーションの例として取り上げています。</p>
+<p>この手法では、アプリケーションコードの修正を最小限にとどめてコンテナ化し、AWS Fargateなどのマネージドサービス上で実行することで、仮想マシン（VM）の保守運用から解放されるという利点があります。</p>
+<p>ただし、データベース（DB）も同時にクラウドへ移行できれば理想的ですが、以下のような理由からオンプレミスに残すケースも少なくありません。</p>
 <ul>
 <li>段階的な移行フェーズである</li>
 <li>データ特性や規制による制約</li>
 </ul>
-<p>こうした状況では、アプリケーションとDBの物理的距離が広がることで、ネットワークレイテンシによる
-性能劣化が懸念されます。</p>
-<p>アプリケーションとDBが離れている場合の性能影響は、アプリケーションコードのDBアクセス部分を精査
-することである程度予測可能ですが、アプリケーションが複雑である場合には、すべての挙動を事前に
-把握するのは困難です。</p>
-<p>そこで、本記事では、実際の構成で性能を測定し、レイテンシの影響を可視化するアプローチをご紹介します。
+<p>こうした状況では、アプリケーションとDBの物理的距離が広がることで、ネットワークレイテンシーによる性能劣化が懸念されます。</p>
+<p>アプリケーションとDBが離れている場合の性能影響は、アプリケーションコードのDBアクセス部分を精査することである程度予測可能です。しかし、アプリケーションが複雑である場合には、すべての挙動を事前に把握するのは困難です。</p>
+<p>そこで、本記事では、実際の構成で性能を測定し、レイテンシーの影響を可視化するアプローチをご紹介します。
 特にクラウド環境では、こうした事前検証が比較的容易に実施できます。</p>
 <p>以前筆者が相談を受けた案件において、手元の環境で実施した検証をベースに、AP-DB間の距離が性能に
 与える影響を検証する方法を紹介します。</p>
@@ -196,13 +189,13 @@ DBへアクセスすることで、<strong>AP-DB間の距離が性能に与え�
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">docker compose build <span style="color:#f92672">&amp;&amp;</span> docker compose up
 </code></pre></div><h2 id="32-dbをawsマネージドサービスauroraへ変更">3.2 DBをAWSマネージドサービス（Aurora）へ変更</h2>
 <p>この構成では、ローカルで稼働していた PostgreSQL を AWS のマネージドサービスである <strong>Amazon Aurora（PostgreSQL）</strong> に置き換えました。
-アプリケーションはそのままに、DBのみをクラウド上の Aurora に変更することで、マネージドな可用性・スケーラビリティの恩恵を得ながら、AP-DB間の距離による影響を測定できます。</p>
+アプリケーションはそのままに、DBのみをクラウド上のAuroraに変更します。これにより、マネージドサービスの可用性・スケーラビリティの恩恵を得ながら、AP-DB間の距離による影響を測定できます。</p>
 <figure><a href="https://github.com/t-tkm/blog_images/raw/main/2025/03/aws_sesar2_vpn/img3.png">
     <img src="https://github.com/t-tkm/blog_images/raw/main/2025/03/aws_sesar2_vpn/img3.png"
          alt="img3"/> </a>
 </figure>
 
-<p>ネットワーク設計（VPCサブネット、セキュリティグループ、ルーティングなど）とともに、AP-DB間の通信がクラウド内で完結するようになります。これにより、クラウド環境におけるネットワークレイテンシや構成の検証が可能です。</p>
+<p>ネットワーク設計（VPCサブネット、セキュリティグループ、ルーティングなど）により、AP-DB間の通信がクラウド内で完結するようになります。これにより、クラウド環境におけるネットワークレイテンシーや構成の検証が可能になります。</p>
 <h2 id="33-アプリケーションをecs-fargate上にデプロイ">3.3 アプリケーションをECS Fargate上にデプロイ</h2>
 <p>次に、アプリケーション実行環境を <strong>ECS Fargate</strong> に移行します。従来EC2上で動作していたDockerコンテナを、Fargateタスクとして定義し、サーバレスで運用します。</p>
 <figure><a href="https://github.com/t-tkm/blog_images/raw/main/2025/03/aws_sesar2_vpn/img4.png">
@@ -249,7 +242,7 @@ JSP画面に <code>startTime</code>, <code>endTime</code>, <code>execTime</code>
          alt="img5"/> </a>
 </figure>
 
-<p>この改修により、既存のアプリケーション構造を大きく変更することなく、レイテンシやDB処理時間を可視化できます。測定結果をもとに、ネットワーク設計やリージョン配置の検討材料とすることができます。</p>
+<p>この改修により、既存のアプリケーション構造を大きく変更することなく、レイテンシーやDB処理時間を可視化できます。測定結果をもとに、ネットワーク設計やリージョン配置の検討材料とすることができます。</p>
 <h2 id="4-ecsによるコンテナ制御">4. ECSによるコンテナ制御</h2>
 <p>ここでは、3章で準備した構成をもとに、実際にECSを使ってコンテナを起動する様子を紹介します。</p>
 <p>以下の図は、東京リージョンと大阪リージョンにそれぞれ構築したECSクラスターの例です。各クラスターは、Fargate上のタスクを含む3つのデータプレーン（実行環境）を制御しています。</p>
@@ -316,7 +309,7 @@ JSP画面に <code>startTime</code>, <code>endTime</code>, <code>execTime</code>
 <td>(1) ローカルLAN</td>
 <td>同一ネットワーク内</td>
 <td>1ms</td>
-<td>最速、レイテンシ最小</td>
+<td>最速、レイテンシー最小</td>
 </tr>
 <tr>
 <td>(2) 横浜–東京（近距離）</td>
@@ -356,7 +349,7 @@ JSP画面に <code>startTime</code>, <code>endTime</code>, <code>execTime</code>
 <li>VPNを介して遠隔DBと接続</li>
 </ul>
 </li>
-<li><strong>性能測定コードでレイテンシを可視化</strong>
+<li><strong>性能測定コードでレイテンシーを可視化</strong>
 <ul>
 <li>実際の処理時間をJSP上で確認可能に</li>
 </ul>
@@ -371,7 +364,7 @@ JSP画面に <code>startTime</code>, <code>endTime</code>, <code>execTime</code>
 <h3 id="設計運用のヒント">設計・運用のヒント</h3>
 <ul>
 <li>
-<p><strong>レイテンシ対策</strong></p>
+<p><strong>レイテンシー対策</strong></p>
 <ul>
 <li>ElastiCache や RDS Proxy の活用</li>
 <li>データのローカルレプリカ導入</li>
@@ -457,16 +450,16 @@ JSP画面に <code>startTime</code>, <code>endTime</code>, <code>execTime</code>
     </li>
     
     <li class="p-related__item js-related__item">
-      <a href="/blog/posts/2022/03/aws_app2container/"
+      <a href="/blog/posts/2022/03/aws_app2container_opt/"
         >
-        <span>AWS App2Container(お試し編)</span>
+        <span>AWS App2Container(イメージ最適化編)</span>
       </a>
     </li>
     
     <li class="p-related__item js-related__item">
-      <a href="/blog/posts/2022/03/aws_app2container_opt/"
+      <a href="/blog/posts/2022/03/aws_app2container/"
         >
-        <span>AWS App2Container(イメージ最適化編)</span>
+        <span>AWS App2Container(お試し編)</span>
       </a>
     </li>
     
