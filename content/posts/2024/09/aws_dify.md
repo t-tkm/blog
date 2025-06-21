@@ -131,6 +131,8 @@ Word形式でExportする機能があります([PartyRock-dump.docx](https://git
 ([Multi-LLM-parallel.yml](https://github.com/t-tkm/blog_images/raw/main/2024/aws_dify/Multi-LLM-parallel.yml))。
 興味ある方は、Dify環境でインポートしてご利用ください。
 
+**注意**: このMulti-LLM-parallel.ymlのDSLは、Dify 0.8以降のバージョンに依存しています。並列処理機能はDify 0.8で追加された機能のため、それ以前のバージョンでは正常に動作しません。
+
 ```yml
 app:
   description: ''
