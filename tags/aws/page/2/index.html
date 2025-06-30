@@ -59,6 +59,28 @@
 
 <article class="c-article p-list-article">
   <header>
+    <h2 class="c-title c-article__title"><a href="https://t-tkm.github.io/blog/posts/2022/10/aws_secure_bastion_2/">踏台VPCの作成(Internet Gateway有り)(AWS)</a></h2>
+    <p class="c-article__meta">
+      Posted on
+<time datetime="2022-10-16T00:00:00&#43;09:00">
+  Oct 16, 2022
+</time>
+
+    </p>
+  </header>
+  <div class="c-article__summary">
+    はじめに 前回は、VPCにInternet Gatewayを設置しない完全にプライベートな環境での、ブラウザを使うEC2操作を見ました。 しかしこのままでは、yumの更新、npmなど各種パッケージ経由でのツール導入、(インターネットにあるRESTエンドポイントを使う)AWS CLI操作などできません。 そこで今回は、インターネットへのアウトバウンド通信を許可するためにNAT GWを設置しようと思います。トラフィックを少し管理するために。Network Firewall というIPS/IDS相当のサービスを設置したいと思います。 なお、今回の検証で、Network Firewallは1,400円/日程度の費用が発生しました。(1 endpoints x 24 hours x 0.395 USD = 9.48 USD 148円/USD 換算
+  </div>
+  
+  <a href="https://t-tkm.github.io/blog/posts/2022/10/aws_secure_bastion_2/" class="c-article__btn p-list-article__btn">Read more</a>
+  
+</article>
+
+
+
+
+<article class="c-article p-list-article">
+  <header>
     <h2 class="c-title c-article__title"><a href="https://t-tkm.github.io/blog/posts/2022/10/aws_secure_bastion_1/">踏台VPCの作成(Internet Gateway無し)(AWS)</a></h2>
     <p class="c-article__meta">
       Posted on
@@ -240,26 +262,6 @@
   </header>
   <div class="c-article__summary">
     AWS費用監視ツール(前編:AWS マネジメントコンソール&amp;AWS CLI) Qiitaにて公開。こちら→
-  </div>
-  
-</article>
-
-
-
-
-<article class="c-article p-list-article">
-  <header>
-    <h2 class="c-title c-article__title"><a href="https://t-tkm.github.io/blog/posts/2021/07/aws_ads/">AWS移行 - ApplicationDiscoveryService(ADS)でのインベントリ情報収集</a></h2>
-    <p class="c-article__meta">
-      Posted on
-<time datetime="2021-07-30T00:00:00&#43;09:00">
-  Jul 30, 2021
-</time>
-
-    </p>
-  </header>
-  <div class="c-article__summary">
-    AWS移行 - ApplicationDiscoveryService(ADS)でのインベントリ情報収集 Application Discovery Service(ADS)の検証記事(Qiita)
   </div>
   
 </article>

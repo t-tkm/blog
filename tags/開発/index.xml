@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>開発 on Takumi Tomita&#39;s Blog</title>
+    <link>https://t-tkm.github.io/blog/tags/%E9%96%8B%E7%99%BA/</link>
+    <description>Recent content in 開発 on Takumi Tomita&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <copyright>&amp;copy; 2022 Takumi Tomita Powered by Hugo &amp; Pickles.</copyright>
+    <lastBuildDate>Mon, 30 Jun 2025 15:00:00 +0900</lastBuildDate><atom:link href="https://t-tkm.github.io/blog/tags/%E9%96%8B%E7%99%BA/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Vibe CodingでDify環境構築</title>
+      <link>https://t-tkm.github.io/blog/posts/2025/06/aws_vibe_coding/</link>
+      <pubDate>Mon, 30 Jun 2025 15:00:00 +0900</pubDate>
+      
+      <guid>https://t-tkm.github.io/blog/posts/2025/06/aws_vibe_coding/</guid>
+      <description>1. 概要 最近、Difyが注目を集めており、クラウドで簡単に試せる環境構築の相談を受ける機会が増えています。つい先日、Azure版でDify環境構築の案件があったのですが、せっかくの機会なのでAWSでも同様の環境を準備してみようと考えました。 しかし、私自身は日常業務において、IaCコードを積極的に記述する機会が限られており、ゼロベースで本格的なインフラ構築を行うとなると、相応の学習時間と開発期間を要すると想定していました。 そこで、昨今話題となっているVibe Codingアプローチを実際に検証してみることにしました。結果的に、当初の想定を大きく上回る効果を得ることができ、短期間でDify環境の構築を完了することができました。 本記事では、そ</description>
+    </item>
+    
+  </channel>
+</rss>

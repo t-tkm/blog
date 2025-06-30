@@ -85,7 +85,11 @@
   
   <section id="js-article" class="p-article__body">
     <h1 id="1-概要">1. 概要</h1>
-<p>オンプレミスで稼働しているレガシーアプリケーション（※）をクラウドに移行する方法として、「Replatform to Containers」というアプローチがあります。</p>
+<p>オンプレミスで稼働しているレガシーアプリケーション（※）をクラウドに移行する方法として、
+「Replatform to Containers」というアプローチがあります。このアプローチでは、アプリケーションを
+コンテナ化することで、クラウドネイティブな環境へと移行しつつも、アプリケーションコード自体の
+大規模な書き換えを避けることができます。特に長年運用されてきたシステムでは、コードの全面的な
+刷新よりも、段階的な移行が現実的な選択肢となることが多いです。</p>
 <p>※本記事では、かつて主流だったSeasar2ベースのアプリケーションをレガシーアプリケーションの例として取り上げています。</p>
 <p>この手法では、アプリケーションコードの修正を最小限にとどめてコンテナ化し、AWS Fargateなどのマネージドサービス上で実行することで、仮想マシン（VM）の保守運用から解放されるという利点があります。</p>
 <p>ただし、データベース（DB）も同時にクラウドへ移行できれば理想的ですが、以下のような理由からオンプレミスに残すケースも少なくありません。</p>
@@ -413,6 +417,7 @@ JSP画面に <code>startTime</code>, <code>endTime</code>, <code>execTime</code>
       <div class="c-pagination__ctrl">
         <div class="c-pagination__newer">
           
+          <a href="https://t-tkm.github.io/blog/posts/2025/06/aws_vibe_coding/">Newer</a>
           
         </div>
         <div class="c-pagination__older">
