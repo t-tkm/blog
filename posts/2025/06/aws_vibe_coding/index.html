@@ -110,11 +110,7 @@
 </ul>
 <p>Difyは、API、Worker、Web、PostgreSQL、Redis、Nginx、Weaviateなどのコンポーネントから構成されています。詳細な技術仕様については、<a href="https://docs.dify.ai/">公式ドキュメント</a>をご参照ください。</p>
 <h2 id="13-本プロジェクトで構築した構成">1.3 本プロジェクトで構築した構成</h2>
-<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img1.png">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img1.png"
-         alt="img7"/> </a>
-</figure>
-
+<p><a href="https://i.imgur.com/LAeZefz.png"><img src="https://i.imgur.com/LAeZefz.png" alt="img1"></a></p>
 <h1 id="2-vibe-codingによるiacコード生成">2. Vibe CodingによるIaCコード生成</h1>
 <p>既存のAzure版の構成を参考として、今回はアーキテクチャ図を基に、要件テキスト（プロンプト）を用いて、AWS CDKのコード、およびプロジェクト全体をAI（CursorのClaude4 Agent）によって構築しました。</p>
 <h2 id="21-プロンプト">2.1 プロンプト</h2>
@@ -134,18 +130,10 @@
 - READMEには、ディレクトリツリーと、アーキテクチャ図を挿入してください。アーキテクチャ図は、mermaid記法で作成してください。
 </code></pre><h4 id="参照アーキテクチャ">参照アーキテクチャ</h4>
 <p>別途実装したAzure版Dify環境のアーキテクチャを参考基盤といたしました。
-<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img4.png">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img4.png"
-         alt="img7"/> </a>
-</figure>
-</p>
+<a href="https://i.imgur.com/r156kUI.png"><img src="https://i.imgur.com/r156kUI.png" alt="img4"></a></p>
 <h2 id="22-aiとの対話">2.2 AIとの対話</h2>
 <p>CursorのAIチャットに、要件テキストと図をインプットしました：
-<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img5.png">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img5.png"
-         alt="img7"/> </a>
-</figure>
-</p>
+<a href="https://i.imgur.com/MLtVafW.png"><img src="https://i.imgur.com/MLtVafW.png" alt="img5"></a></p>
 <h1 id="3-確認">3. 確認</h1>
 <p>AI生成されたCDKプロジェクトの実装確認を実施いたします。</p>
 <h2 id="31-cdkデプロイメント">3.1 CDKデプロイメント</h2>
@@ -181,11 +169,7 @@ cdk list
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># 不要になった場合のクリーンアップ</span>
 cdk destroy
 </code></pre></div><h4 id="cdk実行画面キャプチャ">CDK実行画面（キャプチャ）</h4>
-<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img11.png">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img11.png"
-         alt="img11"/> </a>
-</figure>
-
+<p><a href="https://i.imgur.com/gIfRscH.png"><img src="https://i.imgur.com/gIfRscH.png" alt="img11"></a></p>
 <p>CDKデプロイメントは219秒で完了しましたが、Linux VM上でのDifyコンテナプロビジョニングには追加で数分を要します。</p>
 <h3 id="32-fleet-managerによるrdp接続">3.2 Fleet ManagerによるRDP接続</h3>
 <p>AWS Systems Manager Fleet Managerは、従来のSSHやRDPに代わる安全なリモート管理ソリューションです。</p>
@@ -203,21 +187,9 @@ cdk destroy
 <li>ユーザーはAWSコンソール経由でセッション開始</li>
 <li>暗号化されたトンネル経由での安全な通信</li>
 </ol>
-<p><figure><a href="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img12.png">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img12.png"
-         alt="img12"/> </a>
-</figure>
-
-<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img13.png">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img13.png"
-         alt="img13"/> </a>
-</figure>
-
-<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img14.png">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img14.png"
-         alt="img14"/> </a>
-</figure>
-</p>
+<p><a href="https://i.imgur.com/N3kvTgO.png"><img src="https://i.imgur.com/N3kvTgO.png" alt="img12"></a>
+<a href="https://i.imgur.com/LVGs3lB.png"><img src="https://i.imgur.com/LVGs3lB.png" alt="img13"></a>
+<a href="https://i.imgur.com/BapLssn.png"><img src="https://i.imgur.com/BapLssn.png" alt="img14"></a></p>
 <h2 id="33-ローカルクライアントからの接続">3.3 ローカルクライアントからの接続</h2>
 <p>AWS Fleet Managerを使用する場合、<strong>日本語入力ができない</strong>という制約があります。この制約により、日本語での作業が必要な場面では実用性に限界があるため、実際の運用においては、前述のローカルクライアントからのRDP接続（ポートフォワード方式）を主に活用しております。</p>
 <pre><code>リモートデスクトップは言語入力として英語のみをサポートしています。
@@ -229,23 +201,10 @@ aws ssm start-session <span style="color:#ae81ff">\
 </span><span style="color:#ae81ff"></span>    --target i-xxxxxxxxx <span style="color:#ae81ff">\
 </span><span style="color:#ae81ff"></span>    --document-name AWS-StartPortForwardingSession <span style="color:#ae81ff">\
 </span><span style="color:#ae81ff"></span>    --parameters <span style="color:#e6db74">&#34;portNumber=3389,localPortNumber=13389&#34;</span>
-</code></pre></div><p>ポートフォワードの実行状況（キャプチャ）
-<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img8.png">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img8.png"
-         alt="img8"/> </a>
-</figure>
-</p>
-<p>正常にローカル環境（PC）からの操作が可能になりました。
-<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img9.png">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img9.png"
-         alt="img9"/> </a>
-</figure>
-</p>
-<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img10.png">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img10.png"
-         alt="img10"/> </a>
-</figure>
-
+</code></pre></div><p>ポートフォワードの実行状況（キャプチャ）</p>
+<p><a href="https://i.imgur.com/69kWmax.png"><img src="https://i.imgur.com/69kWmax.png" alt="img8"></a></p>
+<p><a href="https://i.imgur.com/J3aEZcS.png"><img src="https://i.imgur.com/J3aEZcS.png" alt="img9"></a></p>
+<p><a href="https://i.imgur.com/IfdD4Bj.png"><img src="https://i.imgur.com/IfdD4Bj.png" alt="img10"></a></p>
 <h1 id="4-パフォーマンスとコスト考慮">4. パフォーマンスとコスト考慮</h1>
 <h2 id="41-推奨リソースサイズ">4.1 推奨リソースサイズ</h2>
 <p>実際の運用を通じて、以下のリソース構成を推奨いたします：</p>
@@ -288,29 +247,13 @@ aws ec2 create-tags --resources i-xxxxxxxxx <span style="color:#ae81ff">\
 <h1 id="付録1アーキテクチャ図生成プロセス">付録1：アーキテクチャ図生成プロセス</h1>
 <p>構成図作成においても、AIとの協働により効率化を図りました。</p>
 <p><strong>AIへの指示</strong>
-<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img6.png">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img6.png"
-         alt="img7"/> </a>
-</figure>
-</p>
+<a href="https://i.imgur.com/PVN98Zw.png"><img src="https://i.imgur.com/PVN98Zw.png" alt="img6"></a></p>
 <p><strong>初期生成版</strong>
-<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img2.png">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img2.png"
-         alt="img7"/> </a>
-</figure>
-</p>
+<a href="https://i.imgur.com/nc3sccI.png"><img src="https://i.imgur.com/nc3sccI.png" alt="img2"></a></p>
 <p>全体構成は適切でしたが、一部に技術的な誤りを確認したため、修正を指示いたしました。
-<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img7.png">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img7.png"
-         alt="img7"/> </a>
-</figure>
-</p>
+<a href="https://i.imgur.com/SQzneIN.png"><img src="https://i.imgur.com/SQzneIN.png" alt="img7"></a></p>
 <p><strong>修正完了版</strong>
-<figure><a href="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img3.png">
-    <img src="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img3.png"
-         alt="img7"/> </a>
-</figure>
-</p>
+<a href="https://i.imgur.com/nVBjkVn.png"><img src="https://i.imgur.com/nVBjkVn.png" alt="img3"></a></p>
 <p>このプロセスにより、従来であれば数時間を要する作図作業を大幅に短縮することができました。</p>
 <h1 id="付録2プロジェクト規模分析">付録2：プロジェクト規模分析</h1>
 <p><strong>開発成果物</strong></p>
@@ -369,16 +312,16 @@ aws ec2 create-tags --resources i-xxxxxxxxx <span style="color:#ae81ff">\
     </li>
     
     <li class="p-related__item js-related__item">
-      <a href="/blog/posts/2024/03/aws_vpn/"
+      <a href="/blog/posts/2024/03/aws_vpn2/"
         >
-        <span>お手軽にAWS Site-to-Site VPNを試してみよう(AWSシミュレーション環境)</span>
+        <span>お手軽にAWS Site-to-Site VPNを試してみよう(自宅VPN環境)</span>
       </a>
     </li>
     
     <li class="p-related__item js-related__item">
-      <a href="/blog/posts/2024/03/aws_vpn2/"
+      <a href="/blog/posts/2024/03/aws_vpn/"
         >
-        <span>お手軽にAWS Site-to-Site VPNを試してみよう(自宅VPN環境)</span>
+        <span>お手軽にAWS Site-to-Site VPNを試してみよう(AWSシミュレーション環境)</span>
       </a>
     </li>
     
