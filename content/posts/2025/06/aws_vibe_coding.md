@@ -41,7 +41,7 @@ Vibe Codingは、自然言語による要件定義とAIとの対話的開発を�
 Difyは、API、Worker、Web、PostgreSQL、Redis、Nginx、Weaviateなどのコンポーネントから構成されています。詳細な技術仕様については、[公式ドキュメント](https://docs.dify.ai/)をご参照ください。
 
 ## 1.3 本プロジェクトで構築した構成
-{{< figure alt="img7" src="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img1.png" link="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img1.png">}}
+[![img1](https://i.imgur.com/LAeZefz.png)](https://i.imgur.com/LAeZefz.png)
 
 # 2. Vibe CodingによるIaCコード生成
 既存のAzure版の構成を参考として、今回はアーキテクチャ図を基に、要件テキスト（プロンプト）を用いて、AWS CDKのコード、およびプロジェクト全体をAI（CursorのClaude4 Agent）によって構築しました。
@@ -67,12 +67,11 @@ Difyは、API、Worker、Web、PostgreSQL、Redis、Nginx、Weaviateなどのコ
 
 #### 参照アーキテクチャ
 別途実装したAzure版Dify環境のアーキテクチャを参考基盤といたしました。
-{{< figure alt="img7" src="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img4.png" link="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img4.png">}}
+[![img4](https://i.imgur.com/r156kUI.png)](https://i.imgur.com/r156kUI.png)
 
 ## 2.2 AIとの対話
 CursorのAIチャットに、要件テキストと図をインプットしました：
-{{< figure alt="img7" src="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img5.png" link="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img5.png">}}
-
+[![img5](https://i.imgur.com/MLtVafW.png)](https://i.imgur.com/MLtVafW.png)
 
 # 3. 確認
 AI生成されたCDKプロジェクトの実装確認を実施いたします。
@@ -120,7 +119,7 @@ cdk destroy
 
 #### CDK実行画面（キャプチャ）
 
-{{< figure alt="img11" src="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img11.png" link="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img11.png">}}
+[![img11](https://i.imgur.com/gIfRscH.png)](https://i.imgur.com/gIfRscH.png)
 
 CDKデプロイメントは219秒で完了しましたが、Linux VM上でのDifyコンテナプロビジョニングには追加で数分を要します。
 
@@ -140,9 +139,9 @@ AWS Systems Manager Fleet Managerは、従来のSSHやRDPに代わる安全な�
 3. ユーザーはAWSコンソール経由でセッション開始
 4. 暗号化されたトンネル経由での安全な通信
 
-{{< figure alt="img12" src="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img12.png" link="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img12.png">}}
-{{< figure alt="img13" src="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img13.png" link="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img13.png">}}
-{{< figure alt="img14" src="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img14.png" link="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img14.png">}}
+[![img12](https://i.imgur.com/N3kvTgO.png)](https://i.imgur.com/N3kvTgO.png)
+[![img13](https://i.imgur.com/LVGs3lB.png)](https://i.imgur.com/LVGs3lB.png)
+[![img14](https://i.imgur.com/BapLssn.png)](https://i.imgur.com/BapLssn.png)
 
 ## 3.3 ローカルクライアントからの接続
 AWS Fleet Managerを使用する場合、**日本語入力ができない**という制約があります。この制約により、日本語での作業が必要な場面では実用性に限界があるため、実際の運用においては、前述のローカルクライアントからのRDP接続（ポートフォワード方式）を主に活用しております。
@@ -165,13 +164,12 @@ aws ssm start-session \
 ```
 
 ポートフォワードの実行状況（キャプチャ）
-{{< figure alt="img8" src="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img8.png" link="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img8.png">}}
 
-正常にローカル環境（PC）からの操作が可能になりました。
-{{< figure alt="img9" src="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img9.png" link="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img9.png">}}
+[![img8](https://i.imgur.com/69kWmax.png)](https://i.imgur.com/69kWmax.png)
 
-{{< figure alt="img10" src="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img10.png" link="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img10.png">}}
+[![img9](https://i.imgur.com/J3aEZcS.png)](https://i.imgur.com/J3aEZcS.png)
 
+[![img10](https://i.imgur.com/IfdD4Bj.png)](https://i.imgur.com/IfdD4Bj.png)
 
 
 # 4. パフォーマンスとコスト考慮
@@ -220,16 +218,16 @@ aws ec2 create-tags --resources i-xxxxxxxxx \
 構成図作成においても、AIとの協働により効率化を図りました。
 
 **AIへの指示**
-{{< figure alt="img7" src="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img6.png" link="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img6.png">}}
+[![img6](https://i.imgur.com/PVN98Zw.png)](https://i.imgur.com/PVN98Zw.png)
 
 **初期生成版**
-{{< figure alt="img7" src="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img2.png" link="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img2.png">}}
+[![img2](https://i.imgur.com/nc3sccI.png)](https://i.imgur.com/nc3sccI.png)
 
 全体構成は適切でしたが、一部に技術的な誤りを確認したため、修正を指示いたしました。
-{{< figure alt="img7" src="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img7.png" link="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img7.png">}}
+[![img7](https://i.imgur.com/SQzneIN.png)](https://i.imgur.com/SQzneIN.png)
 
 **修正完了版**
-{{< figure alt="img7" src="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img3.png" link="https://github.com/t-tkm/blog_images/raw/main/2025/06/aws_vibe_coding/img3.png">}}
+[![img3](https://i.imgur.com/nVBjkVn.png)](https://i.imgur.com/nVBjkVn.png)
 
 このプロセスにより、従来であれば数時間を要する作図作業を大幅に短縮することができました。
 
