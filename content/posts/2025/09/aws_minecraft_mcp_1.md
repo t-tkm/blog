@@ -49,7 +49,7 @@ Claude Desktopから管理できる環境を構築します。前編では、AWS
 [![img5](https://imgur.com/syPLLhT.png)](https://imgur.com/syPLLhT.png)
 
 (作品集)
-[![img3](https://imgur.com/pgVlXID.png)](https://imgur.com/pgVlXID.png)
+[![img3](https://imgur.com/V1aPgtT.png)](https://imgur.com/V1aPgtT.png)
 
 私は依然としてサーバー管理者で、もっぱらみんなのプレイを鑑賞したり、保守作業に従事したり
 していますが、**たまにはちょっと驚かせたいな**、という気持ちもあったりします。
