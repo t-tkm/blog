@@ -7,10 +7,13 @@ title = "Minecraftサーバー管理で学ぶ！AWS ECS + MCP連携によるコ�
 archives = ["2025", "2025-09", "2025-09-15"]
 +++
 
+
 # 1. 概要
 本記事では、AWS ECS上でMinecraftサーバーを構築し、MCP（Model Context Protocol）を通じて
 Claude Desktopから管理できる環境を構築します。前編では、AWS CDKを使用したインフラストラクチャの
 構築からポートフォワードの設定までを詳しく説明します。
+
+<!-- テストコミット: GitHub Pagesワークフローの動作確認 -->
 
 ## 1-1. この記事で学べること
 
