@@ -2,6 +2,7 @@
 Categories = ["AWS"] 
 Tags = ["AWS", "ECS", "Minecraft", "CDK", "MCP", "Infrastructure", "SRE", "Container", "DevOps"] 
 date = "2025-09-28T00:00:00+09:00" 
+lastmod = "2025-09-29T06:10:00+09:00"
 title = "Minecraftサーバー管理で学ぶ！AWS ECS + MCP連携によるコンテナ運用（前編）" 
 archives = ["2025", "2025-09", "2025-09-15"]
 +++
