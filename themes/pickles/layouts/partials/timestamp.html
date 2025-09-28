@@ -2,3 +2,11 @@ Posted on
 <time datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" | safeHTML }}">
   {{ .Date.Format "Jan 2, 2006" }}
 </time>
+{{ if .Lastmod }}
+  {{ if ne .Lastmod .Date }}
+    (Last updated on
+    <time datetime="{{ .Lastmod.Format "2006-01-02T15:04:05Z07:00" | safeHTML }}">
+      {{ .Lastmod.Format "Jan 2, 2006" }}
+    </time>)
+  {{ end }}
+{{ end }}
