@@ -37,16 +37,14 @@ Claude Desktopから管理できる環境を構築します。前編では、AWS
 こうした最新技術を体験しつつ、AWS運用技術も同時に身につけられるといいなと思います。
 
 ## 1-2. 我が家のMinecraft進化史
-数年前、[我が家のマイクラサーバー(AWS編)](https://t-tkm.github.io/blog/posts/2021/03/minecraft_server_aws_ecs/)という記事で、息子3人（小学生）と母親が楽しむMinecraftサーバーをAWS ECS+Fargate+EFSで構築した話を書きました。
-[![img4](https://imgur.com/JnPzGKj.png)](https://imgur.com/JnPzGKj.png)
+数年前、[我が家のマイクラサーバー(AWS編)](https://t-tkm.github.io/blog/posts/2021/03/minecraft_server_aws_ecs/)という記事で、息子3人（小学生）と母親が楽しむMinecraftサーバーをAWS ECS+Fargate+EFSで構築した話を書きました(当時、小学4年、小学2年、幼稚園年長)。
 
-あれから数年が経ち、息子２人は中学生となりました。実は、あれ以来ずっとマイクラを遊び続けていた
-わけではなく、一時期は部活や勉強、他の趣味に夢中になっていた時期もありました。
+あれから数年が経ち、息子２人は中学生となりました(現在、中学3年、中学1年、小学5年)。あれ以来、ずっとマイクラを遊び続けていたわけではなく、一時期は部活や勉強、他の趣味に夢中になっていた時期もありました。
+
 しかし最近になって、なぜか急に「またみんなでマイクラやりたい！」という声が家族の中で盛り上がり、
 久しぶりにサーバーを新たに建てることになりました。
 
 今度はどんな冒険が始まるのか、親子でワクワクしています。
-[![img5](https://imgur.com/syPLLhT.png)](https://imgur.com/syPLLhT.png)
 
 (作品集)
 [![img3](https://imgur.com/V1aPgtT.png)](https://imgur.com/V1aPgtT.png)
