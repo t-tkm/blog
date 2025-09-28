@@ -4,7 +4,97 @@
   
   <url>
     <loc>https://t-tkm.github.io/blog/archives/2025/</loc>
-    <lastmod>2025-06-30T15:00:00+09:00</lastmod>
+    <lastmod>2025-09-28T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/archives/2025-09/</loc>
+    <lastmod>2025-09-28T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/archives/2025-09-15/</loc>
+    <lastmod>2025-09-28T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/archives/</loc>
+    <lastmod>2025-09-28T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/tags/aws/</loc>
+    <lastmod>2025-09-28T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/categories/aws/</loc>
+    <lastmod>2025-09-28T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/categories/</loc>
+    <lastmod>2025-09-28T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/tags/cdk/</loc>
+    <lastmod>2025-09-28T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/tags/container/</loc>
+    <lastmod>2025-09-28T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/tags/devops/</loc>
+    <lastmod>2025-09-28T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/tags/ecs/</loc>
+    <lastmod>2025-09-28T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/tags/infrastructure/</loc>
+    <lastmod>2025-09-28T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/tags/mcp/</loc>
+    <lastmod>2025-09-28T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/tags/minecraft/</loc>
+    <lastmod>2025-09-28T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/posts/2025/09/aws_minecraft_mcp_1/</loc>
+    <lastmod>2025-09-28T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/posts/</loc>
+    <lastmod>2025-09-28T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/tags/sre/</loc>
+    <lastmod>2025-09-28T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/tags/</loc>
+    <lastmod>2025-09-28T00:00:00+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://t-tkm.github.io/blog/</loc>
+    <lastmod>2025-09-28T00:00:00+09:00</lastmod>
   </url>
   
   <url>
@@ -18,42 +108,7 @@
   </url>
   
   <url>
-    <loc>https://t-tkm.github.io/blog/archives/</loc>
-    <lastmod>2025-06-30T15:00:00+09:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://t-tkm.github.io/blog/tags/aws/</loc>
-    <lastmod>2025-06-30T15:00:00+09:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://t-tkm.github.io/blog/categories/aws/</loc>
-    <lastmod>2025-06-30T15:00:00+09:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://t-tkm.github.io/blog/categories/</loc>
-    <lastmod>2025-06-30T15:00:00+09:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://t-tkm.github.io/blog/tags/coding/</loc>
-    <lastmod>2025-06-30T15:00:00+09:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://t-tkm.github.io/blog/posts/</loc>
-    <lastmod>2025-06-30T15:00:00+09:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://t-tkm.github.io/blog/tags/</loc>
-    <lastmod>2025-06-30T15:00:00+09:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://t-tkm.github.io/blog/</loc>
     <lastmod>2025-06-30T15:00:00+09:00</lastmod>
   </url>
   
@@ -84,11 +139,6 @@
   
   <url>
     <loc>https://t-tkm.github.io/blog/posts/2025/03/aws_sesar2_vpn/</loc>
-    <lastmod>2025-03-30T17:00:00+09:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://t-tkm.github.io/blog/tags/ecs/</loc>
     <lastmod>2025-03-30T17:00:00+09:00</lastmod>
   </url>
   
@@ -154,11 +204,6 @@
   
   <url>
     <loc>https://t-tkm.github.io/blog/tags/aws-site-to-site-vpn/</loc>
-    <lastmod>2024-03-29T00:00:00+09:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://t-tkm.github.io/blog/tags/cdk/</loc>
     <lastmod>2024-03-29T00:00:00+09:00</lastmod>
   </url>
   
@@ -394,11 +439,6 @@
   
   <url>
     <loc>https://t-tkm.github.io/blog/posts/2022/03/aws_app2container_ecs_eks/</loc>
-    <lastmod>2022-03-16T00:00:00+09:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://t-tkm.github.io/blog/tags/container/</loc>
     <lastmod>2022-03-16T00:00:00+09:00</lastmod>
   </url>
   
