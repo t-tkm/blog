@@ -10,7 +10,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     environment:
-      name: github-pages
+      name: gh-pages
     permissions:
       contents: read
       pages: write
