@@ -14,6 +14,8 @@ date = "2023-09-24T00:00:00+09:00"
 - 福岡県出身(1977生まれ)
 
 # 最近の活動
+- 2025.6 [日立、AWSに精通したエンジニアとして社員延べ49名が「2025 Japan AWS Ambassadors」など4部門すべての表彰に選出](https://www.hitachi.co.jp/products/it/harmonious/cloud/news/2025/info_2507_01.html)
+- 2025.6 [[2025 Japan AWS Ambassadors の発表](https://aws.amazon.com/jp/blogs/psa/2025-japan-aws-ambassadors/)
 - 2024.12 アイティメディア株式会社記事: [クラウド移行を阻む見えない壁」日立のキーパーソンが語るモダナイゼーションの実態と現実解](https://www.itmedia.co.jp/enterprise/articles/2412/12/news002.html)
     - Digital Evolution Headline; 同記事[日立のスペシャリストが分析「クラウド移行を阻む見えない壁」日立のキーパーソンが語るモダナイゼーションの実態と現実解](https://deh.hitachi.co.jp/_ct/17743685)
 - 2023.8 マイナビ・アンドエンジニア記事: [AWSって結局、何ができるの？日立製作所のAWSエンジニアに1から解説してもらった！【後編】](https://and-engineer.com/articles/ZP7PSBQAACMAyjIT)
