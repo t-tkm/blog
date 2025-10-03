@@ -125,7 +125,7 @@ cp ../env.example .env
 # サーバーの起動
 python rcon.py
 ```
-[![img15](https://imgur.com/IpXfglQ.png)](https://imgur.com/IpXfglQ.png)
+[![img15](https://imgur.com/A3gH2hh.png)](https://imgur.com/A3gH2hh.png)
 
 サーバーが起動できることが確認できれば、一度このサーバーは停止して構いません。
 後述の、MCPクライアント（Claude Desktop）がアプリ起動の延長で、毎回このMCPサーバーを起動します。
