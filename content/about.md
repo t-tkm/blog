@@ -14,6 +14,8 @@ date = "2023-09-24T00:00:00+09:00"
 - 福岡県出身(1977生まれ)
 
 # 最近の活動
+- 2025.11 東京科学大学整数論研究集会(田口雄一郎教授還暦記念集会)
+    - 2025.11.22(土)-23(日)。恩師へのご報告。[[講演資料](https://drive.google.com/file/d/1T-fel1B2wmVY5hRT6RHQObVm_8Fjdoju/view?usp=drive_link)]
 - 2025.6 [日立、AWSに精通したエンジニアとして社員延べ49名が「2025 Japan AWS Ambassadors」など4部門すべての表彰に選出](https://www.hitachi.co.jp/products/it/harmonious/cloud/news/2025/info_2507_01.html)
 - 2025.6 [[2025 Japan AWS Ambassadors の発表](https://aws.amazon.com/jp/blogs/psa/2025-japan-aws-ambassadors/)
 - 2024.12 アイティメディア株式会社記事: [クラウド移行を阻む見えない壁」日立のキーパーソンが語るモダナイゼーションの実態と現実解](https://www.itmedia.co.jp/enterprise/articles/2412/12/news002.html)
