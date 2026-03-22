@@ -1,121 +1,97 @@
-# AWS費用監視ツール（前編：AWSマネジメントコンソール & AWS CLI）
++++ 
+Categories = ["AWS"] 
+Tags = ["AWS", "ツール", "aws-cli", "通知", "費用"] 
+date = "2026-03-22T15:00:00+09:00" 
+# lastmod = "2025-10-03T17:00:00+09:00"
+title = "AWS費用監視ツール（前編：AWSマネジメントコンソール & AWS CLI）" 
+archives = ["2026", "2026-03", "2026-03-22"]
++++
 
 > **この記事は [2021年版](https://qiita.com/t-taku/items/ef0e7edc79f89929d466) を最新のAWSベストプラクティスに沿ってアップデートしたものです。**
 
 ## 1. はじめに
+AWSを使い始めると「気づいたら思わぬ費用が発生していた」という経験をしたことがある方も多いと思います。この背景のもと、2021年当時、AWSの経験が浅いエンジニア向けに、AWS CLIを使ったコスト確認、Lambdaを使ったデイリー通知の方法を紹介しました。
 
-「AWS費用のデイリー通知、やってますか？」
+当時の記事では、IAMユーザーのアクセスキーを使ったAWS CLIのセットアップ方法を紹介しましたが、現在では、長期的なアクセスキー（Long-term credentials）の使用はAWSの公式セキュリティガイドラインで非推奨となっています。
 
-AWSを使い始めると、気づいたら思わぬ費用が発生していた——という経験をしたことがある方も多いと思います。2021年当時の記事では、IAMユーザーのアクセスキーを使ったAWS CLIのセットアップ方法を紹介しました。しかし**2025年現在、長期的なアクセスキー（Long-term credentials）の使用はAWSの公式セキュリティガイドラインで非推奨**となっています。
+本記事では、アクセスキーを使わず、**IAM Identity Center（旧 AWS SSO）** を使った認証へ移行する方式で、記事を更新しようと思います。
 
-本記事では、以下の2点を意識してアップデートします。
-
-- **セキュリティ面**：アクセスキーを使わず、**IAM Identity Center（旧 AWS SSO）** を使った認証へ移行する
-- **機能面**：2021年以降に追加・強化されたコスト管理の動向にも軽く触れる（異常検知まわりの公式リンクは**付録**にまとめた）
-
-> **記事の構成（全2部）**
-> - **前編（本記事）**：AWSマネジメントコンソール & AWS CLI によるコスト確認
-> - **後編**：Lambda活用によるコスト通知の自動化
-
----
-
-## 2. 2021年からの主な変更点
-
-元記事（2021年）との差分を最初に整理しておきます。
-
+## 2. 主な変更点(2021年版から)
 | 項目 | 2021年版 | 2025年版 |
 |------|----------|----------|
-| IAM認証 | IAMユーザー + アクセスキー | **IAM Identity Center（SSO）+ 一時認証情報** |
-| AWS CLI バージョン | v1 / v2（混在） | **AWS CLI v2 のみ** |
-| 認証情報の設定 | `aws configure` | **`aws configure sso`** |
+| IAM認証 | IAMユーザー+アクセスキー | IAM Identity Center（SSO+一時認証情報 |
+| AWS CLI バージョン | v1/v2（混在） | AWS CLI v2のみ |
+| 認証情報の設定 | `aws configure` | `aws configure sso` |
 
----
-
-## 3. IAM設定（2025年ベストプラクティス）
-
-### 3.1 なぜアクセスキーを使わないのか
-
-2021年版では `aws_access_key_id` と `aws_secret_access_key` を使うIAMユーザーを作成していました。しかし、これらは**長期的に有効な認証情報**であり、以下のリスクがあります。
-
+## 3. IAM設定更新
+### 3.1 なぜアクセスキーを使わない方式へ更新するのか
+2021年版では`aws_access_key_id`と`aws_secret_access_key`を使うIAMユーザーを作成していました。しかし、これらは長期的に有効な認証情報であり、以下のリスクがあります。
 - 誤ってGitHubなどにコミットすると、第三者に悪用される
 - 定期的なローテーションが必要だが、実運用では忘れがち
-- AWSの公式Best PracticesでもLong-term credentialsの使用は**非推奨**
+- AWSの公式Best PracticesでもLong-term credentialsの使用は非推奨
 
 ### 3.2 IAM Identity Centerの設定
+IAM Identity Centerを使うと、一時的な認証情報(最長12時間)が自動的に発行・更新されるため、アクセスキーの管理が不要になります。
 
-**IAM Identity Center** を使うと、一時的な認証情報（最長12時間）が自動的に発行・更新されるため、アクセスキーの管理が不要になります。
-
-#### Step 1: IAM Identity Centerの有効化
-
-1. AWSマネジメントコンソール → **IAM Identity Center** を開く
+#### 3.2.1 IAM Identity Centerの有効化
+1. AWSマネジメントコンソール → IAM Identity Centerを開く
 2. 「有効にする」をクリック（初回のみ）
-3. **アイデンティティソース** を設定（初期設定は Identity Center ディレクトリ）
+3. アイデンティティソースを設定（ex. 今回はAWS管理のIdentity Centerディレクトリを活用）
 
-#### Step 2: ユーザーとグループの作成
-
-```
+#### 3.2.2 ユーザーとグループの作成
 IAM Identity Center > ユーザー > ユーザーを追加
-```
-
 - ユーザー名例：`billing-user`
 - メールアドレスを登録すると招待メールが届きます
+- グループ(複数人に同じ権限を付けたい場合。今回は個人で使うだけなのでグループは作らず、ユーザーを直接割り当て)
 
-**グループ**（複数人に同じ権限を付けたい場合）：
-
-```
-IAM Identity Center > グループ > グループを作成
-```
-
-- 表示名を入力してグループを作成し、グループ詳細の **「ユーザーを追加」** でメンバーを登録する
-- 個人だけで使う場合はグループを作らず、ユーザーを直接割り当ててもよい
-
-#### Step 3: 許可セット（Permission Set）の作成
-
+#### 3.2.3 許可セット（Permission Set）の作成
 コスト確認に必要な最小権限を持つ許可セットを作成します。
 
-```
-IAM Identity Center > 許可セット > 許可セットを作成
-> 「カスタム許可セット」を選択
-> インラインポリシーに以下を追記
-```
+- 概要
+  - ここで作成する(インライン)ポリシーは、AWSの請求情報およびコスト分析機能を閲覧専用(ReadOnly)で利用するための権限セットです。開発者や管理者がコスト状況を可視化することを目的とし、リソースの変更や課金設定の変更はできません。
 
-```json
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "ce:GetCostAndUsage",
-        "ce:GetCostForecast",
-        "ce:GetAnomalies",
-        "budgets:ViewBudget",
-        "billing:GetBillingData"
-      ],
-      "Resource": "*"
-    }
-  ]
-}
-```
+- 対象機能
+  - Billing（請求・明細）
+  - Cost Explorer（コスト分析）
+  - Budgets（予算確認）
 
-> **ポイント**：必要最小限の権限（最小権限の原則）を付与します。`AdministratorAccess` を付与するのはアンチパターンです。
+- 操作
+  - IAM Identity Center > 許可セット > 許可セットを作成
+    
+    「カスタム許可セット」を選択し、インラインポリシーに以下を追記
 
-#### Step 4: AWSアカウントへのアクセス割り当て
+- ポリシー内容
+  ```json
+  {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Sid": "BillingAndCostExplorerReadOnly",
+        "Effect": "Allow",
+        "Action": [
+          "aws-portal:ViewBilling",
+          "aws-portal:ViewUsage",
+          "billing:Get*",
+          "ce:Get*",
+          "ce:Describe*",
+          "budgets:ViewBudget"
+        ],
+        "Resource": "*"
+      }
+    ]
+  }
+  ```
 
-```
-IAM Identity Center > AWSアカウント > 対象アカウントを選択
-> 「ユーザーまたはグループを割り当て」
-> 作成したユーザー（またはグループ）+ 許可セットを紐付ける
-```
+ポイントは、必要最小限の権限（最小権限の原則）を付与することです。`AdministratorAccess` を付与するのはアンチパターンですので避けましょう。ワイルドカード（`ce:Get*` 等）は読み取り範囲が広いので、用途に応じて [Cost Explorer の API 一覧](https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_Operations_AWS_Cost_Explorer_Service.html)を参照しながら個別アクションへ絞る検討もできます。
 
----
+#### 3.2.4 AWSアカウントへのアクセス割り当て
+- IAM Identity Center > AWSアカウント > 対象アカウントを選択
+
+  「ユーザーまたはグループを割り当て」で、 作成したユーザー（またはグループ）+ 許可セットを紐付ける
 
 ## 4. AWS CLIのセットアップ（v2 + SSO）
-
 ### 4.1 AWS CLI v2 のインストール
-
 macOS、Linux、Windowsそれぞれの公式インストーラーを使います。
-
 ```bash
 # macOS（Homebrew）
 brew install awscli
@@ -127,45 +103,34 @@ aws --version
 
 公式ドキュメント：[AWS CLI v2 インストールガイド](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 
-### 4.2 本記事の前提：プロファイルとページャ
+### 4.2 環境変数
+以降、`aws`の例ではSSOプロファイル名を`billing-user`に統一する。プロファイル本体は 4.3 節で `aws configure sso --profile billing-user` により作成するが、先にシェル環境を整えておくと、`--profile` の繰り返しやページャで止まる挙動を避けやすいので、このタイミングでシェルに設定しておく。
 
-以降、`aws` の例では SSO プロファイル名を **`billing-user`** に統一する。プロファイル本体は **次節**で `aws configure sso --profile billing-user` により作成するが、**先にシェル環境を整えておく**と、`--profile` の繰り返しやページャで止まる挙動を避けやすい。
-
-**環境変数で `--profile` を省略**
-
-毎回 `--profile billing-user` を付ける代わりに、`~/.zshrc` などに次を書いておくとよい。
-
+#### 4.2.1 AWS_PROFILE
+`--profile` を省略するための環境変数。
 ```bash
 export AWS_PROFILE=billing-user
 ```
 
-設定後は `aws sts get-caller-identity` のように、**引数にプロファイル名を付けなくても** `billing-user` が使われる（SSO ログイン済みであることが前提）。
+設定後は `aws sts get-caller-identity` のように、引数にプロファイル名を付けなくても本記事で使う`billing-user`が使われる(SSO ログイン済みであることが前提)。
 
-**ページャを無効にする（`q` で終了が面倒なとき）**
-
-AWS CLI v2 は、出力が一定以上あると **既定でページャ**（多くの環境では `less`）に渡す。画面下に **`(END)`** と出て **`q` で抜ける**挙動はこれが原因で、Oh My Zsh 特有の問題ではない。
-
-同じくシェル設定に例えば次を足す。
-
+#### 4.2.2 AWS_PAGER
+ページャを無効にする（`q`で終了が面倒なとき）ための環境変数。AWS CLI v2は、出力が一定以上あると既定でページャ(多くの環境では`less`)に渡す。画面下に`(END)`と出て`q`で抜ける挙動。これが煩わしいのでOFFにする設定。
 ```bash
 export AWS_PAGER=cat
 ```
 
-`cat` は「そのまま標準出力に流す」指定です。空文字 **`AWS_PAGER=""`** でもページャは使われません。チームや端末ごとに **`~/.aws/config`** の `[default]` などへ **`cli_pager =`**（空）と書く方法もあります。
-
-> **注意**：ページャを切ると **長い JSON が一気にターミナルに流れる**ため、スクロールで見づらいときは、そのコマンドだけ `--no-cli-pager` を付けるか、一時的にページャ有効のままにするのも手です。
-
-> **補足**：**4.3** の `aws configure sso --profile billing-user` を除き、以降の `aws` 例では **`--profile` を付けない**（**4.2** の `AWS_PROFILE=billing-user` が効いている前提）。別プロファイルを使うときだけ `--profile` を付ければよい。
+`cat`は「そのまま標準出力に流す」指定。空文字`AWS_PAGER=""`でもページャは使われません。
 
 ### 4.3 SSOプロファイルの設定
+アクセスキーの代わりに`aws configure sso`を使います。プロファイル名を先に決められるので、次のように`--profile`を付ける方法を推奨します。以降の例ではCLI プロファイル名を `billing-user`に統一する。
 
-アクセスキーの代わりに `aws configure sso` を使います。**プロファイル名を先に決められる**ので、次のように **`--profile`** を付ける方法を推奨します。以降の例では **CLI プロファイル名を `billing-user`** に統一する。**SSO session name** は **プロファイル名と別のラベル**にするのがよい（下記ではウィザード例どおり **`my-sso`**。ポータル単位の略称など、読み替えてよい）。
-
+SSO session nameはプロファイル名と別のラベルにするのがよい。
 ```bash
 aws configure sso --profile billing-user
 ```
 
-対話形式で以下を入力します（**プロファイル名の質問は出ません**。`--profile` で既に `billing-user` が決まっているためです）。
+対話形式で以下を入力します。
 
 ```
 SSO session name (Recommended): my-sso
@@ -174,7 +139,7 @@ SSO region [None]: ap-northeast-1
 SSO registration scopes [sso:account:access]: （Enterでデフォルト）
 ```
 
-> **SSO session name** は `~/.aws/config` 内の `[sso-session …]` のラベルです。プロファイル名と同じにする必要はありません。命名の考え方は **付録「SSO session 名の付け方」** を参照してください。
+> **SSO session name** は `~/.aws/config` 内の `[sso-session …]` のラベルです。プロファイル名と同じにする必要はありません。
 
 ブラウザが自動的に開き、IAM Identity CenterのAWSアクセスポータルで認証します。認証後、ターミナルに戻ると続きが表示されます。
 
@@ -182,11 +147,10 @@ SSO registration scopes [sso:account:access]: （Enterでデフォルト）
 Default client Region [ap-northeast-1]: （利用リージョン。Enterで既定でも可）
 CLI default output format (json if not specified) [None]: json
 ```
-#### `~/.aws/config` に追記される内容（構造の意味）
+#### 4.3.1 `~/.aws/config` に追記される内容
+`aws configure sso --profile billing-user`を完了すると、概ね次の2つのブロックが書かれます。
 
-`aws configure sso --profile billing-user` を完了すると、概ね次の **2 ブロック** が書かれます。次の例は **構造の説明用**であり、`sso_account_id` や `sso_start_url` の値はご自身の環境のものに読み替えてください。
-
-**本記事の推奨**：**`[profile billing-user]`**（用途＝コスト閲覧用 CLI）と **`[sso-session my-sso]`**（単位＝このアクセスポータルへのブラウザログイン）を **名前を分ける**。ウィザードで SSO session name に **`my-sso`** を入れた場合の対応関係は次のとおり。
+次の例は説明用で、`sso_account_id`や`sso_start_url`の値はご自身の環境のものに読み替えてください。
 
 ```ini
 [profile billing-user]
@@ -203,7 +167,6 @@ sso_registration_scopes = sso:account:access
 ```
 
 ### 4.4 SSOログインと接続確認
-
 ```bash
 # SSOログイン（ブラウザが開く）
 aws sso login
@@ -212,50 +175,34 @@ aws sso login
 aws sts get-caller-identity
 ```
 
-> **補足**：一時認証情報はデフォルトで8時間有効です。期限切れ後は再度 `aws sso login` を実行してください。
-
-> **許可セットがコスト確認だけの場合**：Step 3 の許可セットに **S3 権限を付けていない**なら、`aws s3 ls` は **`AccessDenied` になるのが正常**です。SSO ログイン成功と `sts get-caller-identity` が返れば、CLI からの認証は問題ありません。接続確認は **`get-caller-identity`** か、後述の **`ce get-cost-and-usage`** など、付与した API に合わせてください。
-
----
+> 一時認証情報はデフォルトで8時間有効です。期限切れ後は再度`aws sso login`を実行してください。
 
 ## 5. AWSマネジメントコンソールでのコスト確認
-
 ### 5.1 Cost Explorer
+マネジメントコンソール → Cost Management → Cost Explorerでコスト確認ができます。
 
-マネジメントコンソール → **Cost Management** → **Cost Explorer** でコスト確認ができます。
-
-**主な確認ポイント：**
-
+#### 5.1.1 主な確認ポイント
 - **期間指定**：日次・月次・年次を選択可能。デフォルトは当月
 - **グループ化条件**：サービス別、リージョン別、タグ別など
 - **フィルター**：料金タイプ（クレジット・使用料・税金）でフィルタリング可能
 
-#### クレジット適用前後のコスト確認
-
+#### 5.1.2 クレジット適用前後のコスト確認
 2021年版でも触れていましたが、2025年現在も同様の確認方法です。
-
 - **クレジット適用後（デフォルト）**：フィルターなしで表示されるのがクレジット適用済みの料金
 - **クレジット適用前**：「料金タイプ」フィルターで「クレジット」を除外することで確認可能
 
-
-> **2025年版の追加補足**
-**AWS Budgets** は、設定した予算に対してしきい値を超えそうなときに メール等で通知する機能です。マネコンではCost Management → Budgetsから予算を作成する。過去の内訳は Cost Explorer、将来の「はみ出し予告」に近い使い方ができる。
-**AWS Cost Anomaly Detection** は、コストの異常な増加を検知してアラートするサービス（Cost Management 内）。本文では扱わず、概要・導線・参考リンクは付録「コスト異常検知」にまとめてある。
-
----
+> **補足**
+AWS Budgetsは、設定した予算に対してしきい値を超えそうなときに メール等で通知する機能です。マネコンではCost Management → Budgetsから予算を作成する。過去の内訳は Cost Explorer、将来の「はみ出し予告」に近い使い方ができる。AWS Cost Anomaly Detectionは、コストの異常な増加を検知してアラートするサービス（Cost Management 内）。
 
 ## 6. AWS CLIでのコスト確認
-
-**前提**：**4.2** のとおり **`export AWS_PROFILE=billing-user`** を済ませてあるものとする（付いていない場合は各コマンドに `--profile billing-user` を足す）。
+4.2 節のとおり、`export AWS_PROFILE=billing-user`を済ませてあるものとする（付いていない場合は各コマンドに`--profile billing-user`を足す）。
 
 ### 6.1 基本コマンド：get-cost-and-usage
-
-3章のマネコン（GUI）経由で取得した期間のデータを、AWS CLIで取得してみます。
+5章のマネコン（GUI）で確認したのと同じ期間のデータを、AWS CLIで取得してみます。
 
 まず、期間をシェル変数に設定します。
 
 ```bash
-# 例：2026年3月執筆時点では「確定しやすい先月」を指定（読み替えてよい）
 START=2026-02-01
 END=2026-03-01   # Cost Explorer は End 日を含まないため「翌月1日」にする
 ```
@@ -339,10 +286,10 @@ aws ce get-cost-and-usage \
 
 クレジット適用前のAWS料金が取得できました。
 
-> **2025年版の追加補足**
+> **補足**
 >`aws ce get-cost-and-usage`などのCost Explorer APIは、**1リクエストあたり $0.01 の料金**が発生します。1日1回程度の呼び出しなら問題ありませんが、Lambda 等で短い間隔で何度も叩くと料金とスロットリングの両方で痛くなります。
 
-### 6.5 【おまけ】サービス別コストをjqで整形する
+### 6.4 【おまけ】サービス別コストをjqで整形する
 
 `jq` コマンドを使うと、サービス別のコスト内訳を見やすく整形できます。
 
@@ -377,22 +324,10 @@ Amazon S3: $12.80
 ...
 ```
 
----
-
 ## 7. まとめと次のステップ
+本記事では、2026年のAWSベストプラクティスに沿った形でコスト監視の基礎を解説しました。後編も、本記事同様に現時点での更新を解説します。
 
-本記事では、2025年のAWSベストプラクティスに沿った形でコスト監視の基礎を解説しました。
-
-**前編のポイント：**
-
-1. **IAMユーザーのアクセスキーは非推奨** → IAM Identity Center（SSO）を使った一時認証情報に移行する
-2. **AWS CLI v2** の `aws configure sso --profile billing-user` などでセキュアなプロファイルを設定する
-3. **Cost Explorer** でコストの詳細を確認する（クレジット前後の使い分けも重要）
-
-後編では、本記事で確認したCLIコマンドをLambdaに実装し、Microsoft Teamsへの定期通知を自動化する方法を解説します。
-
-## 参考リンク
-
+## 8. 参考リンク
 - [AWS CLI v2 インストールガイド](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 - [IAM Identity Center で AWS CLI を設定する](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sso.html)
 - [Security best practices in IAM](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html)
