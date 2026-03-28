@@ -22,9 +22,9 @@ archives = ["2026", "2026-03", "2026-03-22"]
 本記事では、アクセスキーを使わず、**IAM Identity Center（旧 AWS SSO）** を使った認証へ移行する方式で、記事を更新します。
 
 ### 1.1 主な変更点
-| 項目 | 2021年版 | 2025年版 |
+| 項目 | 2021年版 | 2026年版 |
 |------|----------|----------|
-| IAM認証 | IAMユーザー+アクセスキー | IAM Identity Center（SSO+一時認証情報） |
+| IAM認証 | IAMユーザー＋アクセスキー（長期認証情報） | IAM Identity Center（SSO＋一時認証情報） |
 | AWS CLI バージョン | v1/v2（混在） | AWS CLI v2のみ |
 | 認証情報の設定 | `aws configure` | `aws configure sso` |
 
@@ -37,7 +37,9 @@ archives = ["2026", "2026-03", "2026-03-22"]
 手順のうち **IAM Identity Center の許可セット** と **AWS CLI（SSO）のセットアップ** は、本編の流れを遮らないよう **[付録A]・[付録B]** にまとめています。CLI の例を試す前に実施してください。参考リンクは **[付録C]** にあります。
 
 ## 2. 全体構成
-[![img1](https://imgur.com/NcMjnaT.png)](https://imgur.com/NcMjnaT.png)
+[![前編ではマネコンとCLIでのコスト確認、後編ではLambdaによる自動通知を扱う構成図](https://imgur.com/NcMjnaT.png)](https://imgur.com/NcMjnaT.png)
+
+前編（本記事）では、マネジメントコンソールの Cost Explorer によるコスト確認と、AWS CLI での同等データの取得方法を扱います。後編では、Lambda を使ったデイリー通知の自動化に進みます。
 
 ## 3. AWSマネジメントコンソールでのコスト確認
 ### 3.1 Cost Explorer
@@ -51,20 +53,26 @@ archives = ["2026", "2026-03", "2026-03-22"]
 - **フィルター**：料金タイプ（クレジット・使用料・税金）で絞り込めます。
 
 ### 3.3 クレジット適用前後のコスト確認
-2021年版でも触れていましたが、2025年現在も同様の確認方法です。
+2021年版でも触れていましたが、2026年現在も同様の確認方法です。
 - **クレジット適用後（デフォルト）**：フィルターなしで表示されるのがクレジット適用済みの料金です。
 - **クレジット適用前**：「料金タイプ」フィルターで「クレジット」を除外すると確認できます。
 
 ## 4. AWS CLIでのコスト確認
 
-ここからの手順は、**次のとおりまで終えていることを前提**にしています。まだの場合は、先に実施してください。
+ここからの手順は、以下の準備が完了していることを前提にしています。まだの方は先に実施してください。
 
-- **[付録A]** … IAM Identity Center の有効化、ユーザー、**許可セット（コスト閲覧用ポリシー）**、対象 AWS アカウントへの割り当て（SSO でそのアカウントのロールを引ける状態）
-- **[付録B]** … AWS CLI v2、環境変数（**B.2** の `AWS_PROFILE` など）、**初回のみ B.3** での `aws configure sso`（既に `~/.aws/config` に同じプロファイルがある場合は B.3 は省略可）、**B.4** の `aws sso login` でログイン済み
+| 準備項目 | 参照先 |
+|----------|--------|
+| IAM Identity Center の有効化・ユーザー作成・許可セット（コスト閲覧用ポリシー）の割り当て | [付録A] |
+| AWS CLI v2 のインストール・環境変数の設定・`aws sso login` によるログイン | [付録B] |
 
-**[付録B]** の **B.2** のとおり `export AWS_PROFILE=billing-user` を設定するか、各コマンドに `--profile billing-user` を付与してください。
+また、**[付録B] B.2** のとおり `export AWS_PROFILE=billing-user` を設定するか、各コマンドに `--profile billing-user` を付与してください。
 
 ### 4.1 基本コマンド：get-cost-and-usage
+
+> **補足：Cost Explorer API の料金について**
+> `aws ce get-cost-and-usage` などの Cost Explorer API は、**1リクエストあたり $0.01 の料金**が発生します。1日1回程度の呼び出しなら問題ありませんが、Lambda などで短い間隔に何度も呼び出すと、料金とスロットリングの両面で負荷が大きくなります。
+
 **3章**のマネコン（GUI）で確認したのと同じ期間のデータを、AWS CLIで取得してみます。
 
 まず、期間をシェル変数に設定します。
@@ -82,6 +90,9 @@ aws ce get-cost-and-usage \
   --granularity MONTHLY \
   --metrics "AmortizedCost"
 ```
+
+> **`AmortizedCost` とは？**
+> リザーブドインスタンスや Savings Plans の前払い費用を利用期間で按分（償却）した金額です。オンデマンド利用のみの場合は `UnblendedCost`（非ブレンドコスト）とほぼ同じ値になります。
 
 JSON形式で期間のAWS費用合計が得られます。
 
@@ -116,7 +127,7 @@ aws ce get-cost-and-usage \
   --time-period Start=${START},End=${END} \
   --granularity MONTHLY \
   --metrics "AmortizedCost" \
-  --query "ResultsByTime[].Total[].AmortizedCost.Amount" \
+  --query "ResultsByTime[].Total.AmortizedCost.Amount" \
   --output text
 # 209.1272342834
 ```
@@ -146,19 +157,18 @@ aws ce get-cost-and-usage \
   --granularity MONTHLY \
   --metrics "AmortizedCost" \
   --filter file://filter.json \
-  --query "ResultsByTime[].Total[].AmortizedCost.Amount" \
+  --query "ResultsByTime[].Total.AmortizedCost.Amount" \
   --output text
 # 440.2072342834
 ```
 
 クレジット適用前のAWS料金を取得できました。
 
-> **補足**
->`aws ce get-cost-and-usage` などの Cost Explorer API は、**1リクエストあたり $0.01 の料金**が発生します。1日1回程度の呼び出しなら問題ありませんが、Lambda などで短い間隔に何度も呼び出すと、料金とスロットリングの両面で負荷が大きくなります。
-
 ### 4.4 【おまけ】サービス別コストをjqで整形する
 
-`jq` コマンドを使うと、サービス別のコスト内訳を見やすく整形できます。
+[`jq`](https://jqlang.github.io/jq/) は JSON を整形・加工できるコマンドラインツールです。未インストールの場合は `brew install jq`（macOS）や `sudo apt install jq`（Ubuntu）などで導入できます。
+
+`jq` を使うと、サービス別のコスト内訳を見やすく整形できます。
 
 ```bash
 aws ce get-cost-and-usage \
@@ -215,7 +225,7 @@ IAM Identity Centerを使うと、一時的な認証情報(最長12時間)が自
 IAM Identity Center > ユーザー > ユーザーを追加
 - ユーザー名例：`billing-user`
 - メールアドレスを登録すると招待メールが届きます
-- グループ（複数人に同じ権限を付けたい場合）。今回は個人利用のみのためグループは作らず、ユーザーを直接割り当てます。
+- グループは、複数人に同じ権限を一括付与したい場合に使います。今回は個人利用のため作成せず、ユーザーを直接割り当てます。
 
 #### A.2.3 許可セット（Permission Set）の作成
 コスト確認に必要な最小権限を持つ許可セットを作成します。
@@ -247,6 +257,8 @@ IAM Identity Center > ユーザー > ユーザーを追加
   }
   ```
 
+> **補足：** `aws-portal:ViewBilling` / `aws-portal:ViewUsage` はレガシーアクションです。AWS は新しい細粒度アクション（`billing:*`、`cur:*` 等）への移行を進めています。既存環境との互換性のため本記事では併記していますが、新規構築の場合は [AWS Billing のアクション一覧](https://docs.aws.amazon.com/service-authorization/latest/reference/list_awsbilling.html)を参照し、新アクションのみに絞ることも検討してください。
+
 ポイントは、必要最小限の権限（最小権限の原則）を付与することです。`AdministratorAccess` を付与するのはアンチパターンですので避けましょう。ワイルドカード（`ce:Get*` など）は読み取り範囲が広いため、用途に応じて [Cost Explorer の API 一覧](https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_Operations_AWS_Cost_Explorer_Service.html)を参照しながら、個別アクションへ絞ることも検討できます。
 
 #### A.2.4 AWSアカウントへのアクセス割り当て
@@ -261,17 +273,21 @@ IAM Identity Center > ユーザー > ユーザーを追加
 macOS、Linux、Windowsそれぞれの公式インストーラーを使います。
 ```bash
 # macOS（Homebrew）
-$ brew install awscli
+brew install awscli
 
 # バージョン確認
-$ aws --version
+aws --version
 aws-cli/2.27.31 Python/3.13.3 Darwin/24.6.0 exe/x86_64
 ```
 
 公式ドキュメント：[AWS CLI v2 インストールガイド](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 
 ### B.2 環境変数
-以降、`aws` の例では SSO プロファイル名を `billing-user` に統一します。プロファイル定義は **初回だけ** **B.3** で `aws configure sso --profile billing-user` により `~/.aws/config` に書き込みます（**既に SSO プロファイルがある場合は B.3 は不要**で、そのまま **B.4** へ進んでください）。先にシェル環境を整えておくと、`--profile` の繰り返しやページャで止まる挙動を避けやすいので、このタイミングでシェルに設定しておきます。
+以降、`aws` の例では SSO プロファイル名を `billing-user` に統一します。
+
+プロファイル定義は **初回だけ** B.3 の `aws configure sso --profile billing-user` で `~/.aws/config` に書き込みます。既に SSO プロファイルがある場合は B.3 は不要なので、そのまま B.4 へ進んでください。
+
+先にシェル環境変数を設定しておくと、`--profile` の繰り返しやページャで止まる挙動を避けられます。
 
 #### B.2.1 AWS_PROFILE
 `--profile` を省略するための環境変数です。
@@ -339,7 +355,7 @@ sso_registration_scopes = sso:account:access
 ### B.4 SSOログインと接続確認
 ```bash
 # SSOログイン（ブラウザが開く）
-$ aws sso login
+aws sso login
 Attempting to automatically open the SSO authorization page in your default browser.
 If the browser does not open or you wish to use a different device to authorize this request, open the following URL:
 
@@ -349,18 +365,21 @@ Successfully logged into Start URL: https://d-xxxxxxxxxx.awsapps.com/start/
 途中、ブラウザによるユーザ認証がでるのでログインします。
 [![img3](https://imgur.com/rteWJ6m.png)](https://imgur.com/rteWJ6m.png)
 
-```
+```bash
 # 接続確認（認証が通り、どのロールでいるかを表示）
-$ aws sts get-caller-identity
+aws sts get-caller-identity
+```
+
+```json
 {
     "UserId": "AROAEXAMPLE00000000000:billing-user",
     "Account": "123456789012",
     "Arn": "arn:aws:sts::123456789012:assumed-role/AWSReservedSSO_example-permission-set_a1b2c3d4e5f67890/billing-user"
 }
-無事アクセスできました。
-
 ```
-一時認証情報はデフォルトで8時間有効です。期限切れ後は再度`aws sso login`を実行してください。
+
+無事アクセスできました。
+一時認証情報の有効期間は、許可セットのセッション持続時間に依存します（デフォルト1時間、最大12時間まで延長可能）。期限切れ後は再度 `aws sso login` を実行してください。
 
 ## [付録C] 参考リンク
 - [AWS CLI v2 インストールガイド](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
