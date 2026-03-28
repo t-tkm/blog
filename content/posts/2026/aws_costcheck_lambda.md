@@ -1,324 +1,331 @@
-# AWS費用監視ツール（後編：Lambda活用）
++++
+Categories = ["AWS"]
+Tags = ["AWS", "Lambda", "SAM", "Cost", "Teams", "FinOps"]
+date = "2026-03-28T00:00:00+09:00"
+title = "AWS費用監視ツール（後編：Lambda活用）"
+archives = ["2026", "2026-03", "2026-03-28"]
++++
 
-> **この記事は [2021年版](https://qiita.com/t-taku/items/ef0e7edc79f89929d466) の後編を最新のAWSベストプラクティスに沿ってアップデートしたものです。**
+# はじめに
+
 > 前編（マネジメントコンソール & AWS CLI 編）は [こちら](./aws_costcheck_cli.md) をご参照ください。
 
-## 1. はじめに
+前編では、AWSマネジメントコンソールとAWS CLIでのコスト確認方法を紹介しました。後編では、
+Python（boto3）による費用取得とAWS SAMを使ったLambdaへのデプロイを解説します。
 
-前編では、AWSマネジメントコンソールとAWS CLIでのコスト確認方法を紹介しました。後編では、**Python（boto3）による費用取得** と **AWS SAMを使ったLambdaへのデプロイ** を解説します。
+本記事の手順・コードは、以下の実装リポジトリと整合するように書いています。最新のソースや
+テスト、`sam/`配下のそのまま動く構成はGitHubを正としてください。
 
-**本記事の手順・コードは、実装リポジトリ [t-tkm/aws-cost-explore](https://github.com/t-tkm/aws-cost-explore) と整合するように書いています。** 最新のソースやテスト、`sam/` 配下のそのまま動く構成は GitHub を正としてください。
+<a href="https://github.com/t-tkm/aws-cost-explore-lambda" target="_blank" rel="noopener">
+    <img src="https://gh-card.dev/repos/t-tkm/aws-cost-explore-lambda.svg">
+</a>
 
 2021年版からの主な変更点は以下のとおりです。
 
-| 項目 | 2021年版 | 2025年版（リポジトリ準拠） |
+| 項目 | 2021年版 | 2026年版（リポジトリ準拠） |
 |------|----------|----------|
-| Pythonバージョン | 3.8 | **3.12**（Lambda は `python3.12`。3.8 は2024年10月EOL） |
-| Python仮想環境 | Miniconda（conda） | **venv + pip**（リポジトリ README と同じ） |
-| Lambda Runtimeの設定 | python3.8 | **python3.12** |
-| SAMデプロイ方法 | `sam package` + `sam deploy` | **`buildAnddeploy.sh`**（package + S3 + deploy）または **`sam deploy --guided`** |
-| Teams通知方法 | Office 365コネクタ Webhook | **ワークフロー用 Webhook**（リポジトリは **Adaptive Card** 形式で POST） |
-| Webhook URL の管理 | スクリプト変数またはSAMパラメータ | **SAM パラメータ**（`NoEcho`）＋ローカルは **環境変数**（`sample.env` 等） |
+| Pythonバージョン | 3.8 | 3.12（Lambda は `python3.12`。3.8 は2024年10月EOL） |
+| Python仮想環境 | Miniconda（conda） | uv（`uv sync` で仮想環境と依存管理を一括） |
+| Lambda Architecture | x86_64 | arm64（Graviton2、約20%コスト削減） |
+| SAMデプロイ方法 | `sam package` + `sam deploy` | `sam build` + `sam deploy --parameter-overrides` |
+| Teams通知方法 | Office 365コネクタ Webhook | ワークフロー用 Webhook（Adaptive Card形式 + textフォールバック） |
+| Webhook URL の管理 | スクリプト変数またはSAMパラメータ | ローカルは環境変数、LambdaはAWS Secrets Manager（`TEAMS_SECRET_ARN`） |
+| エラーハンドリング | なし | DLQ（SQS）＋ CloudWatch Alarm |
 
 ---
 
-## 2. Python実行環境の準備
+# Python実行環境の準備
 
-### 2.1 Python 3.8 EOLについて
+## Python 3.8 EOLについて
 
-2021年版では Python 3.8 + Miniconda を使用していました。しかし Python 3.8 は **2024年10月にEOL（End of Life）** を迎えており、AWS LambdaもPython 3.8ランタイムのサポートを終了しています。**Python 3.12以上**へ移行してください。
+2021年版ではPython 3.8 + Minicondaを使用していました。しかしPython 3.8は2024年10月にEOL（End of Life）を迎えており、AWS LambdaもPython 3.8ランタイムのサポートを終了しています。
+リポジトリではPython 3.12を採用しています。
 
-2025年11月時点で、AWS Lambdaは **Python 3.14** までサポートしています。安定性と実績のある **Python 3.12** の使用を推奨します。
+## ローカル環境の準備（uv）
 
-### 2.2 ローカル環境の準備（venv + pip）
-
-[リポジトリの README](https://github.com/t-tkm/aws-cost-explore/blob/main/README.md) と同じく、Python 標準の **`venv`** と **`pip`** で仮想環境を用意します（**GitHub 上の手順は uv を使っていません**）。
+リポジトリでは、Pythonのパッケージマネージャとして[uv](https://docs.astral.sh/uv/)を採用しています。
+`uv sync`一発で仮想環境（`.venv`）の作成と依存パッケージのインストールが完了するので、
+従来の`venv` + `pip`よりもセットアップが簡潔です。
 
 ```bash
-git clone https://github.com/t-tkm/aws-cost-explore.git
-cd aws-cost-explore
+git clone https://github.com/t-tkm/aws-cost-explore-lambda.git
+cd aws-cost-explore-lambda
 
-# Python 3.12 系が入っていることを確認（Lambda と揃えるなら 3.12 推奨）
-python3 --version
+# uv がインストール済みであることを確認
+uv --version
 
-# 仮想環境の作成（README と同じくディレクトリ名は venv）
-python3 -m venv venv
-
-# アクティベート（macOS / Linux）
-source venv/bin/activate
-
-# アクティベート（Windows）
-venv\Scripts\activate
-
-# ルートの requirements.txt から依存を導入（boto3 / requests / pytest など）
-pip install -r requirements.txt
+# 仮想環境の作成 & 依存パッケージインストール
+uv sync
 ```
 
-Lambda 用の SAM ビルドは **`sam/app/requirements.txt`**（現状は `requests` のみ。boto3 はランタイム同梱）を SAM CLI が読みます。
+`uv sync`を実行すると、`pyproject.toml`と`uv.lock`に基づいて`boto3`、`requests`、`pytest`などが
+インストールされます。
 
 ---
 
-## 3. Python（boto3）によるコスト取得
+# Python（boto3）によるコスト取得
 
-### 3.1 認証の考え方
+## 認証の考え方
 
-2021年版のコードは `boto3.client('ce', region_name='us-east-1')` を使い、**環境変数のAWSプロファイル（アクセスキー）** に依存していました。
+Cost Explorer APIはus-east-1のクライアントを使います。
+ローカル実行時はIAM Identity Center（SSO）のプロファイルを`AWS_PROFILE`で指定し、
+Lambda実行時はIAMロールをboto3が自動解決します。
 
-リポジトリでも Cost Explorer API は **us-east-1** のクライアントを使います。ローカル実行時は **IAM Identity Center（SSO）のプロファイル** や `~/.aws/credentials`、Lambda 実行時は **IAM 実行ロール** を boto3 が解決します。
+## ソースコードの構成
 
-### 3.2 ソースコードの置き場所
+リポジトリのディレクトリ構成は以下のとおりです。
 
-[aws-cost-explore](https://github.com/t-tkm/aws-cost-explore) では次のように役割が分かれています。
+```
+aws-cost-explore-lambda/
+├── sam/
+│   ├── template.yaml          ← SAMテンプレート
+│   ├── app/
+│   │   ├── app.py             ← Lambda ハンドラ & ローカル実行兼用
+│   │   └── requirements.txt   ← Lambda用（requests のみ）
+│   └── events/
+│       └── event.json         ← テスト用イベント
+├── tests/                     ← テストスイート
+├── img/                       ← ドキュメント用画像
+├── pyproject.toml             ← プロジェクト設定（uv用）
+├── uv.lock                    ← 依存ロックファイル
+└── README.md
+```
 
-| パス | 役割 |
-|------|------|
-| [`src/cost_report.py`](https://github.com/t-tkm/aws-cost-explore/blob/main/src/cost_report.py) | ローカル実行向けエントリ（標準出力・任意で Teams） |
-| [`sam/app/app.py`](https://github.com/t-tkm/aws-cost-explore/blob/main/sam/app/app.py) | Lambda 用（`lambda_handler` が `main()` を呼び出し） |
+エントリポイントは`sam/app/app.py`の一本です。ローカルでもLambdaでも同じファイルを使い、
+`if __name__ == "__main__":`でローカル実行、`lambda_handler`でLambda実行を分けています。
 
-実装の要点（詳細は上記リンクのソースを参照してください）。
+実装の要点は以下のとおりです。
 
-- **`CostExplorer` クラス**で `get_cost_and_usage` をラップし、クレジット除外フィルタやサービス別 `GroupBy` を扱う。
-- **環境変数 `USE_TEAMS_POST`**（`yes` のときのみ投稿）と **`TEAMS_WEBHOOK_URL`**。Lambda では `template.yaml` の `Environment` から注入される。
-- Teams 通知は **`requests`** で JSON を POST。ペイロードは **Adaptive Card**（`application/vnd.microsoft.card.adaptive`）形式。
-- レポート見出しに **STS の `get_caller_identity` で取得した AWS アカウント ID** を付与する。
-- Lambda ランタイムに同梱の **boto3** を利用し、追加パッケージは [`sam/app/requirements.txt`](https://github.com/t-tkm/aws-cost-explore/blob/main/sam/app/requirements.txt)（現状 `requests` のみ）で管理。
+- `CostExplorer`クラスで`get_cost_and_usage`をラップし、クレジット除外フィルタやサービス別`GroupBy`を扱う
+- `get_config()`関数で環境変数を解決。Teams通知が有効な場合、Webhook URLは`TEAMS_WEBHOOK_URL`（ローカル向け）または`TEAMS_SECRET_ARN`（Lambda向け、Secrets Managerから取得）のいずれかから取得する
+- Teams通知は`requests`でJSON POST。Adaptive Card形式を試し、失敗時は`{"text": ...}`にフォールバックする戦略
+- `TEAMS_WEBHOOK_FORMAT=text`を設定すると、Adaptiveを試さずtextのみ送信
+- レポート見出しにSTSの`get_caller_identity`で取得したAWSアカウントIDを付与
+- Lambda用の追加パッケージは`sam/app/requirements.txt`（現状`requests`のみ。boto3はランタイム同梱）
 
-> **注**：リポジトリ内の `sam/app/app.py` 先頭コメントは `src/cost_report.py` の名残です。Lambda では **`sam/app/app.py`** がデプロイ対象です。
+## ローカル実行確認
 
-### 3.3 ローカル実行確認
-
-ルートの [README.md](https://github.com/t-tkm/aws-cost-explore/blob/main/README.md) と同様に、`USE_TEAMS_POST` / `TEAMS_WEBHOOK_URL` を必要に応じて設定してから `src/cost_report.py` を実行します。
+認証・環境変数の設定後、`uv run`で実行します。
 
 ```bash
-# SSOプロファイルでログイン（前編参照）
-aws sso login --profile billing-user
-export AWS_PROFILE=billing-user
-
-# リポジトリルートで（venv を有効化済み想定）
-python src/cost_report.py
+# SSO でログイン
+aws sso login --profile <your-sso-profile>
 ```
 
-Teams へ投稿する場合は `export USE_TEAMS_POST=yes` と `TEAMS_WEBHOOK_URL` を設定します（未設定で `yes` のときは `ValueError`）。具体例はリポジトリの `sample.env` を参照してください。
+続けて、環境変数を設定します。READMEに記載のコピペ用テンプレートを参考にしてください。
+
+```bash
+# --- AWS（必須）---
+export AWS_PROFILE=my-company-sso
+export AWS_DEFAULT_REGION=ap-northeast-1
+export AWS_PAGER=
+
+# --- Teams（使うときだけ # を外して値を埋める）---
+# export USE_TEAMS_POST=yes
+# export TEAMS_WEBHOOK_URL="https://<your-domain>/workflows/<your-webhook-url>"
+```
+
+実行は以下のコマンドです。
+
+```bash
+uv run python sam/app/app.py
+```
+
+`uv run`は子プロセスとして実行されるため、環境変数は必ず`export`しておく必要があります
+（`export`なしの代入だと`uv run`の子プロセスには渡りません）。
+
+実行すると、以下のようなレポートが標準出力に表示されます。`USE_TEAMS_POST=yes`なら
+同一内容がTeamsにも投稿されます。
+
+```
+❯ uv run python sam/app/app.py
+INFO:__main__:AWS Account ID: 123456789012
+INFO:__main__:Calculated total cost from Groups: 0.00 USD
+------------------------------------------------------
+AWSアカウント 123456789012
+03/01～03/27のクレジット適用後費用は、0.00 USD です。
+サービスごとの費用データはありません。
+------------------------------------------------------
+
+INFO:__main__:Calculated total cost from Groups: 12.34 USD
+------------------------------------------------------
+AWSアカウント 123456789012
+03/01～03/27のクレジット適用前費用は、12.34 USD です。
+- Amazon EC2: 5.00 USD
+- Amazon Simple Storage Service: 3.00 USD
+- AWS Lambda: 2.00 USD
+- Amazon CloudWatch: 1.50 USD
+- その他: 0.84 USD
+------------------------------------------------------
+```
 
 ---
 
-## 4. Microsoft Teams通知の移行（重要）
+# Microsoft Teams通知の移行
 
-### 4.1 Office 365コネクタの廃止
+## Office 365コネクタの廃止
 
-2021年版では、Microsoft TeamsのIncoming WebhookとしてOffice 365コネクタのURLを使用していました。しかし、Microsoftは **2024年8月15日をもってOffice 365コネクタの新規作成を停止**し、**2024年10月1日にすべてのコネクタを廃止**しています。
+2021年版では、Microsoft TeamsのIncoming WebhookとしてOffice 365コネクタのURLを使用していました。
+しかし、Microsoftは2024年8月15日をもってOffice 365コネクタの新規作成を停止し、
+2024年10月1日にすべてのコネクタを廃止しています。
 
-既存のWebhook URLはすでに機能しないため、**Power Automate ワークフロー**への移行が必須です。
+既存のWebhook URLはすでに機能しないため、Power Automateワークフローへの移行が必須です。
 
-### 4.2 ワークフロー（Webhook）の作成
+## ワークフロー（Webhook）の作成
 
-Office 365 コネクタの代わりに、**Power Automate** などで **HTTP POST を受け取り Teams に投稿するワークフロー**を用意し、その URL を `TEAMS_WEBHOOK_URL` に設定します。
+Office 365コネクタの代わりに、Power AutomateなどでHTTP POSTを受け取りTeamsに投稿する
+ワークフローを用意し、そのURLを`TEAMS_WEBHOOK_URL`（ローカル）や`TEAMS_SECRET_ARN`
+（Lambda / Secrets Manager）に設定します。
 
-**手順の例（Power Automate）：**
+手順の例（Power Automate）：
 
 1. [Power Automate](https://make.powerautomate.com/) にサインイン
 2. 「作成」→「自動化したクラウドフロー」を選択
-3. トリガーとして「**Teams webhook 要求が受信されたとき**」（または「HTTP要求を受け取ったとき」）を選択
-4. アクションに「**チャットまたはチャネルにメッセージを投稿する**」を追加
-   - 投稿者：フローボット
-   - 投稿先：チャネル（対象のチームとチャネルを選択）
-   - メッセージ：トリガーが渡す本文や Adaptive Card の内容を参照して整形
-5. 保存後に発行される **HTTP POST の URL** をコピーする
+3. トリガーとして「Teams webhook 要求が受信されたとき」を選択
+4. アクションに「チャットまたはチャネルにメッセージを投稿する」を追加
+5. 保存後に発行されるHTTP POST URLをコピーする
 
-この URL を SAM パラメータ `TeamsWebhookUrl` やローカルの環境変数に設定します。
+リポジトリの`post_to_teams`はAdaptive Card形式のJSONを送ります。
+ワークフロー側は受け取ったJSONをそのままTeamsに渡せる構成にするか、`parse JSON`で
+Adaptive Cardを解釈するよう調整してください。なお、Adaptiveでうまく表示されない場合は
+`TEAMS_WEBHOOK_FORMAT=text`を設定すると`{"text": ...}`形式のみで送信します。
 
-> **リポジトリ実装との対応**：[aws-cost-explore](https://github.com/t-tkm/aws-cost-explore) の `post_to_teams` は **`attachments` 配下に Adaptive Card を載せた JSON** を送ります（単純な `{ "title", "text" }` ではありません）。ワークフロー側は **受け取った JSON をそのまま Teams に渡せる構成**にするか、必要に応じて `parse JSON` して Adaptive Card を解釈するよう調整してください。実際のスキーマは [`sam/app/app.py` の `post_to_teams`](https://github.com/t-tkm/aws-cost-explore/blob/main/sam/app/app.py) を参照してください。
-
-> **注意**：Power Automate のフローボットはプライベートチャネルへのメッセージ投稿が制限されています。パブリックチャネルを使用するか、ユーザーとして投稿する設定を選んでください。
+> Power Automateのフローボットはプライベートチャネルへのメッセージ投稿が制限されています。
+> パブリックチャネルを使用するか、ユーザーとして投稿する設定を選んでください。
 
 ---
 
-## 5. AWS SAMによるLambdaデプロイ
+# AWS SAMによるLambdaデプロイ
 
-SAM 用のテンプレートと関数コードはリポジトリの **`sam/`** ディレクトリにあります（ルートの `src/` はローカル実行用）。
+SAM用のテンプレートと関数コードはリポジトリの`sam/`ディレクトリにあります。
 
-### 5.1 前提とディレクトリ構成
+## 前提
 
-SAM CLI の導入は [AWS 公式手順（Install the SAM CLI）](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/install-sam-cli.html) に従ってください（`pip install aws-sam-cli` やパッケージマネージャーなど）。リポジトリ自体は **uv 非依存**です。
+- [AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/install-sam-cli.html)がインストール済みであること
+- [AWS CLI v2](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) と IAM Identity Center（SSO）による認証が使えること
 
-[aws-cost-explore](https://github.com/t-tkm/aws-cost-explore) をクローン済みで、作業ディレクトリを **`sam/`** に移します。
+## SAMテンプレート（`sam/template.yaml`）の概要
 
-```
-aws-cost-explore/
-├── src/                    ← ローカル用 cost_report.py
-├── sam/
-│   ├── template.yaml
-│   ├── app/
-│   │   ├── app.py          ← Lambda ハンドラ
-│   │   └── requirements.txt   ← 現状は requests のみ
-│   ├── events/
-│   │   └── event.json
-│   ├── buildAnddeploy.sh   ← package + S3 + deploy の例
-│   └── tests/
-└── requirements.txt        ← ローカル開発用（pytest 等）
-```
+リポジトリの`template.yaml`は、2021年版からかなり強化されています。実ファイルと差分がある場合は
+[GitHub上のtemplate.yaml](https://github.com/t-tkm/aws-cost-explore-lambda/blob/main/sam/template.yaml)を
+優先してください。
 
-### 5.2 SAMテンプレート（`sam/template.yaml`）
-
-リポジトリの定義を整理した抜粋です（実ファイルと差分がある場合は [GitHub 上の template.yaml](https://github.com/t-tkm/aws-cost-explore/blob/main/sam/template.yaml) を優先してください）。
-
-```yaml
-AWSTemplateFormatVersion: '2010-09-09'
-Transform: AWS::Serverless-2016-10-31
-Description: Notify AWS billing to Teams using Lambda
-
-Globals:
-  Function:
-    Timeout: 60
+主なリソースと設計ポイントをまとめます。
 
 Parameters:
-  TeamsWebhookUrl:
-    Type: String
-    Description: "Webhook URL for Teams notifications"
-    NoEcho: true
+| パラメータ | 説明 |
+|-----------|------|
+| `UseTeamsPost` | Teams通知の有効/無効（`yes` / `no`、デフォルト`no`） |
+| `TeamsWebhookSecretArn` | Webhook URLを格納したSecrets ManagerシークレットのARN。`UseTeamsPost=yes`の場合は必須 |
 
-  UseTeamsPost:
-    Type: String
-    Description: "Flag to enable or disable Teams posting (yes/no)"
-    Default: "false"
+Lambda関数（`BillingNotificationFunction`）:
+- `Runtime: python3.12`、`Architectures: arm64`（Graviton2で約20%コスト削減）
+- `ReservedConcurrentExecutions: 1`（コスト通知は同時1実行で十分）
+- `Timeout: 120`秒（外部API呼び出しのバッファ）
+- スケジュール: `cron(0 0 * * ? *)`（UTC 0:00 = JST 9:00に毎日実行）
+- 環境変数として`USE_TEAMS_POST`と`TEAMS_SECRET_ARN`を注入（Conditionで制御）
 
-Resources:
-  BillingIamRole:
-    Type: AWS::IAM::Role
-    Properties:
-      AssumeRolePolicyDocument:
-        Version: "2012-10-17"
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service: lambda.amazonaws.com
-            Action: "sts:AssumeRole"
-      Policies:
-        - PolicyName: "BillingNotificationToTeamsLambdaPolicy"
-          PolicyDocument:
-            Version: "2012-10-17"
-            Statement:
-              - Effect: Allow
-                Action:
-                  - logs:CreateLogGroup
-                  - logs:CreateLogStream
-                  - logs:PutLogEvents
-                Resource: "arn:aws:logs:*:*:*"
-              - Effect: Allow
-                Action:
-                  - ce:GetCostAndUsage
-                Resource: "*"
-              - Effect: Allow
-                Action:
-                  - sns:Publish
-                Resource: "arn:aws:sns:*:*:*"
+IAMポリシー:
+テンプレートではインラインの`Policies`で以下を許可しています。
 
-  BillingNotificationFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: app/
-      Handler: app.lambda_handler
-      Runtime: python3.12
-      Architectures:
-        - x86_64
-      Role: !GetAtt BillingIamRole.Arn
-      Environment:
-        Variables:
-          USE_TEAMS_POST: !Ref UseTeamsPost
-          TEAMS_WEBHOOK_URL: !Ref TeamsWebhookUrl
-      Events:
-        NotifyTeams:
-          Type: Schedule
-          Properties:
-            Schedule: cron(0 0 * * ? *)
+- `AWSLambdaBasicExecutionRole`（CloudWatch Logs）
+- `ce:GetCostAndUsage`（Cost Explorer読み取り）
+- `sts:GetCallerIdentity`（アカウントID取得）
+- `secretsmanager:GetSecretValue`（Teams有効時のみ、Conditionで制御）
 
-Outputs:
-  BillingNotificationLambdaArn:
-    Description: "ARN of the Billing Notification Lambda Function"
-    Value: !GetAtt BillingNotificationFunction.Arn
-  BillingNotificationLambdaRoleArn:
-    Description: "ARN of the IAM Role for the Billing Notification Lambda Function"
-    Value: !GetAtt BillingIamRole.Arn
-```
+エラーハンドリング:
+- Dead Letter Queue（SQS）: Lambda失敗時にイベントを14日間保持する`BillingNotificationDLQ`
+- CloudWatch Alarm: Lambdaエラー数が1以上になると発火する`LambdaErrorAlarm`（評価期間1日）
 
-**2021年版からの主な変更点（テンプレート観点）：**
+## Secrets Managerへの登録
 
-- `Runtime: python3.12`、`Architectures: x86_64` を明示
-- Webhook URL と Teams 投稿有効化を **パラメータ**（`TeamsWebhookUrl` / `UseTeamsPost`）と **環境変数**で渡す
-- スケジュールは **`cron(0 0 * * ? *)`**（UTC 0:00 = 同日 9:00 JST）
-- IAM に **`sns:Publish`** が含まれる（現行コードパスでは未使用でもテンプレート上は残っている）
-
-### 5.3 ビルドとデプロイ
-
-**方法 A：`sam deploy --guided`（対話形式）**
+Teams通知を使う場合は、デプロイ前にWebhook URLをSecrets Managerに登録しておきます。
 
 ```bash
-cd aws-cost-explore/sam
+# 1. シークレットを作成
+aws secretsmanager create-secret \
+  --name teams-webhook-url \
+  --secret-string "https://<your-domain>/workflows/<your-webhook-url>"
+
+# 2. ARN を確認
+aws secretsmanager describe-secret \
+  --secret-id teams-webhook-url \
+  --query ARN --output text
+# 出力例:
+# arn:aws:secretsmanager:ap-northeast-1:123456789012:secret:teams-webhook-url-xxxxxx
+```
+
+シークレットの値がJSON（例: `{"url":"https://..."}`）でも、コード側でURLを取り出す仕組みに
+なっているため、平文・JSON どちらでも動作します。
+
+## ビルドとデプロイ
+
+```bash
+cd aws-cost-explore-lambda/sam
 sam build
-sam deploy --guided
 ```
 
-プロンプトで `TeamsWebhookUrl`（ワークフローの URL）と `UseTeamsPost` を渡します。アプリは環境変数 `USE_TEAMS_POST` を **小文字で `yes` と一致するときだけ** Teams に POST します（それ以外・未設定は投稿しません）。テンプレートのデフォルトは `"false"` です。
-
-**方法 B：リポジトリの `buildAnddeploy.sh`**
-
-リポジトリルートに **`.env`** を用意し（`buildAnddeploy.sh` は `../.env` を読み込みます）、次を設定したうえで `sam` ディレクトリから実行します。
-
-- `S3_BUCKET` … アーティファクト配置用バケット
-- `TEAMS_WEBHOOK_URL` / `USE_TEAMS_POST` … `sam deploy` の `--parameter-overrides` に渡る値
+Teams通知を使う場合:
 
 ```bash
-cd aws-cost-explore/sam
-./buildAnddeploy.sh
+sam deploy \
+  --parameter-overrides \
+    UseTeamsPost=yes \
+    TeamsWebhookSecretArn=arn:aws:secretsmanager:<region>:<account-id>:secret:teams-webhook-url-xxxxxx
 ```
 
-スクリプトは **`sam package`（S3 経由）→ `sam deploy`** の流れで、スタック名は **`NotifyBillingToTeams`** です。バケットやスタック名を変えたい場合はスクリプトを編集してください。
-
-### 5.4 ローカルテスト（SAM Local）
+Teams通知を使わない場合:
 
 ```bash
-cd aws-cost-explore/sam
+sam deploy --parameter-overrides UseTeamsPost=no
+```
+
+初回デプロイ時は`sam deploy --guided`で対話形式にすると、スタック名やリージョンなどを
+確認しながら設定できるので便利です。
+
+## ローカルテスト（SAM Local）
+
+```bash
+cd aws-cost-explore-lambda/sam
 sam build
-# events/event.json は空の JSON（{}）でよい例がリポジトリに含まれます
 sam local invoke BillingNotificationFunction --event events/event.json
 ```
 
-### 5.5 削除
+## 削除
 
 ```bash
-cd aws-cost-explore/sam
-sam delete --stack-name NotifyBillingToTeams
+sam delete --stack-name <your-stack-name>
 ```
 
-スタック名を `sam deploy --guided` で変えた場合は、その名前に合わせてください。
+---
+
+# まとめ
+
+本記事では、2021年版後編の内容を、実装リポジトリ
+[aws-cost-explore-lambda](https://github.com/t-tkm/aws-cost-explore-lambda)と揃えたうえで
+整理しました。
+
+後編のポイント:
+- Python 3.8 → 3.12: Lambda ランタイムもリポジトリの`template.yaml`準拠
+- パッケージ管理は uv: `uv sync`で仮想環境と依存を一括セットアップ
+- エントリは`sam/app/app.py`一本: ローカル（`uv run python sam/app/app.py`）とLambda（`lambda_handler`）を兼用
+- Webhook URLはSecrets Manager管理: Lambda環境では`TEAMS_SECRET_ARN`経由で安全に取得
+- Teams通知はAdaptive Card + textフォールバック: `TEAMS_WEBHOOK_FORMAT=text`で形式の切り替えも可能
+- Office 365コネクタは廃止済み: Power Automateワークフロー用Webhookへ移行する
+- 運用面の強化: DLQ（SQS）とCloudWatch Alarmで障害検知をカバー
+- arm64（Graviton2）採用: 約20%のコスト削減
 
 ---
 
-## 6. まとめ
-
-本記事では、2021年版後編の内容を、実装リポジトリ [aws-cost-explore](https://github.com/t-tkm/aws-cost-explore) と揃えたうえで整理しました。
-
-**後編のポイント：**
-
-1. **Python 3.8 は EOL** → Lambda は **python3.12**（リポジトリの `template.yaml` 準拠）
-2. **ローカル開発は venv + pip** → リポジトリ README どおり `python -m venv venv` と `pip install -r requirements.txt`（ルート）。SAM の依存は **`sam/app/requirements.txt`**
-3. **エントリが二系統** → 手元実行は **`src/cost_report.py`**、クラウドは **`sam/app/app.py`**（`lambda_handler` → `main()`）
-4. **Teams は Adaptive Card + `requests`** → ワークフロー側の受け取り形式と整合を取る（§4 参照）
-5. **Office 365 コネクタは廃止済み** → ワークフロー用 Webhook へ移行する
-6. **デプロイ** → **`sam build` + `sam deploy --guided`** またはリポジトリの **`buildAnddeploy.sh`**（`sam package` + S3）
-
----
-
-## 参考リンク
-
-- [t-tkm/aws-cost-explore（本記事の実装）](https://github.com/t-tkm/aws-cost-explore)
+# 参考リンク
+- [t-tkm/aws-cost-explore-lambda（本記事の実装）](https://github.com/t-tkm/aws-cost-explore-lambda)
+- [uv - Python package manager](https://docs.astral.sh/uv/)
 - [Python 3.12 runtime now available in AWS Lambda](https://aws.amazon.com/blogs/compute/python-3-12-runtime-now-available-in-aws-lambda/)
 - [Install the AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/install-sam-cli.html)
 - [Retirement of Office 365 connectors within Microsoft Teams](https://devblogs.microsoft.com/microsoft365dev/retirement-of-office-365-connectors-within-microsoft-teams/)
-- [Teams webhook を使ったワークフローへの移行](https://techcommunity.microsoft.com/discussions/teamsdeveloper/simple-workflow-to-replace-teams-incoming-webhooks/4225270)
-- [AWS SAM deploy コマンドリファレンス](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-cli-command-reference-sam-deploy.html)
+- [AWS Secrets Manager ドキュメント](https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html)
 
 ---
 
-*Amazon Web Services、およびその他のAWS商標は、米国およびその他の諸国におけるAmazon.com, Inc.またはその関連会社の商標です。*
-*Microsoft 365、Microsoft Teamsは、米国Microsoft Corporationおよびその関連会社の米国およびその他の国における登録商標または商標です。*
+Amazon Web Services、およびその他のAWS商標は、米国およびその他の諸国におけるAmazon.com, Inc.またはその関連会社の商標です。
+Microsoft 365、Microsoft Teamsは、米国Microsoft Corporationおよびその関連会社の米国およびその他の国における登録商標または商標です。
