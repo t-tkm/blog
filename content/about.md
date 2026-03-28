@@ -14,6 +14,7 @@ date = "2023-09-24T00:00:00+09:00"
 - 福岡県出身(1977生まれ)
 
 # 最近の活動
+- 2026.1 京都産業大学・理学部・数理科学科の学生向け講演(1/14(水))「[企業におけるエンジニアのキャリアパス（学生時代の武器をどう磨くか）](https://www.kyoto-su.ac.jp/news/news-002400.html)」
 - 2025.11 東京科学大学整数論研究集会(田口雄一郎教授還暦記念集会)
     - 2025.11.22(土)-23(日)。恩師へのご報告。[[講演資料](https://drive.google.com/file/d/1T-fel1B2wmVY5hRT6RHQObVm_8Fjdoju/view?usp=drive_link)]
 - 2025.6 [日立、AWSに精通したエンジニアとして社員延べ49名が「2025 Japan AWS Ambassadors」など4部門すべての表彰に選出](https://www.hitachi.co.jp/products/it/harmonious/cloud/news/2025/info_2507_01.html)
