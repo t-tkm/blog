@@ -101,12 +101,12 @@ aws-cost-explore-lambda/
 
 エントリポイントは `sam/app/app.py` です。`if __name__ == "__main__":` を入れているので、ローカルでも Lambda と同じロジックをそのまま試せます。
 
-実装のポイントは次のとおりです。
+コードを眺める前に、書きながら気になって直した点をメモしておきます。
 
 - `CostExplorer` クラスで API をラップし、クレジット除外フィルタなどを共通化している。
 - `get_config()` で環境変数を集約し、Secrets Manager からの URL 取得もここで行う。
 - Teams 通知は `requests` で POST し、Adaptive Card を試し、うまくいかなければテキストで送る二段構えにしてある。
-- レポートに `get_caller_identity` で取得したアカウント ID を付与し、複数アカウント運用時にも見分けがつくようにしている。
+- レポートに `get_caller_identity` で取得したアカウント ID を付与し、複数アカウント運用時にも見分けがつくようにしている（複数アカウントを触ることが多いので、これは個人的に必須でした）。
 
 ## 3.3 ローカルでの動作確認
 
@@ -158,12 +158,9 @@ Power Automate で「Teams webhook 要求が受信されたとき」をトリガ
 
 ## 5.1 SAM テンプレート（`template.yaml`）
 
-Qiita では `TeamsWebhookUrl` をパラメータで渡し、環境変数にそのまま載せる形でした。2026年版では **Secrets Manager** を前提にし、Webhook URL をテンプレートやコマンドラインに残しにくくしています。そのほか、次のような運用面の追記があります。
+Qiita では `TeamsWebhookUrl` をパラメータで渡し、環境変数にそのまま載せる形でした。2026年版では **Secrets Manager** を前提にし、Webhook URL をテンプレートやコマンドラインに残しにくくしています。
 
-* **Runtime**: `python3.12` / `arm64`（Graviton2）
-* **Schedule**: `cron(0 0 * * ? *)`。毎日 JST 9:00 に実行
-* **Security**: Webhook URL は環境変数にベタ書きせず、Secrets Manager（`TEAMS_SECRET_ARN`）から動的に取得
-* **Reliability**: DLQ（SQS）を設定し、失敗イベントをロストしないようにする。エラー時の CloudWatch Alarm もセットで作成
+その他の変更点をざっと挙げると、ランタイムは `python3.12` / `arm64`（Graviton2）、スケジュールは `cron(0 0 * * ? *)` で毎日 JST 9:00 実行です。加えて DLQ（SQS）と CloudWatch Alarm を組み合わせ、失敗時にイベントを取りこぼさないようにしてあります。個人アカウントでここまで必要か、という気もしますが、Lambda が壊れていても気づかず通知が途絶え続けるのは嫌なので入れておきました。
 
 ## 5.2 デプロイ手順（`sam package` 前提からの変更）
 
@@ -191,12 +188,7 @@ sam deploy --parameter-overrides \
 
 # 6. まとめ
 
-Qiita の後編で扱った「boto3 で Cost Explorer を叩き、SAM で Lambda に載せ、Teams に飛ばす」という骨格はそのままです。変わったのは主に次の点です。
-
-* **Python 3.8 → 3.12** と **uv**：ローカルと Lambda の両方を現行ランタイムに載せる
-* **Teams**：廃止されたコネクタから **ワークフロー Webhook** へ
-* **Secrets Manager**：URL をパラメータ平文で渡さない
-* **SAM**：`sam build` 中心のデプロイ、**arm64**、失敗時の **DLQ と Alarm**
+Qiita の後編で扱った「boto3 で Cost Explorer を叩き、SAM で Lambda に載せ、Teams に飛ばす」という骨格はそのままです。変わったのは主に次の4点です。まず Python が 3.8 から 3.12 へ、パッケージ管理が Miniconda から uv に変わりました。次に Teams 通知は、廃止された Office 365 コネクタから Power Automate のワークフロー Webhook に置き換えています。Webhook URL の扱いも見直しており、SAM テンプレートに平文で残す代わりに Secrets Manager で管理する形にしました。SAM のデプロイ手順は `sam build` → `sam deploy` に整理し、Lambda は arm64 に変更、DLQ と CloudWatch Alarm も加えています。
 
 Qiita のまとめ（前編〜後編通して）で触れたように、マネコンの UI は変わりやすい一方、CLI や API は比較的ゆっくり移行します。本記事の更新も、その延長線上で「同じことを 2026年の前提でやり直す」イメージです。
 
