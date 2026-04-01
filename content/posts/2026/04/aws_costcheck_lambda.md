@@ -33,8 +33,9 @@ archives = ["2026", "2026-04", "2026-04-01"]
     <img src="https://gh-card.dev/repos/t-tkm/aws-cost-explore-lambda.svg">
 </a>
 
-> **注:** 本記事および実装リポジトリは、従来のQiita記事実装([t-tkm/aws-cost-explore](https://github.com/t-tkm/aws-cost-explore))をベースに、構成し直しました。
->ディレクトリ構成や設計も刷新しており差分があるため、古いリポジトリと混同しないようご注意ください。
+> **注:** 本記事および実装リポジトリは、従来の Qiita 記事実装（[t-tkm/aws-cost-explore](https://github.com/t-tkm/aws-cost-explore)）をベースに、構成し直しました。
+>
+> ディレクトリ構成や設計も刷新しており差分があるため、古いリポジトリと混同しないようご注意ください。
 
 ## 1.2 本記事の位置づけ（前編・認証）
 
@@ -104,6 +105,8 @@ aws-cost-explore-lambda/
 ```
 
 エントリポイントは `sam/app/app.py` です。`if __name__ == "__main__":` を入れているので、ローカルでも Lambda と同じロジックをそのまま試せます。
+
+次の簡略版は流れの把握用です。`get_config()` はローカル実行向けに `TEAMS_WEBHOOK_URL` のみを見ていますが、実装本体では Lambda 時に `TEAMS_SECRET_ARN` から Secrets Manager へ取りにいく分岐があります（下の「全コードを表示」がリポジトリと一致します）。
 
 ```python {linenos=true}
 import os
@@ -233,7 +236,7 @@ SERVICE_GROUP_DIMENSION = "SERVICE"
 RECORD_TYPE_DIMENSION = "RECORD_TYPE"
 CREDIT_RECORD_TYPE = "Credit"
 MIN_BILLING_THRESHOLD = 0.01
-TEAMS_REQUEST_TIMEOUT_SEC = 10  # P0-2: Webhook POSTのタイムアウト（秒）
+TEAMS_REQUEST_TIMEOUT_SEC = 10  # Webhook POST のタイムアウト（秒）
 MAX_RETRIES = 3
 
 # ロギング設定
@@ -634,7 +637,7 @@ def main() -> None:
     Webhook URLの取得・バリデーションは get_config() 内で完結しているため、
     main() では設定取得後すぐに処理を開始できる。
     """
-    # P0-1: get_config() 内で Secrets Manager から Webhook URL を取得済み
+    # get_config() で Webhook URL の取得・検証まで済ませている
     config = get_config()
     use_teams_post = config["USE_TEAMS_POST"]
     teams_webhook_url = config["TEAMS_WEBHOOK_URL"]
@@ -650,7 +653,7 @@ def main() -> None:
     start_date, end_date = get_date_range()
     period = {"Start": start_date, "End": end_date}
     start_day_str = datetime.strptime(start_date, "%Y-%m-%d").strftime("%m/%d")
-    # P2: Cost Explorer API の End は「その日の 0:00」を指すため、
+    # Cost Explorer API の End は「その日の 0:00」を指すため、
     # 表示上は1日引いて「昨日まで（= 実質の集計最終日）」を表示する
     end_day_str = (datetime.strptime(end_date, "%Y-%m-%d") - timedelta(days=1)).strftime("%m/%d")
 
@@ -661,7 +664,7 @@ def main() -> None:
     title_after = f"AWSアカウント {account_id}\n" + title_after
     print_report(title_after, services_after)
     if use_teams_post:
-        # P0-3: post_to_teams は bool を返す。False でも Lambda は正常終了とする。
+        # Teams 通知が失敗しても Lambda 全体はエラーにしない（ログに警告）
         if not post_to_teams(title_after, services_after, webhook_url=teams_webhook_url):
             logger.warning("クレジット適用後レポートの Teams 通知に失敗しました。処理を継続します。")
 
@@ -677,7 +680,7 @@ def main() -> None:
 
 
 def lambda_handler(event: dict, context: Any) -> dict:
-    # P2: AWSベストプラクティスに合わせてレスポンスdictを返す
+    # API Gateway 等と整合しやすいよう statusCode / body を返す
     try:
         main()
         return {"statusCode": 200, "body": "Cost report generated successfully."}
@@ -694,7 +697,9 @@ if __name__ == "__main__":
 ### コードの処理概要
 主な処理フローは次の通りです。
 - 設定値の取得と初期化
-   - `get_config()` で環境変数や必要なパラメータ（Teams Webhook URL など）を一元的に取得。Secrets Manager から機密情報を取得する処理もここでまとめています。AWS のアカウントIDを `get_caller_identity` を通じて取得し、レポート各所に付与します。これにより、複数アカウントでの利用時も判別しやすくなっています。
+   - `get_config()` で環境変数や Teams 向けの設定を一元的に取得します。Teams 通知を有効にしたときは、ローカルでは `TEAMS_WEBHOOK_URL`、Lambda では `TEAMS_SECRET_ARN` 経由で Secrets Manager から Webhook URL を取る処理もここにまとめています。
+- AWS アカウント ID の付与
+   - `main()` 内の `get_account_id()`（STS の `get_caller_identity`）でアカウント ID を取得し、レポートのタイトル行に付けます。複数アカウント運用時にもどの環境か判別しやすくなります。
 - Cost Explorer クライアントのラップ
    - `CostExplorer` クラスで boto3 の Cost Explorer API をラップし、API呼び出しやクレジット適用/除外のフィルタ処理など、共通化が必要なロジックを一箇所に集約しています。
 - コストレポートの生成
@@ -725,7 +730,7 @@ export AWS_PROFILE=<your-sso-profile>
 export AWS_DEFAULT_REGION=ap-northeast-1
 export AWS_PAGER=
 ```
-`AWS_PROFILE` は `uv run` 自体の必須要件ではありませんが、ローカル実行時に `boto3` がどの認証情報を使うかを明示するため、`default` 以外のプロファイルを使う場合は `export` で指定しておくのを推奨します。`AWS_PROFILE=...` の代入だけでは子プロセスに引き継がれないことがあるため、`export` で設定してください。
+`AWS_PROFILE` は `uv run` 自体の必須要件ではありませんが、ローカル実行時に `boto3` がどの認証情報を使うかを明示するため、`default` 以外のプロファイルを使う場合は設定しておくのを推奨します。同じコマンド行で `AWS_PROFILE=your-profile uv run python sam/app/app.py` のように書けば、その1回の実行には環境変数が渡ります。対話シェルで `AWS_PROFILE=...` と代入したあと、別のコマンドとして `uv run` する場合は子プロセスへ引き継がれないことがあるため、`export AWS_PROFILE=...` を使うか、実行のたびにコマンド先頭へ付けてください。
 
 ```bash
 # 環境変数の設定（Teams 通知を使う場合）
