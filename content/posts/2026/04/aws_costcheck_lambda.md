@@ -1,9 +1,9 @@
 +++
 Categories = ["AWS"]
 Tags = ["AWS", "Lambda", "SAM", "Cost", "Teams", "FinOps"]
-date = "2026-03-28T00:00:00+09:00"
+date = "2026-04-01T00:00:00+09:00"
 title = "AWS費用監視ツール（後編：Lambda活用）"
-archives = ["2026", "2026-03", "2026-03-28"]
+archives = ["2026", "2026-04", "2026-04-01"]
 +++
 
 # 1. はじめに
@@ -79,6 +79,7 @@ uv sync
 `pyproject.toml` に基づき、`boto3` や `requests`、`pytest` 等がセットアップされます。
 
 # 3. Python（boto3）によるコスト取得
+[![img2](https://imgur.com/E7zVnDk.png)](https://imgur.com/E7zVnDk.png)
 
 ## 3.1 認証
 
@@ -139,10 +140,18 @@ class CostExplorer:
 def get_client():
     return boto3.client("ce", region_name=REGION_NAME)
 def get_date_range() -> Tuple[str, str]:
-    """当月初日〜今日を返す。"""
-    start = date.today().replace(day=1).isoformat()
-    end = date.today().isoformat()
-    return start, end
+    """
+    集計期間を取得する。
+    Cost Explorer の TimePeriod は End が排他的で、Start は End より前である必要がある。
+    月初当日だけ Start と「今日」を End にすると同一日になり無効になるため、
+    その場合は End を月初の翌日に補正する。
+    """
+    month_start = date.today().replace(day=1)
+    today = date.today()
+    end_date = today
+    if end_date <= month_start:
+        end_date = month_start + timedelta(days=1)
+    return month_start.isoformat(), end_date.isoformat()
 def build_title(account_id: str, start_date: str, end_date: str, total_cost: float, include_credit: bool) -> str:
     """通知用タイトルを組み立てる。"""
     start_day = datetime.strptime(start_date, "%Y-%m-%d").strftime("%m/%d")
@@ -409,10 +418,16 @@ def get_client() -> botocore.client.BaseClient:
 def get_date_range() -> Tuple[str, str]:
     """
     集計期間を取得する。
+    Cost Explorer の TimePeriod は End が排他的で、Start は End より前である必要がある。
+    月初当日だけ Start と「今日」を End にすると同一日になり無効になるため、
+    その場合は End を月初の翌日に補正する。
     """
-    start_date = date.today().replace(day=1).isoformat()
-    end_date = date.today().isoformat()
-    return start_date, end_date
+    month_start = date.today().replace(day=1)
+    today = date.today()
+    end_date = today
+    if end_date <= month_start:
+        end_date = month_start + timedelta(days=1)
+    return month_start.isoformat(), end_date.isoformat()
 
 
 def format_service_costs(service_billings: List[Dict[str, Any]]) -> List[str]:
@@ -761,17 +776,14 @@ Power Automate で「Teams webhook 要求が受信されたとき」をトリガ
 リポジトリのコードは Adaptive Card 形式を送りますが、表示が崩れる場合は `TEAMS_WEBHOOK_FORMAT=text` を設定すれば、シンプルなテキスト形式に切り替えられるようにしてあります。
 
 # 5. AWS SAM による Lambda デプロイ
+[![img3](https://imgur.com/ZCfzpPX.png)](https://imgur.com/ZCfzpPX.png)
 
-`sam/` ディレクトリにテンプレートを置いています。
-
-## 5.1 SAM テンプレート（`template.yaml`）
-
+## 5.1 SAM テンプレート
 Qiita では `TeamsWebhookUrl` をパラメータで渡し、環境変数にそのまま載せる形でした。2026年版では Secrets Manager を前提にし、Webhook URL をテンプレートやコマンドラインに残しにくくしています。
 
 その他の変更点をざっと挙げると、ランタイムは `python3.12` / `arm64`（Graviton2）、スケジュールは `cron(0 0 * * ? *)` で毎日 JST 9:00 実行です。加えて DLQ（SQS）と CloudWatch Alarm を組み合わせ、失敗時にイベントを取りこぼさないようにしてあります。個人アカウントでここまで必要か、という気もしますが、Lambda が壊れていても気づかず通知が途絶え続けるのは嫌なので入れておきました。
 
-## 5.2 デプロイ手順（`sam package` 前提からの変更）
-
+## 5.2 デプロイ手順
 Qiita では `sam package` で `packaged.yaml` を生成してから `sam deploy` していました。2026年版の手順では、`sam build` のあと `sam deploy` を直接呼ぶ形に寄せています（プロジェクトや CI の方針に合わせて、従来型の `package` フローを取ることも可能です）。
 
 まず Teams 通知用の URL を Secrets Manager に登録します。
