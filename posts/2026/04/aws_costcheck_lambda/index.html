@@ -1,0 +1,1223 @@
+<!doctype html><html lang=ja><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>AWS費用監視ツール（後編：Lambda活用）</title><meta property="og:title" content="AWS費用監視ツール（後編：Lambda活用）"><meta name=twitter:title content="AWS費用監視ツール（後編：Lambda活用）"><meta name=author content="Takumi Tomita"><meta property="og:site_name" content="Takumi Tomita's Blog"><meta property="og:url" content="https://t-tkm.github.io/blog/posts/2026/04/aws_costcheck_lambda/"><meta name=twitter:card content="summary"><meta name=twitter:site content="@t_tkm0911"><meta name=twitter:creator content="@t_tkm0911"><meta property="og:type" content="article"><meta property="og:article:author" content="https://facebook.com/takumi.tomita.vf"><meta name=generator content="Hugo 0.79.1"><link rel=stylesheet href=https://t-tkm.github.io/blog/css/style.css><script type=text/javascript src=https://t-tkm.github.io/blog/js/bundle.js></script></head><body><a href=#main class="skip-link p-screen-reader-text">Skip to content</a><svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true"><symbol id="icon-500px" viewBox="0 0 16 16"><g><path d="M3.953 10.512a5.24 5.24.0 006.996 3.141c.625-.262 1.184-.641 1.666-1.122s.859-1.041 1.122-1.666c.272-.647.412-1.331.412-2.037s-.137-1.394-.412-2.037c-.262-.625-.641-1.184-1.122-1.666s-1.041-.859-1.666-1.122a5.226 5.226.0 00-2.037-.413c-.716.0-1.431.144-2.066.413-.509.216-1.372.769-1.875 1.291l-.003.003V.984h7.241c.262-.003.262-.372.262-.491.0-.122.0-.487-.266-.491H4.377a.343.343.0 00-.344.341v6.066c0 .197.244.338.472.384.444.094.544-.047.653-.197l.016-.019c.166-.247.681-.766.688-.772a4.262 4.262.0 013.037-1.25c1.147.0 2.222.444 3.028 1.25a4.245 4.245.0 011.256 3.019 4.236 4.236.0 01-1.25 3.019 4.336 4.336.0 01-3.047 1.25 4.136 4.136.0 01-2.159-.597l.003-3.688c0-.491.213-1.028.572-1.431a2.09 2.09.0 011.588-.716c.594.0 1.15.225 1.566.634.409.406.637.95.637 1.528a2.179 2.179.0 01-2.206 2.197c-.238.0-.672-.106-.691-.109-.25-.075-.356.272-.391.387-.134.441.069.528.109.541.397.125.659.147 1.003.147a3.173 3.173.0 003.169-3.169c0-1.734-1.422-3.144-3.166-3.144-.856.0-1.659.328-2.263.919-.575.566-.903 1.319-.903 2.069v.019c-.003.094-.003 2.306-.006 3.031l-.003-.003c-.328-.363-.653-.919-.869-1.488-.084-.222-.275-.184-.534-.103-.125.034-.469.141-.391.394zm3.722-.865c0 .106.097.2.156.253l.019.019c.1.097.194.147.281.147a.181.181.0 00.131-.05c.044-.041.537-.544.588-.591l.553.55c.05.056.106.088.172.088.088.0.184-.053.284-.156.238-.244.119-.375.063-.438l-.559-.559.584-.588c.128-.137.016-.284-.097-.397-.162-.162-.322-.206-.422-.112l-.581.581-.588-.588a.16.16.0 00-.113-.047c-.078.0-.172.053-.275.156-.181.181-.219.306-.125.406l.588.584-.584.584c-.053.05-.078.103-.075.156zm1.278-7.931c-.938.0-1.938.191-2.669.506a.207.207.0 00-.134.181.753.753.0 00.069.337c.047.116.166.425.4.334a6.689 6.689.0 012.334-.444 6.35 6.35.0 012.469.497c.622.263 1.206.644 1.844 1.194a.22.22.0 00.147.059c.125.0.244-.122.347-.237.169-.191.287-.35.119-.509a6.858 6.858.0 00-2.1-1.356 7.326 7.326.0 00-2.825-.563zM14.006 13.3c-.113-.113-.209-.178-.294-.203s-.162-.006-.222.053l-.056.056a6.32 6.32.0 01-6.938 1.356 6.336 6.336.0 01-2.013-1.356 6.046 6.046.0 01-1.356-2.012c-.288-.713-.381-1.247-.413-1.422-.003-.016-.006-.028-.006-.037-.041-.206-.231-.222-.503-.178-.112.019-.459.072-.428.319v.006a7.261 7.261.0 002.04 3.994 7.266 7.266.0 0010.288.0l.059-.059c.069-.084.134-.225-.159-.516z"/></g></symbol><symbol id="icon-codepen" viewBox="0 0 16 16"><g><path d="M14.777 5.751l-7-4.667a.5.5.0 00-.555.0l-7 4.667a.501.501.0 00-.223.416v4.667c0 .167.084.323.223.416l7 4.667a.5.5.0 00.554.0l7-4.667a.501.501.0 00.223-.416V6.167a.501.501.0 00-.223-.416zM7.5 10.232 4.901 8.5 7.5 6.768 10.099 8.5 7.5 10.232zM8 5.899V2.434l5.599 3.732L11 7.898l-3-2zm-1 0-3 2-2.599-1.732L7 2.435V5.9zM3.099 8.5 1 9.899V7.101L3.099 8.5zM4 9.101l3 2v3.465l-5.599-3.732L4 9.102zm4 2 3-2 2.599 1.732L8 14.565V11.1zM11.901 8.5 14 7.101v2.798L11.901 8.5z"/></g></symbol><symbol id="icon-dribbble" viewBox="0 0 16 16"><g><path d="M8 16c-4.412.0-8-3.588-8-8s3.587-8 8-8c4.412.0 8 3.587 8 8s-3.588 8-8 8zm6.747-6.906c-.234-.075-2.116-.634-4.256-.291a29.7 29.7.0 011.328 4.872 6.845 6.845.0 002.928-4.581zM10.669 14.3c-.103-.6-.497-2.688-1.456-5.181-.016.006-.031.009-.044.016-3.856 1.344-5.241 4.016-5.362 4.266a6.807 6.807.0 006.863.9zm-7.747-1.722c.156-.266 2.031-3.369 5.553-4.509a7.04 7.04.0 01.269-.081 24.04 24.04.0 00-.553-1.159c-3.409 1.022-6.722.978-7.022.975-.003.069-.003.138-.003.209.0 1.753.666 3.356 1.756 4.566zM1.313 6.609c.306.003 3.122.016 6.319-.831a43.092 43.092.0 00-2.534-3.953A6.854 6.854.0 001.314 6.609zM6.4 1.366a36.612 36.612.0 012.55 4c2.431-.909 3.459-2.294 3.581-2.469A6.799 6.799.0 006.4 1.366zm6.891 2.325c-.144.194-1.291 1.663-3.816 2.694.159.325.313.656.453.991.05.119.1.234.147.353 2.275-.284 4.534.172 4.759.219a6.816 6.816.0 00-1.544-4.256z"/></g></symbol><symbol id="icon-facebook" viewBox="0 0 16 16"><g><path d="M9.5 3H12V0H9.5C7.57.0 6 1.57 6 3.5V5H4v3h2v8h3V8h2.5l.5-3H9V3.5c0-.271.229-.5.5-.5z"/></g></symbol><symbol id="icon-feed" viewBox="0 0 16 16"><g><path d="M2.13 11.733c-1.175.0-2.13.958-2.13 2.126.0 1.174.955 2.122 2.13 2.122a2.126 2.126.0 002.133-2.122A2.133 2.133.0 002.13 11.733zM.002 5.436v3.067c1.997.0 3.874.781 5.288 2.196a7.45 7.45.0 012.192 5.302h3.08c0-5.825-4.739-10.564-10.56-10.564zM.006.0v3.068C7.128 3.068 12.924 8.87 12.924 16H16C16 7.18 8.824.0.006.0z"/></g></symbol><symbol id="icon-flickr" viewBox="0 0 16 16"><g><path d="M0 8.5a3.5 3.5.0 117 0 3.5 3.5.0 01-7 0zm9 0a3.5 3.5.0 117 0 3.5 3.5.0 01-7 0z"/></g></symbol><symbol id="icon-github" viewBox="0 0 16 16"><g><path d="M8 .198A8 8 0 005.471 15.789c.4.074.547-.174.547-.385.0-.191-.008-.821-.011-1.489-2.226.484-2.695-.944-2.695-.944-.364-.925-.888-1.171-.888-1.171-.726-.497.055-.486.055-.486.803.056 1.226.824 1.226.824.714 1.223 1.872.869 2.328.665.072-.517.279-.87.508-1.07-1.777-.202-3.645-.888-3.645-3.954.0-.873.313-1.587.824-2.147-.083-.202-.357-1.015.077-2.117.0.0.672-.215 2.201.82A7.672 7.672.0 018 4.066c.68.003 1.365.092 2.004.269 1.527-1.035 2.198-.82 2.198-.82.435 1.102.162 1.916.079 2.117.513.56.823 1.274.823 2.147.0 3.073-1.872 3.749-3.653 3.947.287.248.543.735.543 1.481.0 1.07-.009 1.932-.009 2.195.0.213.144.462.55.384A8 8 0 008.001.196z"/></g></symbol><symbol id="icon-gitlab" viewBox="0 0 28 28"><g><path d="M1.625 11.031 14 26.89.437 17.046a1.092 1.092.0 01-.391-1.203l1.578-4.813zm7.219.0h10.313L14.001 26.89zM5.75 1.469l3.094 9.562H1.625l3.094-9.562a.548.548.0 011.031.0zm20.625 9.562 1.578 4.813a1.09 1.09.0 01-.391 1.203l-13.563 9.844 12.375-15.859zm0 0h-7.219l3.094-9.562a.548.548.0 011.031.0z"/></g></symbol><symbol id="icon-google-plus" viewBox="0 0 16 16"><g><path d="M5.091 7.147v1.747h2.888c-.116.75-.872 2.197-2.888 2.197-1.737.0-3.156-1.441-3.156-3.216s1.419-3.216 3.156-3.216c.991.0 1.65.422 2.028.784L8.5 4.112c-.888-.828-2.037-1.331-3.409-1.331C2.275 2.784.0 5.059.0 7.875s2.275 5.091 5.091 5.091c2.937.0 4.888-2.066 4.888-4.975.0-.334-.037-.591-.081-.844H5.092zM16 7h-1.5V5.5H13V7h-1.5v1.5H13V10h1.5V8.5H16z"/></g></symbol><symbol id="icon-instagram" viewBox="0 0 22 22"><g><path d="M15.445.0H6.554A6.559 6.559.0 000 6.554v8.891A6.559 6.559.0 006.554 22h8.891a6.56 6.56.0 006.554-6.555V6.554A6.557 6.557.0 0015.445.0zm4.342 15.445a4.343 4.343.0 01-4.342 4.342H6.554a4.341 4.341.0 01-4.341-4.342V6.554a4.34 4.34.0 014.341-4.341h8.891a4.342 4.342.0 014.341 4.341l.001 8.891z"/><path d="M11 5.312A5.693 5.693.0 005.312 11 5.694 5.694.0 0011 16.688 5.694 5.694.0 0016.688 11 5.693 5.693.0 0011 5.312zm0 9.163a3.475 3.475.0 11-.001-6.95 3.475 3.475.0 01.001 6.95zm5.7-10.484a1.363 1.363.0 11-1.364 1.364c0-.752.51-1.364 1.364-1.364z"/></g></symbol><symbol id="icon-linkedin" viewBox="0 0 16 16"><g><path d="M6 6h2.767v1.418h.04C9.192 6.727 10.134 6 11.539 6 14.46 6 15 7.818 15 10.183V15h-2.885v-4.27c0-1.018-.021-2.329-1.5-2.329-1.502.0-1.732 1.109-1.732 2.255V15H6V6zM1 6h3v9H1V6zM4 3.5a1.5 1.5.0 11-3.001-.001A1.5 1.5.0 014 3.5z"/></g></symbol><symbol id="icon-mail" viewBox="0 0 22 18"><g><path fill="#000" d="M0 17.225V.776h22v16.447H0v.002zm3.011-1.815h15.978l-5.111-5.115L11 13.179l-2.877-2.883-5.112 5.114zm-1.216-1.275 5.077-5.09L1.795 3.98v10.155zm13.332-5.09 5.079 5.09V3.979l-5.079 5.066zm-4.126 1.588 8.022-8.027-16.045-.001 8.023 8.028z"/></g></symbol><symbol id="icon-medium" viewBox="0 0 24 24"><g><path d="M22.085 4.733 24 2.901V2.5h-6.634l-4.728 11.768L7.259 2.5H.303v.401L2.54 5.594c.218.199.332.49.303.783V16.96c.069.381-.055.773-.323 1.05L0 21.064v.396h7.145v-.401l-2.52-3.049a1.244 1.244.0 01-.347-1.05V7.806l6.272 13.659h.729l5.393-13.659v10.881c0 .287.0.346-.188.534l-1.94 1.877v.402h9.412v-.401l-1.87-1.831a.556.556.0 01-.214-.534V5.267a.554.554.0 01.213-.534z"/></g></symbol><symbol id="icon-npm" viewBox="0 0 16 16"><g><path d="M0 0v16h16V0H0zm13 13h-2V5H8v8H3V3h10v10z"/></g></symbol><symbol id="icon-pinterest" viewBox="0 0 16 16"><g><path d="M8 1.069A6.93 6.93.0 005.475 14.453c-.059-.547-.116-1.391.025-1.988.125-.541.813-3.444.813-3.444s-.206-.416-.206-1.028c0-.963.559-1.684 1.253-1.684.591.0.878.444.878.975.0.594-.378 1.484-.575 2.306-.166.691.344 1.253 1.025 1.253 1.231.0 2.178-1.3 2.178-3.175.0-1.659-1.194-2.819-2.894-2.819-1.972.0-3.128 1.478-3.128 3.009.0.597.228 1.234.516 1.581.056.069.066.128.047.2a95.89 95.89.0 01-.194.787c-.031.128-.1.153-.231.094-.866-.403-1.406-1.669-1.406-2.684.0-2.188 1.587-4.194 4.578-4.194 2.403.0 4.272 1.712 4.272 4.003.0 2.388-1.506 4.313-3.597 4.313-.703.0-1.362-.366-1.588-.797.0.0-.347 1.322-.431 1.647-.156.603-.578 1.356-.862 1.816a6.93 6.93.0 008.984-6.622 6.931 6.931.0 00-6.931-6.934z"/></g></symbol><symbol id="icon-search" viewBox="0 0 16 16"><g><path d="M15.504 13.616l-3.79-3.223c-.392-.353-.811-.514-1.149-.499a6 6 0 10-.672.672c-.016.338.146.757.499 1.149l3.223 3.79c.552.613 1.453.665 2.003.115s.498-1.452-.115-2.003zM6 10a4 4 0 110-8 4 4 0 010 8z"/></g></symbol><symbol id="icon-strava" viewBox="0 0 24 24"><g><path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599 2.836 5.598h4.172L10.463.0l-7 13.828h4.169"/></g></symbol><symbol id="icon-tumblr" viewBox="0 0 16 16"><g><path d="M9.001 7v3.659c0 .928-.012 1.463.086 1.727.098.262.342.534.609.691.354.212.758.318 1.214.318.81.0 1.289-.107 2.09-.633v2.405a9.089 9.089.0 01-1.833.639A7.93 7.93.0 019.369 16a4.9 4.9.0 01-1.725-.276 4.195 4.195.0 01-1.438-.79c-.398-.343-.672-.706-.826-1.091s-.23-.944-.23-1.676V6.556H3.003V4.29c.628-.204 1.331-.497 1.778-.877a4.386 4.386.0 001.08-1.374C6.133 1.505 6.32.825 6.422.0h2.579v4H13v3H9.001z"/></g></symbol><symbol id="icon-twitter" viewBox="0 0 16 16"><g><path d="M16 3.538a6.461 6.461.0 01-1.884.516 3.301 3.301.0 001.444-1.816 6.607 6.607.0 01-2.084.797 3.28 3.28.0 00-2.397-1.034 3.28 3.28.0 00-3.197 4.028 9.321 9.321.0 01-6.766-3.431 3.284 3.284.0 001.015 4.381A3.301 3.301.0 01.643 6.57v.041A3.283 3.283.0 003.277 9.83a3.291 3.291.0 01-1.485.057 3.293 3.293.0 003.066 2.281 6.586 6.586.0 01-4.862 1.359 9.286 9.286.0 005.034 1.475c6.037.0 9.341-5.003 9.341-9.341.0-.144-.003-.284-.009-.425a6.59 6.59.0 001.637-1.697z"/></g></symbol><symbol id="icon-vimeo" viewBox="0 0 16 16"><g><path d="M15.994 4.281c-.072 1.556-1.159 3.691-3.263 6.397-2.175 2.825-4.016 4.241-5.522 4.241-.931.0-1.722-.859-2.366-2.581-.431-1.578-.859-3.156-1.291-4.734-.478-1.722-.991-2.581-1.541-2.581-.119.0-.538.253-1.256.753l-.753-.969c.791-.694 1.569-1.388 2.334-2.081 1.053-.909 1.844-1.387 2.372-1.438 1.244-.119 2.013.731 2.3 2.553.309 1.966.525 3.188.647 3.666.359 1.631.753 2.447 1.184 2.447.334.0.838-.528 1.509-1.588.669-1.056 1.028-1.862 1.078-2.416.097-.912-.262-1.372-1.078-1.372a2.98 2.98.0 00-1.184.263c.787-2.575 2.287-3.825 4.506-3.753 1.641.044 2.416 1.109 2.322 3.194z"/></g></symbol><symbol id="icon-wordpress" viewBox="0 0 16 16"><g><path d="M2 8c0 2.313 1.38 4.312 3.382 5.259L2.52 5.622A5.693 5.693.0 002 8zm10.05-.295c0-.722-.266-1.222-.495-1.612-.304-.482-.589-.889-.589-1.371.0-.537.418-1.037 1.008-1.037.027.0.052.003.078.005A6.064 6.064.0 008 2.156 6.036 6.036.0 002.987 4.79c.141.004.274.007.386.007.627.0 1.599-.074 1.599-.074.323-.018.361.444.038.482.0.0-.325.037-.687.055l2.185 6.33 1.313-3.835-.935-2.495a12.304 12.304.0 01-.629-.055c-.323-.019-.285-.5.038-.482.0.0.991.074 1.58.074.627.0 1.599-.074 1.599-.074.323-.018.362.444.038.482.0.0-.326.037-.687.055l2.168 6.282.599-1.947c.259-.809.457-1.389.457-1.889zm-3.945.806-1.8 5.095a6.148 6.148.0 003.687-.093.52.52.0 01-.043-.081L8.105 8.511zm5.16-3.315c.026.186.04.386.04.601.0.593-.114 1.259-.456 2.093l-1.833 5.16c1.784-1.013 2.983-2.895 2.983-5.051a5.697 5.697.0 00-.735-2.803zM8 0a8 8 0 100 16A8 8 0 008 0zm0 15A7 7 0 118 1a7 7 0 010 14z"/></g></symbol><symbol id="icon-youtube" viewBox="0 0 16 16"><g><path d="M15.841 4.8s-.156-1.103-.637-1.587c-.609-.637-1.291-.641-1.603-.678-2.237-.163-5.597-.163-5.597-.163h-.006s-3.359.0-5.597.163c-.313.038-.994.041-1.603.678C.317 3.697.164 4.8.164 4.8S.005 6.094.005 7.391v1.213c0 1.294.159 2.591.159 2.591s.156 1.103.634 1.588c.609.637 1.409.616 1.766.684 1.281.122 5.441.159 5.441.159s3.363-.006 5.6-.166c.313-.037.994-.041 1.603-.678.481-.484.637-1.588.637-1.588s.159-1.294.159-2.591V7.39c-.003-1.294-.162-2.591-.162-2.591zm-9.494 5.275V5.578l4.322 2.256-4.322 2.241z"/></g></symbol></svg><header class=l-header><p class="c-title p-title"><a href=https://t-tkm.github.io/blog/ class=p-title__link>Takumi Tomita's Blog</a></p></header><main id=main class=l-main><article class=p-article><header><h1>AWS費用監視ツール（後編：Lambda活用）</h1><div><div class=c-time>Posted on
+<time datetime=2026-04-01T00:00:00+09:00>Apr 1, 2026</time></div><a href=https://t-tkm.github.io/blog/tags/aws class=c-tag>AWS</a>
+<a href=https://t-tkm.github.io/blog/tags/lambda class=c-tag>Lambda</a>
+<a href=https://t-tkm.github.io/blog/tags/sam class=c-tag>SAM</a>
+<a href=https://t-tkm.github.io/blog/tags/cost class=c-tag>Cost</a>
+<a href=https://t-tkm.github.io/blog/tags/teams class=c-tag>Teams</a>
+<a href=https://t-tkm.github.io/blog/tags/finops class=c-tag>FinOps</a></div></header><section id=js-article class=p-article__body><h1 id=1-はじめに>1. はじめに</h1><p>本記事は、<a href=https://t-tkm.github.io/blog/posts/2026/03/aws_costcheck_cli/>AWS費用監視ツール（前編：AWSマネジメントコンソール & AWS CLI）</a> の続編です。</p><p>前編では、マネジメントコンソールの Cost Explorer で見える内容を、AWS CLI の <code>aws ce get-cost-and-usage</code> で同じように取り出すところまでを整理しました。CLI で取得できるようになれば、後編の「Lambda によるデイリー通知の自動化」への道がぐっと近くなる、という流れでした。</p><p>後編では、その Lambda 側の実装に踏み込みます。具体的には、Python（boto3）で Cost Explorer API を呼び出し、Microsoft Teams へ通知しつつ、AWS SAM で定期実行するまでの一連の手順をまとめます。</p><h2 id=11-2021年版qiita記事からの読み替え>1.1 2021年版（Qiita）記事からの読み替え</h2><p>本記事は、筆者が以前 Qiita に公開していた「<a href=https://qiita.com/t-taku/items/56f0e79dda55d89107e4>AWS費用監視ツール(後編:Lambda活用)</a>」の更新版として読めます。当時の記事は <code>sam init</code> で生成した雛形をベースに、<code>app_shell.py</code> をローカル用、<code>lambda_handler</code> を Lambda 用として切り替える構成でした。2026年版では 1 本の <code>app.py</code> にローカル実行と Lambda をまとめ、仮想環境・ランタイム・Teams の通知方式・シークレット管理・SAM のデプロイ手順まで、前提が変わっている箇所が多いです。</p><p>次の表は、Qiita の章立てと本記事の対応です。迷ったら、まず同じ番号の章を読み替えてください。</p><table><thead><tr><th>Qiita（2021年版）</th><th>本記事（2026年版）で扱う内容</th></tr></thead><tbody><tr><td>§2「プログラム(Python)による確認」</td><td>§3（boto3・ディレクトリ構成・ローカル実行）。Miniconda ではなく uv</td></tr><tr><td>§3「Lambda へのデプロイ（AWS SAM）」</td><td>§5（<code>template.yaml</code> の差分・デプロイ）。<code>sam package</code> 経由が前提ではなくなった点に注意</td></tr><tr><td>付録「Miniconda」</td><td>§2（uv に置き換え）</td></tr><tr><td>（Qiita 本文内の Teams 説明）</td><td>§4（Office 365 コネクタ廃止とワークフロー Webhook）</td></tr></tbody></table><p>本記事の手順・コードは、以下の実装リポジトリと整合するように書いています。最新のソースやテスト、<code>sam/</code> 配下のそのまま動く構成は GitHub を正としてください。</p><a href=https://github.com/t-tkm/aws-cost-explore-lambda target=_blank rel=noopener><img src=https://gh-card.dev/repos/t-tkm/aws-cost-explore-lambda.svg></a><blockquote><p><strong>注:</strong> 本記事および実装リポジトリは、従来の Qiita 記事実装（<a href=https://github.com/t-tkm/aws-cost-explore>t-tkm/aws-cost-explore</a>）をベースに、構成し直しました。</p><p>ディレクトリ構成や設計も刷新しており差分があるため、古いリポジトリと混同しないようご注意ください。</p></blockquote><h2 id=12-本記事の位置づけ前編認証>1.2 本記事の位置づけ（前編・認証）</h2><p>前編で触れた IAM Identity Center（SSO）と AWS CLI v2 のセットアップは、ローカルで <code>sam/app/app.py</code> を試すときにもそのまま使えます。まだの方は、前編の付録（許可セットと CLI のセットアップ）を先に済ませておくとスムーズです。</p><p>Qiita 版では <code>export AWS_PROFILE=billing-user</code> のように 名前付きプロファイル を前提にしていましたが、いまは SSO プロファイル を <code>AWS_PROFILE</code> に指定する想定です（認証の中身は「長期アクセスキー」から「一時認証情報」へ変わっています）。</p><p>また、前編のとおり Cost Explorer API はリクエストごとに料金が発生します。Lambda を「1日1回」など低頻度で動かす想定であれば、個人アカウントの試用範囲では大きな問題になりにくい一方、短い間隔で何度も呼び出すと API 料金とスロットリングの両面で負荷が増える点は、デプロイ後も意識しておくとよいです。</p><h2 id=13-2021年版qiitaとの主な差分一覧>1.3 2021年版（Qiita）との主な差分一覧</h2><p>Qiita の手順をそのまま追うと動かなくなる典型は、(1) Teams の Webhook URL の取り方 と (2) Python 3.8 Lambda ランタイムの終了 です。まずはこの表を俯瞰してから、各章に進むと理解しやすいです。</p><table><thead><tr><th>観点</th><th>2021年版（Qiita）</th><th>2026年版（本リポジトリ）</th></tr></thead><tbody><tr><td>Python（ローカル／Lambda）</td><td>3.8、Miniconda + <code>conda install</code></td><td>3.12、uv（<code>uv sync</code>）</td></tr><tr><td>エントリコード</td><td><code>app_shell.py</code>（ローカル）と Lambda 用の切り分け説明</td><td><code>sam/app/app.py</code> 1 ファイル（<code>__main__</code> と <code>lambda_handler</code> 共存）</td></tr><tr><td>Teams 通知</td><td>Office 365 コネクタの Webhook URL</td><td>ワークフロー Webhook（Adaptive Card／テキスト切替）</td></tr><tr><td>Webhook の渡し方</td><td>SAM パラメータ <code>TeamsWebhookUrl</code> で 平文</td><td>Secrets Manager（<code>TEAMS_SECRET_ARN</code>）</td></tr><tr><td>SAM デプロイ</td><td><code>sam build</code> → <code>sam package</code> → <code>sam deploy</code>（<code>packaged.yaml</code>）</td><td><code>sam build</code> → <code>sam deploy</code>（中間の package を前提にしない）</td></tr><tr><td>Lambda アーキテクチャ</td><td>x86_64</td><td>arm64（Graviton）</td></tr><tr><td>失敗時の扱い</td><td>記事上は未整理</td><td>DLQ（SQS） と CloudWatch Alarm</td></tr></tbody></table><h1 id=2-python-実行環境の準備>2. Python 実行環境の準備</h1><h2 id=21-python-38-のサポート終了>2.1 Python 3.8 のサポート終了</h2><p>2021年版の 3.8 + Miniconda は、構成として古くなっています。Python 3.8 は EOL を迎えており、Lambda のマネージドランタイムもサポート終了済みです。今回は Python 3.12 を採用しています。</p><h2 id=22-uv-によるローカル環境構築qiita付録-minicondaの置き換え>2.2 uv によるローカル環境構築（Qiita「付録: Miniconda」の置き換え）</h2><p>Qiita では仮想環境 <code>billing-3.8</code> を <code>conda create</code> で作り、<code>conda install boto3 requests</code> としていました。2026年版ではパッケージマネージャに <a href=https://docs.astral.sh/uv/>uv</a> を使います。<code>uv sync</code> 一発で <code>.venv</code> の作成から依存インストールまで完結するのがとにかく快適です。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>git clone https://github.com/t-tkm/aws-cost-explore-lambda.git
+cd aws-cost-explore-lambda
+
+<span style=color:#75715e># 仮想環境の作成 &amp; 依存パッケージインストール</span>
+uv sync
+</code></pre></div><p><code>pyproject.toml</code> に基づき、<code>boto3</code> や <code>requests</code>、<code>pytest</code> 等がセットアップされます。</p><h1 id=3-pythonboto3によるコスト取得>3. Python（boto3）によるコスト取得</h1><p><a href=https://imgur.com/E7zVnDk.png><img src=https://imgur.com/E7zVnDk.png alt=img2></a></p><h2 id=31-認証>3.1 認証</h2><p>Cost Explorer API は <code>us-east-1</code> のエンドポイントを叩く必要があります。ローカル実行時は SSO プロファイルを <code>AWS_PROFILE</code> で指定し、Lambda では IAM ロール経由で認証します。</p><h2 id=32-ソースコードの構成qiita-2-2-からの変化>3.2 ソースコードの構成（Qiita §2-2 からの変化）</h2><p>Qiita では <code>app_shell.py</code> に処理を書き、Lambda 用には「<code>if __name__ == '__main__':</code> を削って <code>lambda_handler</code> を足す」という手順でした。2026年版では 同じファイル にローカル用のエントリと Lambda ハンドラの両方を持たせ、テストやデバッグの行き来を減らしています。</p><p>リポジトリの主要なディレクトリ構成は次のとおりです。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text>aws-cost-explore-lambda/
+├── sam/
+│   ├── template.yaml          ← SAM テンプレート
+│   ├── app/
+│   │   ├── app.py             ← Lambda ハンドラ &amp; ローカル実行兼用
+│   │   └── requirements.txt   ← Lambda 用
+├── tests/                     ← pytest
+├── pyproject.toml             ← uv 設定
+└── README.md
+</code></pre></div><p>エントリポイントは <code>sam/app/app.py</code> です。<code>if __name__ == "__main__":</code> を入れているので、ローカルでも Lambda と同じロジックをそのまま試せます。</p><p>次の簡略版は流れの把握用です。<code>get_config()</code> はローカル実行向けに <code>TEAMS_WEBHOOK_URL</code> のみを見ていますが、実装本体では Lambda 時に <code>TEAMS_SECRET_ARN</code> から Secrets Manager へ取りにいく分岐があります（下の「全コードを表示」がリポジトリと一致します）。</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">35
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">36
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">37
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">38
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">39
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">40
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">41
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">42
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">43
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">44
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">45
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">46
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">47
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">48
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">49
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">50
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">51
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">52
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">53
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">54
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">55
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">56
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">57
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">58
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">59
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">60
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">61
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">62
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">63
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">64
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">65
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">66
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">67
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">68
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">69
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">70
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">71
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">72
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">73
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">74
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">75
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">76
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">77
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">78
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">79
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">80
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">81
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">82
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">83
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">84
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">85
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">86
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">87
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">88
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">89
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">90
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">91
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">92
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">93
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">94
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">95
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">96
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#f92672>import</span> os
+<span style=color:#f92672>from</span> datetime <span style=color:#f92672>import</span> datetime, timedelta, date
+<span style=color:#f92672>from</span> typing <span style=color:#f92672>import</span> Any, Dict, List, Tuple
+<span style=color:#f92672>import</span> boto3
+<span style=color:#f92672>import</span> requests
+
+<span style=color:#75715e># 記事向けの簡略版:</span>
+<span style=color:#75715e># - 主要フローのみ残す</span>
+<span style=color:#75715e># - 詳細実装は (snip) で省略</span>
+REGION_NAME <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;us-east-1&#34;</span>
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>get_config</span>() <span style=color:#f92672>-&gt;</span> dict:
+    <span style=color:#e6db74>&#34;&#34;&#34;環境変数から実行設定を取得する。&#34;&#34;&#34;</span>
+    use_teams <span style=color:#f92672>=</span> os<span style=color:#f92672>.</span>environ<span style=color:#f92672>.</span>get(<span style=color:#e6db74>&#34;USE_TEAMS_POST&#34;</span>, <span style=color:#e6db74>&#34;no&#34;</span>)<span style=color:#f92672>.</span>lower() <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;yes&#34;</span>
+    webhook_url <span style=color:#f92672>=</span> (os<span style=color:#f92672>.</span>environ<span style=color:#f92672>.</span>get(<span style=color:#e6db74>&#34;TEAMS_WEBHOOK_URL&#34;</span>) <span style=color:#f92672>or</span> <span style=color:#e6db74>&#34;&#34;</span>)<span style=color:#f92672>.</span>strip()
+    <span style=color:#66d9ef>return</span> {<span style=color:#e6db74>&#34;USE_TEAMS_POST&#34;</span>: use_teams, <span style=color:#e6db74>&#34;TEAMS_WEBHOOK_URL&#34;</span>: webhook_url}
+<span style=color:#66d9ef>class</span> <span style=color:#a6e22e>CostExplorer</span>:
+    <span style=color:#e6db74>&#34;&#34;&#34;Cost Explorer API を扱う最小ラッパー。&#34;&#34;&#34;</span>
+    <span style=color:#66d9ef>def</span> __init__(self, client):
+        self<span style=color:#f92672>.</span>client <span style=color:#f92672>=</span> client
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>get_cost_and_usage</span>(self, period: Dict[str, str], include_credit: bool) <span style=color:#f92672>-&gt;</span> Dict[str, Any]:
+        <span style=color:#75715e># (snip) include_credit に応じた Filter、GroupBy などの詳細</span>
+        <span style=color:#66d9ef>return</span> self<span style=color:#f92672>.</span>client<span style=color:#f92672>.</span>get_cost_and_usage(
+            TimePeriod<span style=color:#f92672>=</span>period,
+            Granularity<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;MONTHLY&#34;</span>,
+            Metrics<span style=color:#f92672>=</span>[<span style=color:#e6db74>&#34;AmortizedCost&#34;</span>],
+            <span style=color:#75715e># (snip)</span>
+        )[<span style=color:#e6db74>&#34;ResultsByTime&#34;</span>][<span style=color:#ae81ff>0</span>]
+
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>get_total_cost</span>(self, data: Dict[str, Any]) <span style=color:#f92672>-&gt;</span> float:
+        <span style=color:#75715e># (snip) Total が無い場合のフォールバック処理</span>
+        <span style=color:#66d9ef>return</span> float(data[<span style=color:#e6db74>&#34;Total&#34;</span>][<span style=color:#e6db74>&#34;AmortizedCost&#34;</span>][<span style=color:#e6db74>&#34;Amount&#34;</span>])
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>get_client</span>():
+    <span style=color:#66d9ef>return</span> boto3<span style=color:#f92672>.</span>client(<span style=color:#e6db74>&#34;ce&#34;</span>, region_name<span style=color:#f92672>=</span>REGION_NAME)
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>get_date_range</span>() <span style=color:#f92672>-&gt;</span> Tuple[str, str]:
+    <span style=color:#e6db74>&#34;&#34;&#34;
+</span><span style=color:#e6db74>    集計期間を取得する。
+</span><span style=color:#e6db74>    Cost Explorer の TimePeriod は End が排他的で、Start は End より前である必要がある。
+</span><span style=color:#e6db74>    月初当日だけ Start と「今日」を End にすると同一日になり無効になるため、
+</span><span style=color:#e6db74>    その場合は End を月初の翌日に補正する。
+</span><span style=color:#e6db74>    &#34;&#34;&#34;</span>
+    month_start <span style=color:#f92672>=</span> date<span style=color:#f92672>.</span>today()<span style=color:#f92672>.</span>replace(day<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>)
+    today <span style=color:#f92672>=</span> date<span style=color:#f92672>.</span>today()
+    end_date <span style=color:#f92672>=</span> today
+    <span style=color:#66d9ef>if</span> end_date <span style=color:#f92672>&lt;=</span> month_start:
+        end_date <span style=color:#f92672>=</span> month_start <span style=color:#f92672>+</span> timedelta(days<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>)
+    <span style=color:#66d9ef>return</span> month_start<span style=color:#f92672>.</span>isoformat(), end_date<span style=color:#f92672>.</span>isoformat()
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>build_title</span>(account_id: str, start_date: str, end_date: str, total_cost: float, include_credit: bool) <span style=color:#f92672>-&gt;</span> str:
+    <span style=color:#e6db74>&#34;&#34;&#34;通知用タイトルを組み立てる。&#34;&#34;&#34;</span>
+    start_day <span style=color:#f92672>=</span> datetime<span style=color:#f92672>.</span>strptime(start_date, <span style=color:#e6db74>&#34;%Y-%m-</span><span style=color:#e6db74>%d</span><span style=color:#e6db74>&#34;</span>)<span style=color:#f92672>.</span>strftime(<span style=color:#e6db74>&#34;%m/</span><span style=color:#e6db74>%d</span><span style=color:#e6db74>&#34;</span>)
+    end_day <span style=color:#f92672>=</span> (datetime<span style=color:#f92672>.</span>strptime(end_date, <span style=color:#e6db74>&#34;%Y-%m-</span><span style=color:#e6db74>%d</span><span style=color:#e6db74>&#34;</span>) <span style=color:#f92672>-</span> timedelta(days<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>))<span style=color:#f92672>.</span>strftime(<span style=color:#e6db74>&#34;%m/</span><span style=color:#e6db74>%d</span><span style=color:#e6db74>&#34;</span>)
+    credit_label <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;後&#34;</span> <span style=color:#66d9ef>if</span> include_credit <span style=color:#66d9ef>else</span> <span style=color:#e6db74>&#34;前&#34;</span>
+    <span style=color:#66d9ef>return</span> (
+        f<span style=color:#e6db74>&#34;AWSアカウント {account_id}</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>
+        f<span style=color:#e6db74>&#34;{start_day}～{end_day}のクレジット適用{credit_label}費用は、{total_cost:.2f} USD です。&#34;</span>
+    )
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>post_to_teams</span>(title: str, lines: List[str], webhook_url: str) <span style=color:#f92672>-&gt;</span> bool:
+    payload <span style=color:#f92672>=</span> {<span style=color:#e6db74>&#34;text&#34;</span>: f<span style=color:#e6db74>&#34;{title}</span><span style=color:#ae81ff>\n\n</span><span style=color:#e6db74>&#34;</span> <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34;</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span><span style=color:#f92672>.</span>join(lines)}
+    <span style=color:#75715e># (snip) Adaptive Card フォールバック、HTTP リトライ設定</span>
+    r <span style=color:#f92672>=</span> requests<span style=color:#f92672>.</span>post(webhook_url, json<span style=color:#f92672>=</span>payload, timeout<span style=color:#f92672>=</span><span style=color:#ae81ff>10</span>)
+    r<span style=color:#f92672>.</span>raise_for_status()
+    <span style=color:#66d9ef>return</span> True
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>run_report</span>(explorer: CostExplorer, period: Dict[str, str], account_id: str, include_credit: bool) <span style=color:#f92672>-&gt;</span> Tuple[str, List[str]]:
+    <span style=color:#e6db74>&#34;&#34;&#34;1種類のレポート（適用前 or 適用後）を作る。&#34;&#34;&#34;</span>
+    data <span style=color:#f92672>=</span> explorer<span style=color:#f92672>.</span>get_cost_and_usage(period, include_credit<span style=color:#f92672>=</span>include_credit)
+    total_cost <span style=color:#f92672>=</span> explorer<span style=color:#f92672>.</span>get_total_cost(data)
+    <span style=color:#75715e># (snip) サービス別内訳の整形。例: [&#39;- Amazon EC2: 5.00 USD&#39;, ...]</span>
+    services <span style=color:#f92672>=</span> [<span style=color:#e6db74>&#34;- Amazon EC2: 5.00 USD&#34;</span>]
+    title <span style=color:#f92672>=</span> build_title(account_id, period[<span style=color:#e6db74>&#34;Start&#34;</span>], period[<span style=color:#e6db74>&#34;End&#34;</span>], total_cost, include_credit)
+    <span style=color:#66d9ef>return</span> title, services
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>notify_if_needed</span>(enabled: bool, webhook_url: str, title: str, services: List[str]) <span style=color:#f92672>-&gt;</span> None:
+    <span style=color:#66d9ef>if</span> enabled <span style=color:#f92672>and</span> webhook_url:
+        post_to_teams(title, services, webhook_url)
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>main</span>() <span style=color:#f92672>-&gt;</span> None:
+    config <span style=color:#f92672>=</span> get_config()
+    explorer <span style=color:#f92672>=</span> CostExplorer(get_client())
+    account_id <span style=color:#f92672>=</span> boto3<span style=color:#f92672>.</span>client(<span style=color:#e6db74>&#34;sts&#34;</span>)<span style=color:#f92672>.</span>get_caller_identity()[<span style=color:#e6db74>&#34;Account&#34;</span>]
+    start_date, end_date <span style=color:#f92672>=</span> get_date_range()
+    period <span style=color:#f92672>=</span> {<span style=color:#e6db74>&#34;Start&#34;</span>: start_date, <span style=color:#e6db74>&#34;End&#34;</span>: end_date}
+    <span style=color:#75715e># クレジット適用後</span>
+    title_after, services_after <span style=color:#f92672>=</span> run_report(explorer, period, account_id, include_credit<span style=color:#f92672>=</span>True)
+    <span style=color:#66d9ef>print</span>(title_after)
+    <span style=color:#66d9ef>print</span>(<span style=color:#e6db74>&#34;</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span><span style=color:#f92672>.</span>join(services_after))
+    notify_if_needed(config[<span style=color:#e6db74>&#34;USE_TEAMS_POST&#34;</span>], config[<span style=color:#e6db74>&#34;TEAMS_WEBHOOK_URL&#34;</span>], title_after, services_after)
+    <span style=color:#75715e># クレジット適用前</span>
+    title_before, services_before <span style=color:#f92672>=</span> run_report(explorer, period, account_id, include_credit<span style=color:#f92672>=</span>False)
+    <span style=color:#66d9ef>print</span>(title_before)
+    <span style=color:#66d9ef>print</span>(<span style=color:#e6db74>&#34;</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span><span style=color:#f92672>.</span>join(services_before))
+    notify_if_needed(config[<span style=color:#e6db74>&#34;USE_TEAMS_POST&#34;</span>], config[<span style=color:#e6db74>&#34;TEAMS_WEBHOOK_URL&#34;</span>], title_before, services_before)
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>lambda_handler</span>(event: dict, context: Any) <span style=color:#f92672>-&gt;</span> dict:
+    <span style=color:#66d9ef>try</span>:
+        main()
+        <span style=color:#66d9ef>return</span> {<span style=color:#e6db74>&#34;statusCode&#34;</span>: <span style=color:#ae81ff>200</span>, <span style=color:#e6db74>&#34;body&#34;</span>: <span style=color:#e6db74>&#34;Cost report generated successfully.&#34;</span>}
+    <span style=color:#66d9ef>except</span> <span style=color:#a6e22e>Exception</span> <span style=color:#66d9ef>as</span> e:
+        <span style=color:#66d9ef>return</span> {<span style=color:#e6db74>&#34;statusCode&#34;</span>: <span style=color:#ae81ff>500</span>, <span style=color:#e6db74>&#34;body&#34;</span>: str(e)}
+<span style=color:#66d9ef>if</span> __name__ <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;__main__&#34;</span>:
+    main()
+</code></pre></td></tr></table></div></div><details><summary>全コードを表示</summary><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 28
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 29
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 30
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 31
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 32
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 33
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 34
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 35
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 36
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 37
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 38
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 39
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 40
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 41
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 42
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 43
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 44
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 45
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 46
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 47
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 48
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 49
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 50
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 51
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 52
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 53
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 54
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 55
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 56
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 57
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 58
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 59
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 60
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 61
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 62
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 63
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 64
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 65
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 66
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 67
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 68
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 69
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 70
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 71
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 72
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 73
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 74
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 75
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 76
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 77
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 78
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 79
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 80
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 81
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 82
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 83
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 84
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 85
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 86
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 87
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 88
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 89
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 90
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 91
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 92
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 93
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 94
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 95
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 96
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 97
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 98
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 99
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">100
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">101
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">102
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">103
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">104
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">105
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">106
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">107
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">108
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">109
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">110
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">111
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">112
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">113
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">114
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">115
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">116
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">117
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">118
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">119
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">120
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">121
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">122
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">123
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">124
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">125
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">126
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">127
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">128
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">129
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">130
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">131
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">132
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">133
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">134
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">135
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">136
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">137
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">138
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">139
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">140
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">141
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">142
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">143
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">144
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">145
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">146
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">147
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">148
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">149
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">150
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">151
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">152
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">153
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">154
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">155
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">156
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">157
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">158
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">159
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">160
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">161
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">162
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">163
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">164
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">165
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">166
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">167
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">168
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">169
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">170
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">171
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">172
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">173
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">174
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">175
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">176
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">177
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">178
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">179
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">180
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">181
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">182
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">183
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">184
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">185
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">186
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">187
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">188
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">189
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">190
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">191
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">192
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">193
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">194
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">195
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">196
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">197
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">198
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">199
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">200
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">201
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">202
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">203
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">204
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">205
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">206
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">207
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">208
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">209
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">210
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">211
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">212
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">213
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">214
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">215
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">216
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">217
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">218
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">219
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">220
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">221
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">222
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">223
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">224
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">225
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">226
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">227
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">228
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">229
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">230
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">231
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">232
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">233
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">234
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">235
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">236
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">237
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">238
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">239
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">240
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">241
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">242
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">243
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">244
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">245
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">246
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">247
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">248
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">249
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">250
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">251
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">252
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">253
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">254
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">255
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">256
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">257
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">258
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">259
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">260
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">261
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">262
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">263
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">264
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">265
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">266
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">267
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">268
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">269
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">270
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">271
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">272
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">273
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">274
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">275
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">276
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">277
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">278
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">279
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">280
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">281
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">282
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">283
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">284
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">285
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">286
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">287
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">288
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">289
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">290
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">291
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">292
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">293
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">294
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">295
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">296
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">297
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">298
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">299
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">300
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">301
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">302
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">303
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">304
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">305
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">306
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">307
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">308
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">309
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">310
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">311
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">312
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">313
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">314
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">315
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">316
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">317
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">318
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">319
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">320
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">321
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">322
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">323
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">324
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">325
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">326
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">327
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">328
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">329
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">330
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">331
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">332
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">333
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">334
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">335
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">336
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">337
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">338
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">339
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">340
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">341
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">342
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">343
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">344
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">345
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">346
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">347
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">348
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">349
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">350
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">351
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">352
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">353
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">354
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">355
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">356
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">357
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">358
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">359
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">360
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">361
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">362
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">363
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">364
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">365
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">366
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">367
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">368
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">369
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">370
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">371
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">372
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">373
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">374
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">375
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">376
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">377
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">378
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">379
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">380
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">381
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">382
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">383
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">384
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">385
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">386
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">387
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">388
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">389
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">390
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">391
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">392
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">393
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">394
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">395
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">396
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">397
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">398
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">399
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">400
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">401
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">402
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">403
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">404
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">405
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">406
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">407
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">408
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">409
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">410
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">411
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">412
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">413
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">414
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">415
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">416
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">417
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">418
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">419
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">420
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">421
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">422
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">423
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">424
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">425
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">426
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">427
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">428
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">429
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">430
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">431
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">432
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">433
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">434
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">435
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">436
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">437
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">438
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">439
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">440
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">441
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">442
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">443
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">444
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">445
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">446
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">447
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">448
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">449
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">450
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">451
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">452
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">453
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">454
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">455
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">456
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">457
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">458
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">459
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">460
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">461
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">462
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">463
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">464
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">465
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">466
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">467
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">468
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">469
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">470
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">471
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">472
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">473
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">474
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">475
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">476
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">477
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">478
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">479
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">480
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#f92672>import</span> os
+<span style=color:#f92672>import</span> json
+<span style=color:#f92672>import</span> logging
+<span style=color:#f92672>from</span> datetime <span style=color:#f92672>import</span> datetime, timedelta, date
+<span style=color:#f92672>from</span> typing <span style=color:#f92672>import</span> Tuple, List, Dict, Any, Optional
+<span style=color:#f92672>from</span> urllib.parse <span style=color:#f92672>import</span> urlparse
+
+<span style=color:#f92672>import</span> boto3
+<span style=color:#f92672>import</span> botocore.client
+<span style=color:#f92672>import</span> botocore.exceptions
+<span style=color:#f92672>import</span> requests
+
+<span style=color:#f92672>from</span> requests.adapters <span style=color:#f92672>import</span> HTTPAdapter
+<span style=color:#f92672>from</span> urllib3.util.retry <span style=color:#f92672>import</span> Retry
+
+<span style=color:#75715e># --------------------------------------------------------------------</span>
+<span style=color:#75715e># 定数定義</span>
+<span style=color:#75715e># --------------------------------------------------------------------</span>
+REGION_NAME <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;us-east-1&#34;</span>
+GRANULARITY <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;MONTHLY&#34;</span>
+COST_METRIC <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;AmortizedCost&#34;</span>
+SERVICE_GROUP_DIMENSION <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;SERVICE&#34;</span>
+RECORD_TYPE_DIMENSION <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;RECORD_TYPE&#34;</span>
+CREDIT_RECORD_TYPE <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;Credit&#34;</span>
+MIN_BILLING_THRESHOLD <span style=color:#f92672>=</span> <span style=color:#ae81ff>0.01</span>
+TEAMS_REQUEST_TIMEOUT_SEC <span style=color:#f92672>=</span> <span style=color:#ae81ff>10</span>  <span style=color:#75715e># Webhook POST のタイムアウト（秒）</span>
+MAX_RETRIES <span style=color:#f92672>=</span> <span style=color:#ae81ff>3</span>
+
+<span style=color:#75715e># ロギング設定</span>
+logging<span style=color:#f92672>.</span>basicConfig(level<span style=color:#f92672>=</span>logging<span style=color:#f92672>.</span>INFO)
+logger <span style=color:#f92672>=</span> logging<span style=color:#f92672>.</span>getLogger(__name__)
+
+
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>_parse_webhook_url</span>(raw: str) <span style=color:#f92672>-&gt;</span> str:
+    <span style=color:#e6db74>&#34;&#34;&#34;
+</span><span style=color:#e6db74>    Secrets Manager に JSON で保存している場合（例: {</span><span style=color:#ae81ff>\&#34;</span><span style=color:#e6db74>url</span><span style=color:#ae81ff>\&#34;</span><span style=color:#e6db74>:</span><span style=color:#ae81ff>\&#34;</span><span style=color:#e6db74>https://...</span><span style=color:#ae81ff>\&#34;</span><span style=color:#e6db74>}）に対応する。
+</span><span style=color:#e6db74>    平文の URL のときはそのまま返す。
+</span><span style=color:#e6db74>    &#34;&#34;&#34;</span>
+    text <span style=color:#f92672>=</span> (raw <span style=color:#f92672>or</span> <span style=color:#e6db74>&#34;&#34;</span>)<span style=color:#f92672>.</span>strip()
+    <span style=color:#66d9ef>if</span> <span style=color:#f92672>not</span> text<span style=color:#f92672>.</span>startswith(<span style=color:#e6db74>&#34;{&#34;</span>):
+        <span style=color:#66d9ef>return</span> text
+    <span style=color:#66d9ef>try</span>:
+        obj <span style=color:#f92672>=</span> json<span style=color:#f92672>.</span>loads(text)
+        <span style=color:#66d9ef>if</span> isinstance(obj, dict):
+            <span style=color:#66d9ef>for</span> key <span style=color:#f92672>in</span> (<span style=color:#e6db74>&#34;webhook_url&#34;</span>, <span style=color:#e6db74>&#34;url&#34;</span>, <span style=color:#e6db74>&#34;TEAMS_WEBHOOK_URL&#34;</span>, <span style=color:#e6db74>&#34;value&#34;</span>):
+                v <span style=color:#f92672>=</span> obj<span style=color:#f92672>.</span>get(key)
+                <span style=color:#66d9ef>if</span> isinstance(v, str) <span style=color:#f92672>and</span> v<span style=color:#f92672>.</span>strip()<span style=color:#f92672>.</span>startswith(<span style=color:#e6db74>&#34;http&#34;</span>):
+                    <span style=color:#66d9ef>return</span> v<span style=color:#f92672>.</span>strip()
+    <span style=color:#66d9ef>except</span> json<span style=color:#f92672>.</span>JSONDecodeError:
+        <span style=color:#66d9ef>pass</span>
+    <span style=color:#66d9ef>return</span> text
+
+
+<span style=color:#75715e># --------------------------------------------------------------------</span>
+<span style=color:#75715e># 実行時に環境変数を取得する関数</span>
+<span style=color:#75715e># --------------------------------------------------------------------</span>
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>get_config</span>() <span style=color:#f92672>-&gt;</span> dict:
+    <span style=color:#e6db74>&#34;&#34;&#34;
+</span><span style=color:#e6db74>    環境変数を実行時に取得して返す。
+</span><span style=color:#e6db74>    Teams 通知が有効な場合、Webhook URL は次のいずれかから取得する。
+</span><span style=color:#e6db74>
+</span><span style=color:#e6db74>    1. TEAMS_WEBHOOK_URL … ローカル実行向け（平文のため Lambda では使わない想定）
+</span><span style=color:#e6db74>    2. TEAMS_SECRET_ARN … Lambda 向け（Secrets Manager に URL を保存）
+</span><span style=color:#e6db74>
+</span><span style=color:#e6db74>    Returns:
+</span><span style=color:#e6db74>        dict: USE_TEAMS_POST, TEAMS_WEBHOOK_URL をキーに含む辞書
+</span><span style=color:#e6db74>
+</span><span style=color:#e6db74>    Raises:
+</span><span style=color:#e6db74>        ValueError: Teams 有効だが URL の取得元がどちらも無い場合
+</span><span style=color:#e6db74>        RuntimeError: Secrets Manager からの取得に失敗した場合
+</span><span style=color:#e6db74>    &#34;&#34;&#34;</span>
+    use_teams <span style=color:#f92672>=</span> os<span style=color:#f92672>.</span>environ<span style=color:#f92672>.</span>get(<span style=color:#e6db74>&#34;USE_TEAMS_POST&#34;</span>, <span style=color:#e6db74>&#34;no&#34;</span>)<span style=color:#f92672>.</span>lower() <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;yes&#34;</span>
+    webhook_url: Optional[str] <span style=color:#f92672>=</span> None
+
+    <span style=color:#66d9ef>if</span> use_teams:
+        direct <span style=color:#f92672>=</span> (os<span style=color:#f92672>.</span>environ<span style=color:#f92672>.</span>get(<span style=color:#e6db74>&#34;TEAMS_WEBHOOK_URL&#34;</span>) <span style=color:#f92672>or</span> <span style=color:#e6db74>&#34;&#34;</span>)<span style=color:#f92672>.</span>strip()
+        <span style=color:#66d9ef>if</span> direct:
+            logger<span style=color:#f92672>.</span>info(<span style=color:#e6db74>&#34;Teams Webhook URL は環境変数 TEAMS_WEBHOOK_URL を使用します（ローカル向け）。&#34;</span>)
+            webhook_url <span style=color:#f92672>=</span> _parse_webhook_url(direct)
+        <span style=color:#66d9ef>else</span>:
+            secret_arn <span style=color:#f92672>=</span> (os<span style=color:#f92672>.</span>environ<span style=color:#f92672>.</span>get(<span style=color:#e6db74>&#34;TEAMS_SECRET_ARN&#34;</span>) <span style=color:#f92672>or</span> <span style=color:#e6db74>&#34;&#34;</span>)<span style=color:#f92672>.</span>strip()
+            <span style=color:#66d9ef>if</span> <span style=color:#f92672>not</span> secret_arn:
+                <span style=color:#66d9ef>raise</span> <span style=color:#a6e22e>ValueError</span>(
+                    <span style=color:#e6db74>&#34;Teams 通知を有効にするには、TEAMS_WEBHOOK_URL（ローカル）または &#34;</span>
+                    <span style=color:#e6db74>&#34;TEAMS_SECRET_ARN（Secrets Manager の ARN）のいずれかを設定してください。&#34;</span>
+                    <span style=color:#e6db74>&#34; ターミナルでは必ず export してください（export なしの代入は echo では見えても &#34;</span>
+                    <span style=color:#e6db74>&#34;uv run の子プロセスには渡りません）。&#34;</span>
+                )
+            <span style=color:#66d9ef>try</span>:
+                sm_client <span style=color:#f92672>=</span> boto3<span style=color:#f92672>.</span>client(<span style=color:#e6db74>&#34;secretsmanager&#34;</span>)
+                secret <span style=color:#f92672>=</span> sm_client<span style=color:#f92672>.</span>get_secret_value(SecretId<span style=color:#f92672>=</span>secret_arn)
+                raw <span style=color:#f92672>=</span> (secret<span style=color:#f92672>.</span>get(<span style=color:#e6db74>&#34;SecretString&#34;</span>) <span style=color:#f92672>or</span> <span style=color:#e6db74>&#34;&#34;</span>)<span style=color:#f92672>.</span>strip()
+                webhook_url <span style=color:#f92672>=</span> _parse_webhook_url(raw)
+                logger<span style=color:#f92672>.</span>info(<span style=color:#e6db74>&#34;Secrets Manager から Teams Webhook URL を取得しました。&#34;</span>)
+            <span style=color:#66d9ef>except</span> botocore<span style=color:#f92672>.</span>exceptions<span style=color:#f92672>.</span>ClientError <span style=color:#66d9ef>as</span> e:
+                logger<span style=color:#f92672>.</span>error(f<span style=color:#e6db74>&#34;Secrets Manager からの取得に失敗しました: {e}&#34;</span>)
+                <span style=color:#66d9ef>raise</span> <span style=color:#a6e22e>RuntimeError</span>(<span style=color:#e6db74>&#34;Teams Webhook URL の取得に失敗しました。&#34;</span>) <span style=color:#f92672>from</span> e
+
+        <span style=color:#66d9ef>if</span> <span style=color:#f92672>not</span> webhook_url:
+            <span style=color:#66d9ef>raise</span> <span style=color:#a6e22e>ValueError</span>(<span style=color:#e6db74>&#34;Teams Webhook URL が空です。Secrets の値または TEAMS_WEBHOOK_URL を確認してください。&#34;</span>)
+
+        parsed <span style=color:#f92672>=</span> urlparse(webhook_url)
+        <span style=color:#66d9ef>if</span> parsed<span style=color:#f92672>.</span>scheme <span style=color:#f92672>not</span> <span style=color:#f92672>in</span> (<span style=color:#e6db74>&#34;http&#34;</span>, <span style=color:#e6db74>&#34;https&#34;</span>) <span style=color:#f92672>or</span> <span style=color:#f92672>not</span> parsed<span style=color:#f92672>.</span>netloc:
+            <span style=color:#66d9ef>raise</span> <span style=color:#a6e22e>ValueError</span>(
+                <span style=color:#e6db74>&#34;Teams Webhook URL が無効です（http(s):// で始まる実際の URL ではありません）。&#34;</span>
+                <span style=color:#e6db74>&#34;README のプレースホルダー「（Webhook URL）」などをそのまま使っていないか確認し、&#34;</span>
+                <span style=color:#e6db74>&#34;Teams / Power Automate でコピーした https://... の文字列を設定してください。&#34;</span>
+            )
+
+    <span style=color:#66d9ef>return</span> {
+        <span style=color:#e6db74>&#34;USE_TEAMS_POST&#34;</span>: use_teams,
+        <span style=color:#e6db74>&#34;TEAMS_WEBHOOK_URL&#34;</span>: webhook_url,
+    }
+
+
+<span style=color:#75715e># --------------------------------------------------------------------</span>
+<span style=color:#75715e># クラス・関数定義</span>
+<span style=color:#75715e># --------------------------------------------------------------------</span>
+<span style=color:#66d9ef>class</span> <span style=color:#a6e22e>CostExplorer</span>:
+    <span style=color:#e6db74>&#34;&#34;&#34;
+</span><span style=color:#e6db74>    AWS Cost Explorer API を用いてコスト情報を取得するクラス。
+</span><span style=color:#e6db74>    &#34;&#34;&#34;</span>
+
+    <span style=color:#66d9ef>def</span> __init__(self, client: botocore<span style=color:#f92672>.</span>client<span style=color:#f92672>.</span>BaseClient) <span style=color:#f92672>-&gt;</span> None:
+        self<span style=color:#f92672>.</span>client <span style=color:#f92672>=</span> client
+
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>get_cost_and_usage</span>(
+        self,
+        period: Dict[str, str],
+        include_credit: bool,
+        group_by_dimension: Optional[str] <span style=color:#f92672>=</span> None
+    ) <span style=color:#f92672>-&gt;</span> Dict[str, Any]:
+        <span style=color:#e6db74>&#34;&#34;&#34;
+</span><span style=color:#e6db74>        指定期間のコストと使用状況を取得する。
+</span><span style=color:#e6db74>        &#34;&#34;&#34;</span>
+        <span style=color:#66d9ef>try</span>:
+            filter_params: Dict[str, Any] <span style=color:#f92672>=</span> {}
+            <span style=color:#66d9ef>if</span> <span style=color:#f92672>not</span> include_credit:
+                filter_params <span style=color:#f92672>=</span> {
+                    <span style=color:#e6db74>&#34;Filter&#34;</span>: {
+                        <span style=color:#e6db74>&#34;Not&#34;</span>: {
+                            <span style=color:#e6db74>&#34;Dimensions&#34;</span>: {
+                                <span style=color:#e6db74>&#34;Key&#34;</span>: RECORD_TYPE_DIMENSION,
+                                <span style=color:#e6db74>&#34;Values&#34;</span>: [CREDIT_RECORD_TYPE]
+                            }
+                        }
+                    }
+                }
+
+            group_by <span style=color:#f92672>=</span> []
+            <span style=color:#66d9ef>if</span> group_by_dimension:
+                group_by <span style=color:#f92672>=</span> [{<span style=color:#e6db74>&#34;Type&#34;</span>: <span style=color:#e6db74>&#34;DIMENSION&#34;</span>, <span style=color:#e6db74>&#34;Key&#34;</span>: group_by_dimension}]
+
+            response <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>client<span style=color:#f92672>.</span>get_cost_and_usage(
+                TimePeriod<span style=color:#f92672>=</span>period,
+                Granularity<span style=color:#f92672>=</span>GRANULARITY,
+                Metrics<span style=color:#f92672>=</span>[COST_METRIC],
+                GroupBy<span style=color:#f92672>=</span>group_by,
+                <span style=color:#f92672>**</span>filter_params
+            )
+            <span style=color:#66d9ef>return</span> response[<span style=color:#e6db74>&#34;ResultsByTime&#34;</span>][<span style=color:#ae81ff>0</span>]
+
+        <span style=color:#66d9ef>except</span> botocore<span style=color:#f92672>.</span>exceptions<span style=color:#f92672>.</span>ClientError <span style=color:#66d9ef>as</span> e:
+            logger<span style=color:#f92672>.</span>error(f<span style=color:#e6db74>&#34;Failed to fetch cost and usage data: {e}&#34;</span>)
+            <span style=color:#66d9ef>raise</span> <span style=color:#a6e22e>RuntimeError</span>(f<span style=color:#e6db74>&#34;Error calling AWS Cost Explorer API: {e}&#34;</span>) <span style=color:#f92672>from</span> e
+
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>get_total_cost</span>(self, cost_and_usage_data: Dict[str, Any]) <span style=color:#f92672>-&gt;</span> float:
+        <span style=color:#e6db74>&#34;&#34;&#34;
+</span><span style=color:#e6db74>        コストと使用状況のデータから合計費用を取得する。
+</span><span style=color:#e6db74>        &#34;&#34;&#34;</span>
+        <span style=color:#66d9ef>try</span>:
+            <span style=color:#66d9ef>if</span> <span style=color:#f92672>not</span> cost_and_usage_data<span style=color:#f92672>.</span>get(<span style=color:#e6db74>&#34;Total&#34;</span>):
+                total_cost <span style=color:#f92672>=</span> sum(
+                    max(<span style=color:#ae81ff>0</span>, float(group[<span style=color:#e6db74>&#34;Metrics&#34;</span>][COST_METRIC][<span style=color:#e6db74>&#34;Amount&#34;</span>]))
+                    <span style=color:#66d9ef>for</span> group <span style=color:#f92672>in</span> cost_and_usage_data<span style=color:#f92672>.</span>get(<span style=color:#e6db74>&#34;Groups&#34;</span>, [])
+                )
+                logger<span style=color:#f92672>.</span>info(f<span style=color:#e6db74>&#34;Calculated total cost from Groups: {total_cost:.2f} USD&#34;</span>)
+                <span style=color:#66d9ef>return</span> total_cost
+
+            <span style=color:#66d9ef>return</span> float(cost_and_usage_data[<span style=color:#e6db74>&#34;Total&#34;</span>][COST_METRIC][<span style=color:#e6db74>&#34;Amount&#34;</span>])
+
+        <span style=color:#66d9ef>except</span> <span style=color:#a6e22e>KeyError</span> <span style=color:#66d9ef>as</span> e:
+            logger<span style=color:#f92672>.</span>error(f<span style=color:#e6db74>&#34;Metric &#39;{COST_METRIC}&#39; not found in response data: {e}&#34;</span>)
+            <span style=color:#66d9ef>return</span> <span style=color:#ae81ff>0.0</span>
+
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>get_service_costs</span>(self, cost_and_usage_data: Dict[str, Any]) <span style=color:#f92672>-&gt;</span> List[Dict[str, Any]]:
+        <span style=color:#e6db74>&#34;&#34;&#34;
+</span><span style=color:#e6db74>        コストと使用状況のデータからサービスごとの費用を取得する。
+</span><span style=color:#e6db74>        &#34;&#34;&#34;</span>
+        service_groups <span style=color:#f92672>=</span> cost_and_usage_data<span style=color:#f92672>.</span>get(<span style=color:#e6db74>&#34;Groups&#34;</span>, [])
+        result <span style=color:#f92672>=</span> []
+        <span style=color:#66d9ef>for</span> item <span style=color:#f92672>in</span> service_groups:
+            billing_amount <span style=color:#f92672>=</span> float(item[<span style=color:#e6db74>&#34;Metrics&#34;</span>][COST_METRIC][<span style=color:#e6db74>&#34;Amount&#34;</span>])
+            result<span style=color:#f92672>.</span>append({
+                <span style=color:#e6db74>&#34;service_name&#34;</span>: item[<span style=color:#e6db74>&#34;Keys&#34;</span>][<span style=color:#ae81ff>0</span>],
+                <span style=color:#e6db74>&#34;billing&#34;</span>: billing_amount
+            })
+        <span style=color:#66d9ef>return</span> result
+
+
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>get_client</span>() <span style=color:#f92672>-&gt;</span> botocore<span style=color:#f92672>.</span>client<span style=color:#f92672>.</span>BaseClient:
+    <span style=color:#e6db74>&#34;&#34;&#34;
+</span><span style=color:#e6db74>    boto3 Cost Explorer クライアントを返す。
+</span><span style=color:#e6db74>    &#34;&#34;&#34;</span>
+    <span style=color:#66d9ef>return</span> boto3<span style=color:#f92672>.</span>client(<span style=color:#e6db74>&#34;ce&#34;</span>, region_name<span style=color:#f92672>=</span>REGION_NAME)
+
+
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>get_date_range</span>() <span style=color:#f92672>-&gt;</span> Tuple[str, str]:
+    <span style=color:#e6db74>&#34;&#34;&#34;
+</span><span style=color:#e6db74>    集計期間を取得する。
+</span><span style=color:#e6db74>    Cost Explorer の TimePeriod は End が排他的で、Start は End より前である必要がある。
+</span><span style=color:#e6db74>    月初当日だけ Start と「今日」を End にすると同一日になり無効になるため、
+</span><span style=color:#e6db74>    その場合は End を月初の翌日に補正する。
+</span><span style=color:#e6db74>    &#34;&#34;&#34;</span>
+    month_start <span style=color:#f92672>=</span> date<span style=color:#f92672>.</span>today()<span style=color:#f92672>.</span>replace(day<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>)
+    today <span style=color:#f92672>=</span> date<span style=color:#f92672>.</span>today()
+    end_date <span style=color:#f92672>=</span> today
+    <span style=color:#66d9ef>if</span> end_date <span style=color:#f92672>&lt;=</span> month_start:
+        end_date <span style=color:#f92672>=</span> month_start <span style=color:#f92672>+</span> timedelta(days<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>)
+    <span style=color:#66d9ef>return</span> month_start<span style=color:#f92672>.</span>isoformat(), end_date<span style=color:#f92672>.</span>isoformat()
+
+
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>format_service_costs</span>(service_billings: List[Dict[str, Any]]) <span style=color:#f92672>-&gt;</span> List[str]:
+    <span style=color:#e6db74>&#34;&#34;&#34;
+</span><span style=color:#e6db74>    サービスごとの費用を表示用に整形する。
+</span><span style=color:#e6db74>    &#34;&#34;&#34;</span>
+    formatted_services <span style=color:#f92672>=</span> []
+    <span style=color:#66d9ef>for</span> item <span style=color:#f92672>in</span> service_billings:
+        billing <span style=color:#f92672>=</span> item[<span style=color:#e6db74>&#34;billing&#34;</span>]
+        <span style=color:#66d9ef>if</span> billing <span style=color:#f92672>&gt;=</span> MIN_BILLING_THRESHOLD:
+            formatted_services<span style=color:#f92672>.</span>append(f<span style=color:#e6db74>&#34;- {item[&#39;service_name&#39;]}: {billing:.2f} USD&#34;</span>)
+        <span style=color:#66d9ef>else</span>:
+            logger<span style=color:#f92672>.</span>debug(f<span style=color:#e6db74>&#34;Excluded negligible cost: {item[&#39;service_name&#39;]} ({billing:.5f})&#34;</span>)
+    <span style=color:#66d9ef>return</span> formatted_services
+
+
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>handle_cost_report</span>(
+    explorer: CostExplorer,
+    period: Dict[str, str],
+    include_credit: bool,
+    start_day: str,
+    end_day: str
+) <span style=color:#f92672>-&gt;</span> Tuple[str, List[str]]:
+    <span style=color:#e6db74>&#34;&#34;&#34;
+</span><span style=color:#e6db74>    費用レポート（クレジット適用前/後）の取得と整形を行う。
+</span><span style=color:#e6db74>    &#34;&#34;&#34;</span>
+    cost_and_usage <span style=color:#f92672>=</span> explorer<span style=color:#f92672>.</span>get_cost_and_usage(
+        period,
+        include_credit<span style=color:#f92672>=</span>include_credit,
+        group_by_dimension<span style=color:#f92672>=</span>SERVICE_GROUP_DIMENSION
+    )
+    total_cost <span style=color:#f92672>=</span> explorer<span style=color:#f92672>.</span>get_total_cost(cost_and_usage)
+    services_cost <span style=color:#f92672>=</span> explorer<span style=color:#f92672>.</span>get_service_costs(cost_and_usage)
+    formatted_services <span style=color:#f92672>=</span> format_service_costs(services_cost)
+
+    credit_text <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;後&#34;</span> <span style=color:#66d9ef>if</span> include_credit <span style=color:#66d9ef>else</span> <span style=color:#e6db74>&#34;前&#34;</span>
+    title <span style=color:#f92672>=</span> f<span style=color:#e6db74>&#34;{start_day}～{end_day}のクレジット適用{credit_text}費用は、{total_cost:.2f} USD です。&#34;</span>
+    <span style=color:#66d9ef>return</span> title, formatted_services
+
+
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>print_report</span>(title: str, services_cost: List[str]) <span style=color:#f92672>-&gt;</span> None:
+    <span style=color:#e6db74>&#34;&#34;&#34;
+</span><span style=color:#e6db74>    レポートを標準出力に表示する。
+</span><span style=color:#e6db74>    &#34;&#34;&#34;</span>
+    <span style=color:#66d9ef>print</span>(<span style=color:#e6db74>&#34;------------------------------------------------------&#34;</span>)
+    <span style=color:#66d9ef>print</span>(title)
+    <span style=color:#66d9ef>if</span> services_cost:
+        <span style=color:#66d9ef>print</span>(<span style=color:#e6db74>&#34;</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span><span style=color:#f92672>.</span>join(services_cost))
+    <span style=color:#66d9ef>else</span>:
+        <span style=color:#66d9ef>print</span>(<span style=color:#e6db74>&#34;サービスごとの費用データはありません。&#34;</span>)
+    <span style=color:#66d9ef>print</span>(<span style=color:#e6db74>&#34;------------------------------------------------------</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>)
+
+
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>_teams_payload_legacy_adaptive</span>(title: str, services_text: str) <span style=color:#f92672>-&gt;</span> Dict[str, Any]:
+    <span style=color:#e6db74>&#34;&#34;&#34;
+</span><span style=color:#e6db74>    旧 src/cost_report.py で Teams に表示できていた形式と同一。
+</span><span style=color:#e6db74>    （attachments のみ・AdaptiveCard 1.2・TextBlock に markdown: true）
+</span><span style=color:#e6db74>    &#34;&#34;&#34;</span>
+    <span style=color:#66d9ef>return</span> {
+        <span style=color:#e6db74>&#34;attachments&#34;</span>: [
+            {
+                <span style=color:#e6db74>&#34;contentType&#34;</span>: <span style=color:#e6db74>&#34;application/vnd.microsoft.card.adaptive&#34;</span>,
+                <span style=color:#e6db74>&#34;content&#34;</span>: {
+                    <span style=color:#e6db74>&#34;$schema&#34;</span>: <span style=color:#e6db74>&#34;http://adaptivecards.io/schemas/adaptive-card.json&#34;</span>,
+                    <span style=color:#e6db74>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;AdaptiveCard&#34;</span>,
+                    <span style=color:#e6db74>&#34;version&#34;</span>: <span style=color:#e6db74>&#34;1.2&#34;</span>,
+                    <span style=color:#e6db74>&#34;body&#34;</span>: [
+                        {
+                            <span style=color:#e6db74>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;TextBlock&#34;</span>,
+                            <span style=color:#e6db74>&#34;text&#34;</span>: f<span style=color:#e6db74>&#34;### {title}</span><span style=color:#ae81ff>\n\n</span><span style=color:#e6db74>{services_text}&#34;</span>,
+                            <span style=color:#e6db74>&#34;wrap&#34;</span>: True,
+                            <span style=color:#e6db74>&#34;markdown&#34;</span>: True,
+                        }
+                    ],
+                },
+            }
+        ]
+    }
+
+
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>_teams_payload_text</span>(title: str, services_text: str) <span style=color:#f92672>-&gt;</span> Dict[str, str]:
+    <span style=color:#e6db74>&#34;&#34;&#34;Microsoft 公式 curl 例と同じ {</span><span style=color:#ae81ff>\&#34;</span><span style=color:#e6db74>text</span><span style=color:#ae81ff>\&#34;</span><span style=color:#e6db74>: </span><span style=color:#ae81ff>\&#34;</span><span style=color:#e6db74>...</span><span style=color:#ae81ff>\&#34;</span><span style=color:#e6db74>}（フォールバック用）。&#34;&#34;&#34;</span>
+    <span style=color:#66d9ef>return</span> {<span style=color:#e6db74>&#34;text&#34;</span>: f<span style=color:#e6db74>&#34;{title}</span><span style=color:#ae81ff>\n\n</span><span style=color:#e6db74>{services_text}&#34;</span>}
+
+
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>post_to_teams</span>(title: str, services_cost: List[str], webhook_url: str) <span style=color:#f92672>-&gt;</span> bool:
+    <span style=color:#e6db74>&#34;&#34;&#34;
+</span><span style=color:#e6db74>    Teams Webhook に POST する。
+</span><span style=color:#e6db74>    既定は旧 cost_report.py と同じ Adaptive（legacy_adaptive）。失敗時のみ {</span><span style=color:#ae81ff>\&#34;</span><span style=color:#e6db74>text</span><span style=color:#ae81ff>\&#34;</span><span style=color:#e6db74>: ...}。
+</span><span style=color:#e6db74>
+</span><span style=color:#e6db74>    TEAMS_WEBHOOK_FORMAT=text のときは text のみ送る。
+</span><span style=color:#e6db74>
+</span><span style=color:#e6db74>    Returns:
+</span><span style=color:#e6db74>        bool: いずれかの形式で成功すれば True。すべて失敗なら False（ログのみ）。
+</span><span style=color:#e6db74>    &#34;&#34;&#34;</span>
+
+    services_text <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span><span style=color:#f92672>.</span>join(services_cost) <span style=color:#66d9ef>if</span> services_cost <span style=color:#66d9ef>else</span> <span style=color:#e6db74>&#34;サービスごとの費用データはありません。&#34;</span>
+
+    fmt <span style=color:#f92672>=</span> (os<span style=color:#f92672>.</span>environ<span style=color:#f92672>.</span>get(<span style=color:#e6db74>&#34;TEAMS_WEBHOOK_FORMAT&#34;</span>) <span style=color:#f92672>or</span> <span style=color:#e6db74>&#34;&#34;</span>)<span style=color:#f92672>.</span>strip()<span style=color:#f92672>.</span>lower()
+    <span style=color:#66d9ef>if</span> fmt <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;text&#34;</span>:
+        strategies: List[Tuple[str, Dict[str, Any]]] <span style=color:#f92672>=</span> [
+            (<span style=color:#e6db74>&#34;text&#34;</span>, _teams_payload_text(title, services_text)),
+        ]
+    <span style=color:#66d9ef>else</span>:
+        strategies <span style=color:#f92672>=</span> [
+            (<span style=color:#e6db74>&#34;legacy_adaptive&#34;</span>, _teams_payload_legacy_adaptive(title, services_text)),
+            (<span style=color:#e6db74>&#34;text&#34;</span>, _teams_payload_text(title, services_text)),
+        ]
+
+    <span style=color:#75715e># HTTPリトライの設定</span>
+    session <span style=color:#f92672>=</span> requests<span style=color:#f92672>.</span>Session()
+    retries <span style=color:#f92672>=</span> Retry(
+        total<span style=color:#f92672>=</span>MAX_RETRIES,
+        backoff_factor<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>,
+        status_forcelist<span style=color:#f92672>=</span>[<span style=color:#ae81ff>500</span>, <span style=color:#ae81ff>502</span>, <span style=color:#ae81ff>503</span>, <span style=color:#ae81ff>504</span>],
+        allowed_methods<span style=color:#f92672>=</span>[<span style=color:#e6db74>&#34;POST&#34;</span>]
+    )
+    session<span style=color:#f92672>.</span>mount(<span style=color:#e6db74>&#34;https://&#34;</span>, HTTPAdapter(max_retries<span style=color:#f92672>=</span>retries))
+
+    last_error: Optional[requests<span style=color:#f92672>.</span>exceptions<span style=color:#f92672>.</span>RequestException] <span style=color:#f92672>=</span> None
+    <span style=color:#66d9ef>for</span> idx, (name, payload) <span style=color:#f92672>in</span> enumerate(strategies):
+        <span style=color:#66d9ef>try</span>:
+            <span style=color:#66d9ef>if</span> name <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;legacy_adaptive&#34;</span>:
+                <span style=color:#75715e># 旧実装どおり json を文字列化して data= で送る（Incoming Webhook での表示実績あり）</span>
+                response <span style=color:#f92672>=</span> session<span style=color:#f92672>.</span>post(
+                    webhook_url,
+                    data<span style=color:#f92672>=</span>json<span style=color:#f92672>.</span>dumps(payload, ensure_ascii<span style=color:#f92672>=</span>False),
+                    headers<span style=color:#f92672>=</span>{<span style=color:#e6db74>&#34;Content-Type&#34;</span>: <span style=color:#e6db74>&#34;application/json&#34;</span>},
+                    timeout<span style=color:#f92672>=</span>TEAMS_REQUEST_TIMEOUT_SEC,
+                )
+            <span style=color:#66d9ef>else</span>:
+                response <span style=color:#f92672>=</span> session<span style=color:#f92672>.</span>post(
+                    webhook_url,
+                    json<span style=color:#f92672>=</span>payload,
+                    headers<span style=color:#f92672>=</span>{<span style=color:#e6db74>&#34;Content-Type&#34;</span>: <span style=color:#e6db74>&#34;application/json; charset=utf-8&#34;</span>},
+                    timeout<span style=color:#f92672>=</span>TEAMS_REQUEST_TIMEOUT_SEC,
+                )
+            response<span style=color:#f92672>.</span>raise_for_status()
+            <span style=color:#75715e># Power Automate 等は 202 で本文が空のことが多い。HTTP 成功でもチャネル投稿は別ステップ依存。</span>
+            body_preview <span style=color:#f92672>=</span> (response<span style=color:#f92672>.</span>text <span style=color:#f92672>or</span> <span style=color:#e6db74>&#34;&#34;</span>)<span style=color:#f92672>.</span>strip()[:<span style=color:#ae81ff>400</span>]
+            <span style=color:#66d9ef>if</span> fmt <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;text&#34;</span> <span style=color:#f92672>and</span> len(strategies) <span style=color:#f92672>==</span> <span style=color:#ae81ff>1</span>:
+                logger<span style=color:#f92672>.</span>info(
+                    <span style=color:#e6db74>&#34;Teams: TEAMS_WEBHOOK_FORMAT=text のため、Adaptive は送らず text のみ送信します。&#34;</span>
+                )
+            <span style=color:#66d9ef>elif</span> idx <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>0</span>:
+                logger<span style=color:#f92672>.</span>info(
+                    <span style=color:#e6db74>&#34;Teams: 形式「</span><span style=color:#e6db74>%s</span><span style=color:#e6db74>」が失敗したため「</span><span style=color:#e6db74>%s</span><span style=color:#e6db74>」で再送し、HTTP </span><span style=color:#e6db74>%s</span><span style=color:#e6db74> になりました（直前の WARNING に失敗理由があります）。&#34;</span>,
+                    strategies[idx <span style=color:#f92672>-</span> <span style=color:#ae81ff>1</span>][<span style=color:#ae81ff>0</span>],
+                    name,
+                    response<span style=color:#f92672>.</span>status_code,
+                )
+            logger<span style=color:#f92672>.</span>info(
+                <span style=color:#e6db74>&#34;Teams Webhook へ HTTP </span><span style=color:#e6db74>%s</span><span style=color:#e6db74>（形式: </span><span style=color:#e6db74>%s</span><span style=color:#e6db74>）。応答本文の先頭: </span><span style=color:#e6db74>%r</span><span style=color:#e6db74>&#34;</span>,
+                response<span style=color:#f92672>.</span>status_code,
+                name,
+                body_preview <span style=color:#66d9ef>if</span> body_preview <span style=color:#66d9ef>else</span> <span style=color:#e6db74>&#34;(空)&#34;</span>,
+            )
+            <span style=color:#66d9ef>return</span> True
+        <span style=color:#66d9ef>except</span> requests<span style=color:#f92672>.</span>exceptions<span style=color:#f92672>.</span>RequestException <span style=color:#66d9ef>as</span> e:
+            last_error <span style=color:#f92672>=</span> e
+            resp <span style=color:#f92672>=</span> getattr(e, <span style=color:#e6db74>&#34;response&#34;</span>, None)
+            extra <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;&#34;</span>
+            <span style=color:#66d9ef>if</span> resp <span style=color:#f92672>is</span> <span style=color:#f92672>not</span> None:
+                snippet <span style=color:#f92672>=</span> (resp<span style=color:#f92672>.</span>text <span style=color:#f92672>or</span> <span style=color:#e6db74>&#34;&#34;</span>)[:<span style=color:#ae81ff>800</span>]
+                extra <span style=color:#f92672>=</span> f<span style=color:#e6db74>&#34; HTTP {resp.status_code} body={snippet!r}&#34;</span>
+            logger<span style=color:#f92672>.</span>warning(
+                <span style=color:#e6db74>&#34;Teams Webhook（形式: </span><span style=color:#e6db74>%s</span><span style=color:#e6db74>）が失敗しました。</span><span style=color:#e6db74>%s</span><span style=color:#e6db74>&#34;</span>,
+                name,
+                extra <span style=color:#f92672>or</span> str(e),
+            )
+
+    <span style=color:#66d9ef>if</span> last_error <span style=color:#f92672>is</span> <span style=color:#f92672>not</span> None:
+        resp <span style=color:#f92672>=</span> getattr(last_error, <span style=color:#e6db74>&#34;response&#34;</span>, None)
+        tail <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;&#34;</span>
+        <span style=color:#66d9ef>if</span> resp <span style=color:#f92672>is</span> <span style=color:#f92672>not</span> None:
+            tail <span style=color:#f92672>=</span> f<span style=color:#e6db74>&#34; HTTP {resp.status_code} body={(resp.text or &#39;&#39;)[:800]!r}&#34;</span>
+        logger<span style=color:#f92672>.</span>error(
+            <span style=color:#e6db74>&#34;Teams Webhook への通知はすべての形式で失敗しました（処理は継続します）: </span><span style=color:#e6db74>%s%s</span><span style=color:#e6db74>&#34;</span>,
+            last_error,
+            tail,
+        )
+    <span style=color:#66d9ef>return</span> False
+
+
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>get_account_id</span>(sts_client: Optional[botocore<span style=color:#f92672>.</span>client<span style=color:#f92672>.</span>BaseClient] <span style=color:#f92672>=</span> None) <span style=color:#f92672>-&gt;</span> str:
+    <span style=color:#e6db74>&#34;&#34;&#34;
+</span><span style=color:#e6db74>    AWSアカウントIDを取得する。
+</span><span style=color:#e6db74>
+</span><span style=color:#e6db74>    Args:
+</span><span style=color:#e6db74>        sts_client: STSクライアント。省略時は boto3 デフォルトクライアントを使用。
+</span><span style=color:#e6db74>    &#34;&#34;&#34;</span>
+    <span style=color:#66d9ef>try</span>:
+        client <span style=color:#f92672>=</span> sts_client <span style=color:#f92672>or</span> boto3<span style=color:#f92672>.</span>client(<span style=color:#e6db74>&#34;sts&#34;</span>)
+        account_id <span style=color:#f92672>=</span> client<span style=color:#f92672>.</span>get_caller_identity()[<span style=color:#e6db74>&#34;Account&#34;</span>]
+        <span style=color:#66d9ef>return</span> account_id
+    <span style=color:#66d9ef>except</span> botocore<span style=color:#f92672>.</span>exceptions<span style=color:#f92672>.</span>ClientError <span style=color:#66d9ef>as</span> e:
+        logger<span style=color:#f92672>.</span>error(f<span style=color:#e6db74>&#34;Failed to fetch AWS Account ID: {e}&#34;</span>)
+        <span style=color:#66d9ef>raise</span> <span style=color:#a6e22e>RuntimeError</span>(<span style=color:#e6db74>&#34;AWS Account IDの取得に失敗しました。&#34;</span>) <span style=color:#f92672>from</span> e
+
+
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>main</span>() <span style=color:#f92672>-&gt;</span> None:
+    <span style=color:#e6db74>&#34;&#34;&#34;
+</span><span style=color:#e6db74>    メイン関数。
+</span><span style=color:#e6db74>    Webhook URLの取得・バリデーションは get_config() 内で完結しているため、
+</span><span style=color:#e6db74>    main() では設定取得後すぐに処理を開始できる。
+</span><span style=color:#e6db74>    &#34;&#34;&#34;</span>
+    <span style=color:#75715e># get_config() で Webhook URL の取得・検証まで済ませている</span>
+    config <span style=color:#f92672>=</span> get_config()
+    use_teams_post <span style=color:#f92672>=</span> config[<span style=color:#e6db74>&#34;USE_TEAMS_POST&#34;</span>]
+    teams_webhook_url <span style=color:#f92672>=</span> config[<span style=color:#e6db74>&#34;TEAMS_WEBHOOK_URL&#34;</span>]
+
+    <span style=color:#75715e># AWSアカウントIDを取得</span>
+    account_id <span style=color:#f92672>=</span> get_account_id()
+    logger<span style=color:#f92672>.</span>info(f<span style=color:#e6db74>&#34;AWS Account ID: {account_id}&#34;</span>)
+
+    <span style=color:#75715e># boto3 CostExplorer クライアントをモック化できるよう必ず get_client() 経由にする</span>
+    client <span style=color:#f92672>=</span> get_client()
+    explorer <span style=color:#f92672>=</span> CostExplorer(client)
+
+    start_date, end_date <span style=color:#f92672>=</span> get_date_range()
+    period <span style=color:#f92672>=</span> {<span style=color:#e6db74>&#34;Start&#34;</span>: start_date, <span style=color:#e6db74>&#34;End&#34;</span>: end_date}
+    start_day_str <span style=color:#f92672>=</span> datetime<span style=color:#f92672>.</span>strptime(start_date, <span style=color:#e6db74>&#34;%Y-%m-</span><span style=color:#e6db74>%d</span><span style=color:#e6db74>&#34;</span>)<span style=color:#f92672>.</span>strftime(<span style=color:#e6db74>&#34;%m/</span><span style=color:#e6db74>%d</span><span style=color:#e6db74>&#34;</span>)
+    <span style=color:#75715e># Cost Explorer API の End は「その日の 0:00」を指すため、</span>
+    <span style=color:#75715e># 表示上は1日引いて「昨日まで（= 実質の集計最終日）」を表示する</span>
+    end_day_str <span style=color:#f92672>=</span> (datetime<span style=color:#f92672>.</span>strptime(end_date, <span style=color:#e6db74>&#34;%Y-%m-</span><span style=color:#e6db74>%d</span><span style=color:#e6db74>&#34;</span>) <span style=color:#f92672>-</span> timedelta(days<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>))<span style=color:#f92672>.</span>strftime(<span style=color:#e6db74>&#34;%m/</span><span style=color:#e6db74>%d</span><span style=color:#e6db74>&#34;</span>)
+
+    <span style=color:#75715e># --- クレジット適用後 ---</span>
+    title_after, services_after <span style=color:#f92672>=</span> handle_cost_report(
+        explorer, period, include_credit<span style=color:#f92672>=</span>True, start_day<span style=color:#f92672>=</span>start_day_str, end_day<span style=color:#f92672>=</span>end_day_str
+    )
+    title_after <span style=color:#f92672>=</span> f<span style=color:#e6db74>&#34;AWSアカウント {account_id}</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span> <span style=color:#f92672>+</span> title_after
+    print_report(title_after, services_after)
+    <span style=color:#66d9ef>if</span> use_teams_post:
+        <span style=color:#75715e># Teams 通知が失敗しても Lambda 全体はエラーにしない（ログに警告）</span>
+        <span style=color:#66d9ef>if</span> <span style=color:#f92672>not</span> post_to_teams(title_after, services_after, webhook_url<span style=color:#f92672>=</span>teams_webhook_url):
+            logger<span style=color:#f92672>.</span>warning(<span style=color:#e6db74>&#34;クレジット適用後レポートの Teams 通知に失敗しました。処理を継続します。&#34;</span>)
+
+    <span style=color:#75715e># --- クレジット適用前 ---</span>
+    title_before, services_before <span style=color:#f92672>=</span> handle_cost_report(
+        explorer, period, include_credit<span style=color:#f92672>=</span>False, start_day<span style=color:#f92672>=</span>start_day_str, end_day<span style=color:#f92672>=</span>end_day_str
+    )
+    title_before <span style=color:#f92672>=</span> f<span style=color:#e6db74>&#34;AWSアカウント {account_id}</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span> <span style=color:#f92672>+</span> title_before
+    print_report(title_before, services_before)
+    <span style=color:#66d9ef>if</span> use_teams_post:
+        <span style=color:#66d9ef>if</span> <span style=color:#f92672>not</span> post_to_teams(title_before, services_before, webhook_url<span style=color:#f92672>=</span>teams_webhook_url):
+            logger<span style=color:#f92672>.</span>warning(<span style=color:#e6db74>&#34;クレジット適用前レポートの Teams 通知に失敗しました。処理を継続します。&#34;</span>)
+
+
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>lambda_handler</span>(event: dict, context: Any) <span style=color:#f92672>-&gt;</span> dict:
+    <span style=color:#75715e># API Gateway 等と整合しやすいよう statusCode / body を返す</span>
+    <span style=color:#66d9ef>try</span>:
+        main()
+        <span style=color:#66d9ef>return</span> {<span style=color:#e6db74>&#34;statusCode&#34;</span>: <span style=color:#ae81ff>200</span>, <span style=color:#e6db74>&#34;body&#34;</span>: <span style=color:#e6db74>&#34;Cost report generated successfully.&#34;</span>}
+    <span style=color:#66d9ef>except</span> <span style=color:#a6e22e>Exception</span> <span style=color:#66d9ef>as</span> e:
+        logger<span style=color:#f92672>.</span>exception(<span style=color:#e6db74>&#34;Unexpected error occurred during execution.&#34;</span>)
+        <span style=color:#66d9ef>return</span> {<span style=color:#e6db74>&#34;statusCode&#34;</span>: <span style=color:#ae81ff>500</span>, <span style=color:#e6db74>&#34;body&#34;</span>: str(e)}
+
+
+<span style=color:#66d9ef>if</span> __name__ <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;__main__&#34;</span>:
+    main()
+</code></pre></td></tr></table></div></div></details><h3 id=コードの処理概要>コードの処理概要</h3><p>主な処理フローは次の通りです。</p><ul><li>設定値の取得と初期化<ul><li><code>get_config()</code> で環境変数や Teams 向けの設定を一元的に取得します。Teams 通知を有効にしたときは、ローカルでは <code>TEAMS_WEBHOOK_URL</code>、Lambda では <code>TEAMS_SECRET_ARN</code> 経由で Secrets Manager から Webhook URL を取る処理もここにまとめています。</li></ul></li><li>AWS アカウント ID の付与<ul><li><code>main()</code> 内の <code>get_account_id()</code>（STS の <code>get_caller_identity</code>）でアカウント ID を取得し、レポートのタイトル行に付けます。複数アカウント運用時にもどの環境か判別しやすくなります。</li></ul></li><li>Cost Explorer クライアントのラップ<ul><li><code>CostExplorer</code> クラスで boto3 の Cost Explorer API をラップし、API呼び出しやクレジット適用/除外のフィルタ処理など、共通化が必要なロジックを一箇所に集約しています。</li></ul></li><li>コストレポートの生成<ul><li>指定された期間（通常は当月の初日～前日）について、AWS サービス毎の利用料金サマリを生成。クレジット適用後・適用前という2パターンの料金をまとめてレポートします。</li></ul></li><li>Teams 通知機能<ul><li>レポートは標準出力に出すだけでなく、必要に応じて Microsoft Teams にも送信可能です。Teams 通知は <code>requests</code> ライブラリで Webhook 経由で送信。まず Adaptive Card 形式で送信し、うまく表示できなければシンプルなテキストでも送る二重化設計になっています（<code>TEAMS_WEBHOOK_FORMAT=text</code> で明示切替も可）。なお、Teams Webhook は Power Automate Workflow などを使った URL に置き換える必要があり、旧 Office 365 Connector 専用のものは使えません。</li></ul></li></ul><h2 id=33-ローカルでの動作確認>3.3 ローカルでの動作確認</h2><p>認証を通したあと、<code>uv run</code> で実行します。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e># SSO ログイン</span>
+aws sso login --profile &lt;your-sso-profile&gt;
+
+<span style=color:#75715e># 出力サンプル</span>
+<span style=color:#75715e># Attempting to automatically open the SSO authorization page in your default browser.</span>
+<span style=color:#75715e># If the browser does not open or you wish to use a different device to authorize this request, open the following URL:</span>
+<span style=color:#75715e># </span>
+<span style=color:#75715e># https://example-sso.awsapps.com/start/#/device</span>
+<span style=color:#75715e># </span>
+<span style=color:#75715e># Then enter the code:</span>
+<span style=color:#75715e># </span>
+<span style=color:#75715e># MQXV-VQHQ</span>
+<span style=color:#75715e># Successfully logged into Start URL: https://example-sso.awsapps.com/start/</span>
+
+export AWS_PROFILE<span style=color:#f92672>=</span>&lt;your-sso-profile&gt;
+export AWS_DEFAULT_REGION<span style=color:#f92672>=</span>ap-northeast-1
+export AWS_PAGER<span style=color:#f92672>=</span>
+</code></pre></div><p><code>AWS_PROFILE</code> は <code>uv run</code> 自体の必須要件ではありませんが、ローカル実行時に <code>boto3</code> がどの認証情報を使うかを明示するため、<code>default</code> 以外のプロファイルを使う場合は設定しておくのを推奨します。同じコマンド行で <code>AWS_PROFILE=your-profile uv run python sam/app/app.py</code> のように書けば、その1回の実行には環境変数が渡ります。対話シェルで <code>AWS_PROFILE=...</code> と代入したあと、別のコマンドとして <code>uv run</code> する場合は子プロセスへ引き継がれないことがあるため、<code>export AWS_PROFILE=...</code> を使うか、実行のたびにコマンド先頭へ付けてください。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e># 環境変数の設定（Teams 通知を使う場合）</span>
+export USE_TEAMS_POST<span style=color:#f92672>=</span>yes
+export TEAMS_WEBHOOK_URL<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;https://example.com/your-teams-webhook-url&#39;</span>
+</code></pre></div><p>実行コマンドは次のとおりです。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>uv run python sam/app/app.py
+</code></pre></div><p>実行すると、標準出力に以下のようなレポートが出ます。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text>INFO:__main__:AWS Account ID: 123456789012
+INFO:__main__:Calculated total cost from Groups: 0.00 USD
+------------------------------------------------------
+AWSアカウント 123456789012
+01/01～01/30のクレジット適用後費用は、0.00 USD です。
+サービスごとの費用データはありません。
+------------------------------------------------------
+
+INFO:__main__:Calculated total cost from Groups: 9.99 USD
+------------------------------------------------------
+AWSアカウント 123456789012
+01/01～01/30のクレジット適用前費用は、9.99 USD です。
+- AWS Config: 1.00 USD
+- AWS Cost Explorer: 2.00 USD
+- AWS Secrets Manager: 0.50 USD
+- Amazon EC2 Container Registry (ECR): 0.75 USD
+- Amazon GuardDuty: 1.25 USD
+- Amazon Simple Storage Service: 4.49 USD
+------------------------------------------------------
+</code></pre></div><h1 id=4-microsoft-teams-通知の移行>4. Microsoft Teams 通知の移行</h1><h2 id=41-office-365-コネクタの廃止重要>4.1 Office 365 コネクタの廃止（重要）</h2><p>ここが一番のハマりどころです。Qiita のコードコメントにあった <code>webhook.office.com</code> 形式の Office 365 コネクタ は、すでに廃止されています。旧 URL はそのままでは使えません。今後は Power Automate などの ワークフロー を経由した Webhook に差し替える必要があります。</p><h2 id=42-ワークフローの作成>4.2 ワークフローの作成</h2><p>Power Automate で「Teams webhook 要求が受信されたとき」をトリガーにするフローを作成し、発行された URL を使います。</p><p>リポジトリのコードは Adaptive Card 形式を送りますが、表示が崩れる場合は <code>TEAMS_WEBHOOK_FORMAT=text</code> を設定すれば、シンプルなテキスト形式に切り替えられるようにしてあります。</p><h1 id=5-aws-sam-による-lambda-デプロイ>5. AWS SAM による Lambda デプロイ</h1><p><a href=https://imgur.com/ZCfzpPX.png><img src=https://imgur.com/ZCfzpPX.png alt=img3></a></p><h2 id=51-sam-テンプレート>5.1 SAM テンプレート</h2><p>Qiita では <code>TeamsWebhookUrl</code> をパラメータで渡し、環境変数にそのまま載せる形でした。2026年版では Secrets Manager を前提にし、Webhook URL をテンプレートやコマンドラインに残しにくくしています。</p><p>その他の変更点をざっと挙げると、ランタイムは <code>python3.12</code> / <code>arm64</code>（Graviton2）、スケジュールは <code>cron(0 0 * * ? *)</code> で毎日 JST 9:00 実行です。加えて DLQ（SQS）と CloudWatch Alarm を組み合わせ、失敗時にイベントを取りこぼさないようにしてあります。個人アカウントでここまで必要か、という気もしますが、Lambda が壊れていても気づかず通知が途絶え続けるのは嫌なので入れておきました。</p><h2 id=52-デプロイ手順>5.2 デプロイ手順</h2><p>Qiita では <code>sam package</code> で <code>packaged.yaml</code> を生成してから <code>sam deploy</code> していました。2026年版の手順では、<code>sam build</code> のあと <code>sam deploy</code> を直接呼ぶ形に寄せています（プロジェクトや CI の方針に合わせて、従来型の <code>package</code> フローを取ることも可能です）。</p><p>まず Teams 通知用の URL を Secrets Manager に登録します。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>aws secretsmanager create-secret <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --name teams-webhook-url <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --secret-string <span style=color:#e6db74>&#34;https://example.com/your-teams-webhook-url&#34;</span>
+</code></pre></div><p>あとはビルドしてデプロイします。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>cd sam
+sam build
+sam deploy --parameter-overrides <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>    UseTeamsPost<span style=color:#f92672>=</span>yes <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>    TeamsWebhookSecretArn<span style=color:#f92672>=</span>arn:aws:secretsmanager:...
+</code></pre></div><p>スタックを片付けるときは、Qiita 版と同様に <code>sam delete</code> で CloudFormation スタックと関連リソースをまとめて削除できます（リージョンやスタック名は環境に合わせてください）。</p><h1 id=6-まとめ>6. まとめ</h1><p>Qiita の後編で扱った「boto3 で Cost Explorer を叩き、SAM で Lambda に載せ、Teams に飛ばす」という骨格はそのままです。変わったのは主に次の4点です。まず Python が 3.8 から 3.12 へ、パッケージ管理が Miniconda から uv に変わりました。次に Teams 通知は、廃止された Office 365 コネクタから Power Automate のワークフロー Webhook に置き換えています。Webhook URL の扱いも見直しており、SAM テンプレートに平文で残す代わりに Secrets Manager で管理する形にしました。SAM のデプロイ手順は <code>sam build</code> → <code>sam deploy</code> に整理し、Lambda は arm64 に変更、DLQ と CloudWatch Alarm も加えています。</p><p>Qiita のまとめ（前編〜後編通して）で触れたように、マネコンの UI は変わりやすい一方、CLI や API は比較的ゆっくり移行します。本記事の更新も、その延長線上で「同じことを 2026年の前提でやり直す」イメージです。</p><p>毎日自動で費用サマリが届くようになると、開発の心理的安全性がだいぶ上がる、というのが筆者の実感です。細かい実装やテストコードは <a href=https://github.com/t-tkm/aws-cost-explore-lambda>GitHub</a> を参照してください。</p></section><footer><nav class="p-pagination c-pagination"><div class=c-pagination__ctrl><div class=c-pagination__newer></div><div class=c-pagination__older><a href=https://t-tkm.github.io/blog/posts/2026/03/aws_costcheck_cli/>Older</a></div></div></nav><section class=p-related><h3>See Also</h3><ul id=slider class=p-related__list><li class="p-related__item js-related__item"><a href=/blog/posts/2023/12/aws_cost_usage_report3/><span>AWS Cost Usage Reportの可視化(3) -生成AI SQL (Cube + LangChain)</span></a></li><li class="p-related__item js-related__item"><a href=/blog/posts/2023/09/aws_cost_usage_report2/><span>AWS Cost Usage Reportの可視化(2) -ヘッドレスBIツールCubeを試してみる</span></a></li><li class="p-related__item js-related__item"><a href=/blog/posts/2023/06/aws_cost_usage_report/><span>AWS Cost Usage Reportの可視化</span></a></li><li class="p-related__item js-related__item"><a href=/blog/posts/2026/03/aws_costcheck_cli/><span>AWS費用監視ツール（前編：AWSマネジメントコンソール & AWS CLI）</span></a></li><li class="p-related__item js-related__item"><a href=/blog/posts/2025/10/aws_minecraft_mcp_2/><span>Minecraftサーバー管理で学ぶ！AWS ECS + MCP連携によるコンテナ運用（後編）</span></a></li><li class="p-related__item js-related__item"><a href=/blog/posts/2025/09/aws_minecraft_mcp_1/><span>Minecraftサーバー管理で学ぶ！AWS ECS + MCP連携によるコンテナ運用（前編）</span></a></li></ul></section><aside class=p-author><div class="c-avatar p-author__avatar"><img alt="Author Avatar" src=https://www.gravatar.com/avatar/01f65fbc400bf554d948aec41084a9fa></div><div class=p-author__body><p class="c-title p-author__name">Takumi Tomita</p><p>(株)日立製作所 マネージド＆プラットフォームサービス事業部 チーフクラウドアーキテクト。2021-2025 AWS Ambassadorに選出頂きました。</p></div></aside></footer></article></main><nav class="l-nav p-menu"><ul class=p-menu__lists><li class=p-menu__listitem><a href=/blog/>Blog</a></li><li class=p-menu__listitem><a href=/blog/about>About</a></li><li class=p-menu__listitem><a href=/blog/tags>Tags</a></li></ul></nav><footer class=l-footer><ul class=c-links><li class=c-links__item><a href=https://twitter.com/t_tkm0911 target=_blank><svg viewBox="0 0 64 64" class="c-links__icon"><title>twitter</title><use xlink:href="#icon-twitter"/></svg></a></li><li class=c-links__item><a href=https://facebook.com/takumi.tomita.vf target=_blank><svg viewBox="0 0 64 64" class="c-links__icon"><title>facebook</title><use xlink:href="#icon-facebook"/></svg></a></li><li class=c-links__item><a href=https://github.com/t-tkm target=_blank><svg viewBox="0 0 64 64" class="c-links__icon"><title>github</title><use xlink:href="#icon-github"/></svg></a></li><li class=c-links__item><a href=https://gitlab.com/t-tkm target=_blank><svg viewBox="0 0 64 64" class="c-links__icon"><title>gitlab</title><use xlink:href="#icon-gitlab"/></svg></a></li><li class=c-links__item><a href=https://linkedin.com/in/takumitomta target=_blank><svg viewBox="0 0 64 64" class="c-links__icon"><title>linkedin</title><use xlink:href="#icon-linkedin"/></svg></a></li></ul><p class=p-copyright>&copy; 2022 Takumi Tomita Powered by Hugo & Pickles.
+      
+   </p></footer></body></html>
