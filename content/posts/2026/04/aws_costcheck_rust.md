@@ -107,12 +107,6 @@ AWSアカウント 123456789012
 chmod +x aws-cost-report
 ```
 
-macOS でブラウザ経由でダウンロードした場合、「開発元が未確認のため開けません」と表示されることがあります。その場合は隔離属性を外します。
-
-```bash
-xattr -d com.apple.quarantine aws-cost-report
-```
-
 ### 4.2 ソースからビルド
 
 Rust環境（stable 1.75以上）があれば、ソースからビルドすることもできます。
@@ -144,15 +138,30 @@ cargo build --release
 
 前編で作成した `billing-user` プロファイルをそのまま使えます。
 
-```bash
-# SSOログイン（ブラウザが開く）
-aws sso login --profile billing-user
+### 4.4 実行前チェック
 
-# プロファイルを環境変数に設定
+初回実行の前に、次の2点を確認してください。
+
+**① macOSの隔離属性を外す（ブラウザでダウンロードした場合のみ）**
+
+ブラウザ経由で取得したバイナリには隔離（quarantine）が付いており、そのままでは実行できないことがあります。
+
+```bash
+xattr -d com.apple.quarantine aws-cost-report
+```
+
+この属性がない場合はエラーになりますが、無視してかまいません。
+
+**② AWS SSOでログインする**
+
+```bash
+aws sso login --profile billing-user
 export AWS_PROFILE=billing-user
 ```
 
-### 4.4 実行
+一時認証情報の有効期間は最大12時間です。期限が切れたら再度 `aws sso login` を実行してください。
+
+### 4.5 実行
 
 ```bash
 ./aws-cost-report
@@ -161,7 +170,6 @@ export AWS_PROFILE=billing-user
 ログレベルを上げると、0.01 USD 未満で除外されたサービスの一覧もDEBUGログで確認できます。
 
 ```bash
-# DEBUGログあり
 RUST_LOG=debug ./aws-cost-report
 ```
 
